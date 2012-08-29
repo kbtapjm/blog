@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>boardList</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<!-- Le styles -->
+<link href="../../common/css/bootstrap.css" rel="stylesheet">
+<link href="../../common/css/bootstrap-responsive.css" rel="stylesheet">
+<link href="../../common/css/common.css" rel="stylesheet">
+
+<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.js"></script> -->
+<script type="text/javascript"
+	src="../../common/js/jQuery/jquery-1.7.1.min.js"></script>
+<script type="text/javascript"
+	src="../../common/js/jQuery/jquery.validate.js"></script>
+
+<script type="text/javascript">
+	    $(document).ready(function() {
+	        var tooltipSet = function() {
+	            var trObj = $("table > tbody > tr");
+	            
+	            for(var i = 0; i < trObj.length; i++) {
+	                $(trObj[i]).find('#titleTooltip').tooltip();
+	            }    
+	        }
+	        
+	        var boardCreate = function() {
+	            location.href = "./boardCreate.html";    
+	        }
+	        var myProfile = function() {
+	            $('#myModal').modal('show')
+	        }
+
+	        $('#boardCreate').bind('click', boardCreate);
+	        $('#myProfile').bind('click', myProfile);
+	        tooltipSet(); 
+	        
+	        // typehead
+	        var alCities = ['Baltimore', 'Boston', 'New York', 'Tampa Bay', 'Toronto', 'Chicago', 'Cleveland', 'Detroit', 'Kansas City', 'Minnesota', 'Los Angeles', 'Oakland', 'Seattle', 'Texas'].sort();
+            $('#searchword').typeahead({
+                /*
+                source: function(typeahead, query){
+                    $.ajax({
+                        url: window.location.origin+"/bows/get_manufacturers.json",
+                        type: "POST",
+                        data: "",
+                        dataType: "JSON",
+                        async: false,
+                        success: function(results){
+                            var manufacturers = {};
+                            $.map(results.data.manufacturers, function(data, item){
+                                var group;
+                                group = {
+                                    manufacturer_id: data.Manufacturer.id,
+                                    manufacturer: data.Manufacturer.manufacturer
+                                };
+                                manufacturers.push(group);
+                            });
+                            typeahead.process(manufacturers);
+                        },
+                        error: function(results){
+                            console.log("results : " + JSON.stringify(results));
+                        }
+                    });
+                    typeahead.process();
+                },
+                */
+                source: alCities,
+                property: 'name',
+                items:5,
+                onselect: function (obj) {
+                    console.log("obj : " + obj);
+                }
+            });
+	    });
+	    
+	    function boardRead(boardNo) {
+	    	location.href = "./boardRead.html";
+	    }
+    
+    </script>
+
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+	<!-- 상단 hearder 영역 -->
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="btn btn-navbar" data-toggle="collapse"
+					data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span>
+				</a> <a class="brand" href="../home.html">MyBlog</a>
+				<div class="nav-collapse">
+					<ul class="nav">
+						<li><a href="../home.html">Home</a></li>
+						<li class="active"><a href="../board/boardList.html">Board</a></li>
+						<li><a href="#">Photo</a></li>
+					</ul>
+					<ul class="nav pull-right">
+						<li class="about-menu"><a href="#" id="myProfile">MyProfile</a></li>
+						<li class="about-menu"><a href="../login.html">Login</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<fieldset>
+			<legend>List</legend>
+
+			<!--  search area  start-->
+			<form class="well well-small  form-search">
+				<div align="right">
+					<select class="span2">
+						<option>Title+Content</option>
+						<option>Title</option>
+						<option>CreateUser</option>
+						<option>Content</option>
+					</select> <input type="text" name="searchword" id="searchword"
+						class="input-large search-query" style="margin: 0 auto;"
+						data-provide="typeahead">
+					<button type="submit" class="btn btn-primary">Search</button>
+				</div>
+			</form>
+
+			<!-- table 영역 -->
+			<table class="table table-striped ">
+				<thead>
+					<tr>
+						<th style="width: 10%">No</th>
+						<th style="width: 40%">Title</th>
+						<th style="width: 20%">CreateUser</th>
+						<th style="width: 20%">CreateDate</th>
+						<th style="width: 10%">ViewCount</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td><a href="#" onClick="javascript:boardRead('1');"
+							id="titleTooltip" rel="tooltip" data-placement="bottom"
+							data-bitly-type="bitly_hover_card"
+							data-original-title="블로그 개발~!!">블로그 개발~!!</a></td>
+						<td>검은몽스</td>
+						<td>2012-08-15 17:03</td>
+						<td>25</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td><a href="#" onClick="javascript:boardRead('2');"
+							id="titleTooltip" rel="tooltip" data-placement="bottom"
+							data-bitly-type="bitly_hover_card"
+							data-original-title="Twitter boorstrap~!!">Twitter
+								boorstrap~!!</a></td>
+						<td>검은몽스</td>
+						<td>2012-08-17 17:03</td>
+						<td>25</td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td><a href="#" onClick="javascript:boardRead('3');"
+							id="titleTooltip" rel="tooltip" data-placement="bottom"
+							data-bitly-type="bitly_hover_card" data-original-title="jQuery">jQuery</a></td>
+						<td>검은몽스</td>
+						<td>2012-08-17 17:03</td>
+						<td>10</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div align="right">
+				<button type="button" class="btn btn-primary" id="boardCreate">Create</button>
+				<button type="button" class="btn btn-info disabled">ExcelSava</button>
+				<button type="button" class="btn btn-info disabled">PdfSave</button>
+			</div>
+
+			<div class="pagination pagination-centered">
+				<ul>
+					<li class="disabled"><a href="#"
+						data-bitly-type="bitly_hover_card">«</a></li>
+					<li class="active"><a href="#"
+						data-bitly-type="bitly_hover_card">1</a></li>
+					<li><a href="#" data-bitly-type="bitly_hover_card">2</a></li>
+					<li><a href="#" data-bitly-type="bitly_hover_card">3</a></li>
+					<li><a href="#" data-bitly-type="bitly_hover_card">4</a></li>
+					<li><a href="#" data-bitly-type="bitly_hover_card">»</a></li>
+				</ul>
+			</div>
+		</fieldset>
+	</div>
+	<!-- /container -->
+
+	<!-- Modal popup -->
+	<div style="display: none;" class="modal" id="myModal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"
+				aria-hidden="true">×</button>
+			<h3 id="myModalLabel">MyProfile</h3>
+		</div>
+		<div class="modal-body">
+			<p>My Name is Park Jae myung</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		</div>
+	</div>
+
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="../../common/js/bootstrap/bootstrap-transition.js"></script>
+	<script src="../../common/js/bootstrap/bootstrap-alert.js"></script>
+	<script src="../../common/js/bootstrap/bootstrap-modal.js"></script>
+	<script src="../../common/js/bootstrap/bootstrap-dropdown.js"></script>
+	<script src="../../common/js/bootstrap/bootstrap-scrollspy.js"></script>
+	<script src="../../common/js/bootstrap/bootstrap-tab.js"></script>
+	<script src="../../common/js/bootstrap/bootstrap-tooltip.js"></script>
+	<script src="../../common/js/bootstrap/bootstrap-popover.js"></script>
+	<script src="../../common/js/bootstrap/bootstrap-button.js"></script>
+	<script src="../../common/js/bootstrap/bootstrap-collapse.js"></script>
+	<script src="../../common/js/bootstrap/bootstrap-carousel.js"></script>
+	<script src="../../common/js/bootstrap/bootstrap-typeahead.js"></script>
+</body>
+</html>
