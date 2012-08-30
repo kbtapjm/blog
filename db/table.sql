@@ -1,65 +1,60 @@
 
-CREATE TABLE user (
-       userId             VARCHAR(40) NOT NULL,
-       UserMerberId          VARCHAR(30) NULL,
-       userName           VARCHAR(100) NULL,
-       password             VARCHAR(12) NULL,
-       email                VARCHAR(30) NULL,
-       birthday             CHAR(8) NULL,
-       gender               CHAR(1) NULL
-);
-
-
-ALTER TABLE Member
-       ADD PRIMARY KEY (memberId);
+/*사용자*/
+create table user (
+       userid             varchar(40) not null,
+       memberid          varchar(30) not null,
+       username           varchar(100) not null,
+       password             varchar(12) not null,
+       email                varchar(30) not null,
+       birthday             char(8) null,
+       gender               char(1) null,
+       primary key(userid)
+)
+engine = innodb
+default character set = latin1;
        
-CREATE TABLE GeneralBoard (
-       boardId              VARCHAR2(40) NOT NULL,
-       subject              VARCHAR2(100) NOT NULL,
-       content              VARCHAR2(2000) NOT NULL,
-       createUser           VARCHAR2(20) NOT NULL,
-       createDt             DATE NOT NULL,
-       modifyDt             DATE NULL,
-       count                NUMBER(10) NULL,
-       noticeYn             CHAR(1) NULL,
-       ip                   VARCHAR2(15) NULL,
-       pageUrl              VARCHAR2(200) NULL,
-       fileName             VARCHAR2(200) NULL,
-       fileSize             NUMBER(7) NULL,
-       memberId             VARCHAR2(40) NOT NULL
-);
+/* 게시판 */       
+create table board (
+       boardid              varchar(40) not null,
+       subject              varchar(100) not null,
+       content              blob(2000) not null,
+       createuser           varchar(20) not null,
+       createdt             datetime not null,
+       modifydt             datetime null,
+       count                int(10) null,
+       noticeyn             char(1) null,
+       ip                   varchar(15) null,
+       pageurl              varchar(200) null,
+       filename             varchar(200) null,
+       filesize             int(7) null,
+       userid             varchar(40) not null,
+       primary key(boardid)
+)
+engine = innodb
+default character set = latin1;
 
+/* 게시판 댓글*/
+create table boardreply (
+       replyid              varchar(40) not null,
+       replycontent         varchar(1200) not null,
+       createuser           varchar(20) not null,
+       createdt             datetime not null,
+       ip                   varchar(15) null,
+       boardid              varchar(40) not null,
+       userid             varchar(40) not null,
+       primary key(replyid)
+)
+engine = innodb
+default character set = latin1;
 
-ALTER TABLE GeneralBoard
-       ADD PRIMARY KEY (boardId, memberId);
+/*foreign key*/
+alter table board foreign key(userid) references user(userid) on delete cascade;
 
+alter table boardreply foreign key(userid) references user(userid) on delete cascade;
 
-CREATE TABLE ReplyBoard (
-       replyId              VARCHAR2(40) NOT NULL,
-       replyContent         VARCHAR2(1200) NOT NULL,
-       createUser           VARCHAR2(20) NOT NULL,
-       createDt             DATE NOT NULL,
-       ip                   VARCHAR2(15) NULL,
-       boardId              VARCHAR2(40) NOT NULL,
-       memberId             VARCHAR2(40) NOT NULL
-);
+alter table boardreply foreign key(boardid, userid) references user(board, userid) on delete cascade;
 
+alter table board drop foreign key userid
+alter table boardreply drop foreign key userid
+alter table board drop foreign key boardid
 
-ALTER TABLE ReplyBoard
-       ADD PRIMARY KEY (replyId, boardId, memberId);
-
-
-ALTER TABLE GeneralBoard
-       ADD FOREIGN KEY (memberId)
-                             REFERENCES Member  (memberId);
-
-
-ALTER TABLE ReplyBoard
-       ADD FOREIGN KEY (memberId)
-                             REFERENCES Member  (memberId);
-
-
-ALTER TABLE ReplyBoard
-       ADD FOREIGN KEY (boardId, memberId)
-                             REFERENCES GeneralBoard  (boardId, 
-              memberId);
