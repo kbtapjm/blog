@@ -23,6 +23,10 @@
 <script type="text/javascript">
     $(document).ready(function() {
         
+        $('#signup').bind('click', function() {
+            location.href = "../user/signUp.do";
+        });
+        
         // Popover 
         $('#login input').hover(function() {
             $(this).popover('show');
@@ -97,7 +101,7 @@
                             </label>
                             <button id="signin" class="btn btn-success" rel="tooltip"
                                 title="first tooltip">Login</button>
-                            <a href="user/userCreate.html" id="signup"
+                            <a href="#" id="signup"
                                 class="btn btn-primary" data-bitly-type="bitly_hover_card">Sign-up</a>
                         </div>
                     </div>
