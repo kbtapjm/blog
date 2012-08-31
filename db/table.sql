@@ -1,51 +1,60 @@
 
+/*=============================================================================*/
+/* MYSQL */
+/*=============================================================================*/
 /*사용자*/
-create table user (
-       userid             varchar(40) not null,
-       memberid          varchar(30) not null,
-       username           varchar(100) not null,
-       password             varchar(12) not null,
-       email                varchar(30) not null,
-       birthday             char(8) null,
-       gender               char(1) null,
-       primary key(userid)
+CREATE TABLE `user` (
+    `userid` VARCHAR(40) NOT NULL,
+    `memberid` VARCHAR(30) NOT NULL,
+    `username` VARCHAR(100) NOT NULL,
+    `password` VARCHAR(12) NOT NULL,
+    `email` VARCHAR(30) NOT NULL,
+    `birthday` CHAR(8) NULL DEFAULT NULL,
+    `gender` CHAR(1) NULL DEFAULT NULL,
+    PRIMARY KEY (`userid`)
 )
-engine = innodb
-default character set = latin1;
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+ROW_FORMAT=DEFAULT
        
 /* 게시판 */       
-create table board (
-       boardid              varchar(40) not null,
-       subject              varchar(100) not null,
-       content              blob(2000) not null,
-       createuser           varchar(20) not null,
-       createdt             datetime not null,
-       modifydt             datetime null,
-       count                int(10) null,
-       noticeyn             char(1) null,
-       ip                   varchar(15) null,
-       pageurl              varchar(200) null,
-       filename             varchar(200) null,
-       filesize             int(7) null,
-       userid             varchar(40) not null,
-       primary key(boardid)
+CREATE TABLE `board` (
+    `boardid` VARCHAR(40) NOT NULL,
+    `subject` VARCHAR(100) NOT NULL,
+    `content` BLOB NOT NULL,
+    `createuser` VARCHAR(20) NOT NULL,
+    `createdt` DATETIME NOT NULL,
+    `modifydt` DATETIME NULL DEFAULT NULL,
+    `count` INT(10) NULL DEFAULT NULL,
+    `noticeyn` CHAR(1) NULL DEFAULT NULL,
+    `ip` VARCHAR(15) NULL DEFAULT NULL,
+    `pageurl` VARCHAR(200) NULL DEFAULT NULL,
+    `filename` VARCHAR(200) NULL DEFAULT NULL,
+    `filesize` INT(7) NULL DEFAULT NULL,
+    `userid` VARCHAR(40) NOT NULL,
+    PRIMARY KEY (`boardid`),
+    CONSTRAINT FOREIGN KEY (`userid`) REFERENCES user(`userid`) ON DELETE CASCADE ON UPDATE RESTRICT    
 )
-engine = innodb
-default character set = latin1;
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+ROW_FORMAT=DEFAULT
 
 /* 게시판 댓글*/
-create table boardreply (
-       replyid              varchar(40) not null,
-       replycontent         varchar(1200) not null,
-       createuser           varchar(20) not null,
-       createdt             datetime not null,
-       ip                   varchar(15) null,
-       boardid              varchar(40) not null,
-       userid             varchar(40) not null,
-       primary key(replyid)
+CREATE TABLE `boardreply` (
+    `replyid` VARCHAR(40) NOT NULL,
+    `replycontent` VARCHAR(1200) NOT NULL,
+    `createuser` VARCHAR(20) NOT NULL,
+    `createdt` DATETIME NOT NULL,
+    `ip` VARCHAR(15) NULL DEFAULT NULL,
+    `boardid` VARCHAR(40) NOT NULL,
+    `userid` VARCHAR(40) NOT NULL,
+    PRIMARY KEY (`replyid`),
+    CONSTRAINT FOREIGN KEY (`userid`) REFERENCES `user` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY (`boardid`) REFERENCES `board` (`boardid`) ON DELETE CASCADE ON UPDATE CASCADE
 )
-engine = innodb
-default character set = latin1;
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+ROW_FORMAT=DEFAULT
 
 /*foreign key*/
 alter table board foreign key(userid) references user(userid) on delete cascade;
@@ -54,7 +63,12 @@ alter table boardreply foreign key(userid) references user(userid) on delete cas
 
 alter table boardreply foreign key(boardid, userid) references user(board, userid) on delete cascade;
 
-alter table board drop foreign key userid
-alter table boardreply drop foreign key userid
-alter table board drop foreign key boardid
+ALTER TABLE board ADD CONSTRAINT FOREIGN KEY(userid) REFERENCES user(userid) ON DELETE CASCADE ON UPDATE CASCADE;
 
+ALTER TABLE board DROP FOREIGN KEY userid;
+ALTER TABLE boardreply DROP FOREIGN KEY userid;
+ALTER TABLE board DROP FOREIGN KEY userid;
+
+/*=============================================================================*/
+/* ORACLE */
+/*=============================================================================*/

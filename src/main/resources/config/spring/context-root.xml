@@ -6,5 +6,8 @@
      
     <!-- Spring Bean 의 추가 설정이 생길 경우 각 기능별로 파일을 분리하여 관리 -->
     <beans:import resource="context/context-common.xml" />
+    <beans:import resource="context/context-datasource.xml" />
+    <beans:import resource="context/context-mapper.xml" />
+    <beans:import resource="context/context-transaction.xml"/>
      
 </beans:beans>

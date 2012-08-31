@@ -2,7 +2,7 @@ package kr.co.blog.domain;
 
 import java.io.Serializable;
 
-public class User implements Serializable  {
+public class User implements Serializable {
     private static final long serialVersionUID = 6152672980439790751L;
     
     private String userId;

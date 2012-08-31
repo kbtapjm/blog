@@ -28,7 +28,7 @@
 
         // Popover 
         $('#registerHere input').hover(function() {
-            $(this).popover('show')
+            $(this).popover('show');
         });
         
         // Validation
