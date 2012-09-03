@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="description" content="This is description" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>singUp</title>
+<title><spring:message code="blog.label.signup"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -19,11 +19,47 @@
 
 <script type="text/javascript" src="${root}/common/js/jQuery/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="${root}/common/js/jQuery/jquery.validate.js"></script>
+<script type="text/javascript" src="${root}/common/js/common.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
         $('#cancel').bind('click', function() {
             location.href = "../user/login.do";
+        });
+        
+        // 중복체크
+        $('#memberCheck').bind('click', function() {
+            var memberId = $('#memberId').val();
+            
+            if($.trim(memberId).length == 0) {
+                getErrMsg('아이디를 입력하세요.');
+                return false;
+            }
+            
+            $.ajax({
+                url: "../user/membercheck.do",
+                type: "GET",
+                cache: false,
+                dataType: "json",
+                data: "memberId=" + memberId,
+                success: function(result) {
+                    console.log(JSON.stringify(result));
+                    
+                    if(result == null) {
+                        console.log("111");
+                        
+                    } else {
+                        console.log("222");
+                        
+                    }
+                },
+                error: function(result) {
+                    console.log(JSON.stringify(result));
+                    // {"readyState":0,"responseText":"","status":0,"statusText":"error"} 
+                    getErrMsg("에러가 발생하여 중복확인이 실패하였습니다.");
+                }
+            });
+            
         });
 
         // Popover 
@@ -34,26 +70,33 @@
         // Validation
         $("#registerHere").validate({
             rules:{
-                user_name:"required",
-                user_email:{required:true,email: true},
-                pwd:{required:true,minlength: 6},
-                cpwd:{required:true,equalTo: "#pwd"},
+                memberId:"required",
+                userName:"required",
+                password:{required:true,minlength: 6},
+                cpassword:{required:true,equalTo: "#password"},
+                email:{required:true,email: true},
+                birthday:{required:true,minlength: 8},
                 gender:"required"
             },
 
             messages:{
-                user_name:"Enter your first and last name",
-                user_email:{
-                    required:"Enter your email address",
-                    email:"Enter valid email address"
-                },
-                pwd:{
+                memberId:"Enter your ID",
+                password:{
                     required:"Enter your password",
                     minlength:"Password must be minimum 6 characters"
                 },
-                cpwd:{
+                cpassword:{
                     required:"Enter confirm password",
                     equalTo:"Password and Confirm Password must match"
+                },
+                userName:"Enter your first and last name",
+                email:{
+                    required:"Enter your email address",
+                    email:"Enter valid email address"
+                },
+                birthday:{
+                    required:"Enter your birthday",
+                    minlength:"birthday must be minimum 8 characters"
                 },
                 gender:"Select Gender"
             },
@@ -81,66 +124,88 @@
 
     <!-- contents 영역 -->
     <div class="container">
-        <form class="form-horizontal" id="registerHere" method='post' action='../user/userCreate.do'>
+        <form class="form-horizontal" id="registerHere" method='post' action='../user/createUser.do'>
+            <input type="hidden" name="userId" value="">
             <fieldset>
-                <legend>Registration</legend>
+                <legend><spring:message code="blog.label.signup"/></legend>
                 <div class="control-group">
-                    <label class="control-label">Name</label>
+                    <label class="control-label"><spring:message code="blog.label.memberid"/></label>
                     <div class="controls">
-                        <input type="text" class="input-xlarge" id="user_name"
-                            name="user_name" rel="popover"
-                            data-content="Enter your first and last name."
-                            data-original-title="Full Name">
+                        <input type="text" class="input-small" id="memberId"
+                            name="memberId" rel="popover"
+                            data-content="Enter ID."
+                            data-original-title="ID" value="kbtapjm">
+                            <button type="button" class="btn btn-info" id="memberCheck"><spring:message code="blog.label.member.check"/></button>
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label">Email</label>
+                    <label class="control-label" for=""><spring:message code="blog.label.password"/></label>
                     <div class="controls">
-                        <input type="text" class="input-xlarge" id="user_email"
-                            name="user_email" rel="popover"
-                            data-content="What’s your email address?"
-                            data-original-title="Email">
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="">Password</label>
-                    <div class="controls">
-                        <input type="password" class="input-xlarge" id="pwd" name="pwd"
+                        <input type="password" class="input-xlarge" id="password" name="password"
                             rel="popover" data-content="6 characters or more! Be tricky"
-                            data-original-title="Password">
+                            data-original-title="Password" value="123456">
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label">Confirm Password</label>
+                    <label class="control-label"><spring:message code="blog.label.confirm.password"/></label>
                     <div class="controls">
-                        <input type="password" class="input-xlarge" id="cpwd" name="cpwd"
+                        <input type="password" class="input-xlarge" id="cpassword" name="cpassword"
                             rel="popover"
                             data-content="Re-enter your password for confirmation."
-                            data-original-title="Re-Password">
+                            data-original-title="Re-Password" value="123456">
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label">Gender</label>
+                    <label class="control-label"><spring:message code="blog.label.name"/></label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="userName"
+                            name="userName" rel="popover"
+                            data-content="Enter your first and last name."
+                            data-original-title="Full Name" value="검은몽스">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"><spring:message code="blog.label.email"/></label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="email"
+                            name="email" rel="popover"
+                            data-content="What’s your email address?"
+                            data-original-title="Email" value="kbtapjm@gmai.com">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"><spring:message code="blog.label.birthday"/></label>
+                    <div class="controls">
+                        <input type="text" class="input-small" id="birthday"
+                            name="birthday" rel="popover"
+                            data-content="Enter your birthday"
+                            data-original-title="Birthday" value="19820509">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"><spring:message code="blog.label.gender"/></label>
                     <div class="controls">
                         <select name="gender" id="gender">
-                            <option value="">Gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
+                            <option value=""><spring:message code="blog.label.gender.select"/></option>
+                            <option value="m"><spring:message code="blog.label.gender.male"/></option>
+                            <option value="f"><spring:message code="blog.label.gender.female"/></option>
                         </select>
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label"></label>
                     <div class="controls">
-                        <button type="submit" class="btn btn-success">Create My
-                            Account</button>
-                        <button type="button" class="btn" id="cancel">Cancel</button>
+                        <button type="submit" class="btn btn-success"><spring:message code="blog.label.signup"/></button>
+                        <button type="button" class="btn" id="cancel"><spring:message code="blog.label.cancel"/></button>
                     </div>
                 </div>
             </fieldset>
         </form>
     </div>
     <!-- /container -->
+    
+    <!-- common html include -->
+    <%@ include file="/WEB-INF/views/jsp/common/commonHtml.jsp" %>
 
     <!-- common file include -->
     <%@ include file="/WEB-INF/views/jsp/common/include.jsp" %>

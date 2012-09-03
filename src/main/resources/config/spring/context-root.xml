@@ -9,5 +9,6 @@
     <beans:import resource="context/context-datasource.xml" />
     <beans:import resource="context/context-mapper.xml" />
     <beans:import resource="context/context-transaction.xml"/>
+    <beans:import resource="context/context-message.xml"/>
      
 </beans:beans>

@@ -84,4 +84,14 @@ public class User implements Serializable {
     public void setGender(String gender) {
         this.gender = gender;
     }
+    
+    public void userToString() {
+        System.out.println("userId : " + this.userId);
+        System.out.println("memberId : " + this.memberId);
+        System.out.println("password : " + this.password);
+        System.out.println("userName : " + this.userName);
+        System.out.println("email : " + this.email);
+        System.out.println("birthday : " + this.birthday);
+        System.out.println("gender : " + this.gender);
+    }
 }

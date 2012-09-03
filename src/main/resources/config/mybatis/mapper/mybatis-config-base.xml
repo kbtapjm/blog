@@ -3,6 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-config.dtd">
  
+<!-- http://www.mybatis.org/core/configuration.html 참조 -->
 <configuration>
     <settings>  
         <setting name="cacheEnabled"              value="true"/>  
@@ -11,7 +12,8 @@
         <setting name="useColumnLabel"            value="true"/>  
         <setting name="useGeneratedKeys"          value="false"/>  
         <setting name="defaultExecutorType"       value="SIMPLE"/>  
-        <setting name="defaultStatementTimeout"   value="25000"/>  
+        <setting name="defaultStatementTimeout"   value="25000"/>
+        <setting name="jdbcTypeForNull"           value="VARCHAR"/>
     </settings>
  
     <typeHandlers>

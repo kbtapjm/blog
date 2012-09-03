@@ -37,7 +37,7 @@ public class UserBo {
     public User getUserById(String userId) throws Exception{
         SqlSession session = ConnectionFactory.getSession().openSession();
         UserDao dao =session.getMapper(UserDao.class);
-        User user =dao.getUserById(userId);
+        User user =dao.getUserByUserId(userId);
         session.close();
         return user;
     }
@@ -51,7 +51,7 @@ public class UserBo {
     public User createUser(User user) throws Exception{
         SqlSession session = ConnectionFactory.getSession().openSession();
         UserDao dao =session.getMapper(UserDao.class);
-        dao.doCreateUser(user);
+        dao.createUser(user);
         session.commit();
         session.close();
         return user;
@@ -66,7 +66,7 @@ public class UserBo {
     public User updateUser(User user) throws Exception{
         SqlSession session = ConnectionFactory.getSession().openSession();
         UserDao dao =session.getMapper(UserDao.class);
-        dao.doUpdateUser(user);
+        dao.updateUser(user);
         session.commit();
         session.close();
         return user;
@@ -81,7 +81,7 @@ public class UserBo {
     public int deleteUser(User user) throws Exception{
         SqlSession session = ConnectionFactory.getSession().openSession();
         UserDao dao =session.getMapper(UserDao.class);
-        int cnt= dao.doDeleteUser(user);
+        int cnt= dao.deleteUser(user);
         session.commit();
         session.close();
         return cnt;
