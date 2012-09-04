@@ -10,6 +10,6 @@
         </p>
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">Close</button>
+        <button id="close" class="btn" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">Close</button>
     </div>
 </div>

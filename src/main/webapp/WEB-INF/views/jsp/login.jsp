@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="description" content="This is description" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>Login</title>
+<title><spring:message code="blog.label.login"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -19,6 +19,7 @@
 
 <script type="text/javascript" src="${root}/common/js/jQuery/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="${root}/common/js/jQuery/jquery.validate.js"></script>
+<script type="text/javascript" src="${root}/common/js/common.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -35,13 +36,13 @@
         // Validation
         $("#login").validate({
             rules:{
-                user_name:"required",
-                pwd:{required:true,minlength: 6}
+                memberid:"required",
+                password:{required:true,minlength: 6}
             },
 
             messages:{
-                user_name:"Enter your name",
-                pwd:{
+                memberid:"Enter your ID",
+                password:{
                     required:"Enter your password",
                     minlength:"Password must be minimum 6 characters"
                 }
@@ -71,23 +72,23 @@
     <!-- contents 영역 -->
     <div class="container">
         <div class="content">
-            <form class="form-horizontal" id="login" method="post" action=""
+            <form class="form-horizontal" id="login" method="post" action="../user/loginProc.do"
                 novalidate="novalidate">
                 <fieldset>
                     <legend>Login</legend>
                     <div class="control-group">
-                        <label class="control-label">Username</label>
+                        <label class="control-label"><spring:message code="blog.label.memberid"/></label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="user_name"
-                                name="user_name" rel="popover"
-                                data-content="Enter your username."
-                                data-original-title="Full Name" placeholder="Enter your name">
+                            <input type="text" class="input-xlarge" id="memberid"
+                                name="memberid" rel="popover"
+                                data-content="Enter your ID"
+                                data-original-title="ID" placeholder="Enter your ID">
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label">Password</label>
+                        <label class="control-label"><spring:message code="blog.label.password"/></label>
                         <div class="controls">
-                            <input type="password" class="input-xlarge" id="pwd" name="pwd"
+                            <input type="password" class="input-xlarge" id="password" name="password"
                                 rel="popover" data-content="6 characters or more! Be tricky"
                                 data-original-title="Password"
                                 placeholder="6 characters or more! Be tricky">
@@ -96,13 +97,9 @@
                     <div class="control-group">
                         <label class="control-label"></label>
                         <div class="controls">
-                            <label class="checkbox"> <input type="checkbox">
-                                Remember me
-                            </label>
-                            <button id="signin" class="btn btn-success" rel="tooltip"
-                                title="first tooltip">Login</button>
-                            <a href="#" id="signup"
-                                class="btn btn-primary" data-bitly-type="bitly_hover_card">Sign-up</a>
+                            <label class="checkbox"> <input type="checkbox"><spring:message code="blog.label.remember.id"/></label>
+                            <button id="signin" class="btn btn-success" rel="tooltip" title="first tooltip"><spring:message code="blog.label.login"/></button>
+                            <a href="#" id="signup" class="btn btn-primary" data-bitly-type="bitly_hover_card"><spring:message code="blog.label.signup"/></a>
                         </div>
                     </div>
                 </fieldset>
@@ -110,6 +107,9 @@
         </div>
     </div>
     <!-- /container -->
+
+    <!-- common html include -->
+    <%@ include file="/WEB-INF/views/jsp/common/commonHtml.jsp" %>
 
     <!-- common file include -->
     <%@ include file="/WEB-INF/views/jsp/common/include.jsp" %>

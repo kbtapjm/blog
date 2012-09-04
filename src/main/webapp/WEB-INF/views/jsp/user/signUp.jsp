@@ -46,15 +46,18 @@
                     var result = data.result;
                     
                     if(result == true) {
-                        $('#memberIdcheck').val("N");
-                        getErrMsg("이미 존재하는 아이디입니다.");
+                        $('#memberId').val("");
+                        
+                        var memberIdFocus = function() {
+                            $('#memberId').focus();
+                        };
+                        
+                        getErrMsg("이미 존재하는 아이디입니다.", memberIdFocus);
                     } else {
                         $('#memberIdcheck').val("Y");
                     }
                 },
                 error: function(data) {
-                    console.log(JSON.stringify(data));
-                    // {"readyState":0,"responseText":"","status":0,"statusText":"error"} 
                     getErrMsg("에러가 발생하여 중복확인이 실패하였습니다.");
                 }
             });
@@ -69,13 +72,11 @@
         $("#registerHere").validate({
             submitHandler: function(form) {
                 // 아이디 중복확인 체크유무 
-                /*
                 if($('#memberIdcheck').val() != "Y") {
                     getErrMsg("아이디 중복확인을 하세요.");
                     return false;
                 }
-                */
-                form.submit();
+                
                 var pattern1 = /(^[a-zA-Z])/;
                 var pattern2 = /([^a-zA-Z0-9\-_])/;
                 var memberId = $.trim($('input[name=memberId]').val());
@@ -95,30 +96,7 @@
                 memberId:{
                     required:true,
                     minlength: 4,
-                    maxlength: 12,
-                    remote: { // 아이디 중복 확인
-                        url: "../user/membercheck.do",
-                        type: "GET",
-                        cache: false,
-                        dataType: "json",
-                        data: {
-                            memberId: function() {
-                                var memberId = $("#memberId").val();
-                                return $.trim(memberId);
-                            }
-                        },
-                        success: function(data) {
-                            var result = data.result;
-                            
-                            if(result == true) {
-                                $("#memberId").val("");
-                                getErrMsg("이미 존재하는 아이디입니다.");
-                            } 
-                        },
-                        error: function(data) {
-                            getErrMsg("에러가 발생하여 중복확인이 실패하였습니다.");
-                        }
-                    }
+                    maxlength: 12
                 },
                 userName:"required",
                 password:{
@@ -167,7 +145,7 @@
                     number: "Numeric only."
                 },
                 gender:"Select Gender",
-                agree:"Agree check"
+                agree:"Agree Check out"
             },
             errorClass: "help-inline",
             errorElement: "span",
@@ -203,16 +181,14 @@
                             name="memberId" rel="popover"
                             data-content="Enter ID."
                             data-original-title="ID" value="" maxlength="12">
-                            <!-- 중복확인 버튼 
                             <button type="button" class="btn btn-info" id="memberCheck"><spring:message code="blog.label.member.check"/></button>
-                            <input type="hidden" name="memberIdcheck" id="memberIdcheck">
-                             -->
+                            <input type="hidden" name="memberIdcheck" id="memberIdcheck" value="N">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for=""><spring:message code="blog.label.password"/></label>
                     <div class="controls">
-                        <input type="password" class="input-xlarge" id="password" name="password"
+                        <input type="password" class="input-medium" id="password" name="password"
                             rel="popover" data-content="6 characters or more! Be tricky"
                             data-original-title="Password" value="" maxlength="12">
                     </div>
@@ -220,7 +196,7 @@
                 <div class="control-group">
                     <label class="control-label"><spring:message code="blog.label.confirm.password"/></label>
                     <div class="controls">
-                        <input type="password" class="input-xlarge" id="cpassword" name="cpassword"
+                        <input type="password" class="input-medium" id="cpassword" name="cpassword"
                             rel="popover"
                             data-content="Re-enter your password for confirmation."
                             data-original-title="Re-Password" value="" maxlength="12">
@@ -241,7 +217,7 @@
                         <input type="text" class="input-xlarge" id="email"
                             name="email" rel="popover"
                             data-content="What’s your email address?"
-                            data-original-title="Email" value="kbtapjm@gmai.com" maxlength="30">
+                            data-original-title="Email" value="" maxlength="30">
                     </div>
                 </div>
                 <div class="control-group">
@@ -250,13 +226,13 @@
                         <input type="text" class="input-small" id="birthday"
                             name="birthday" rel="popover"
                             data-content="Enter your birthday(19820101)"
-                            data-original-title="Birthday" value="19820101" maxlength="8">
+                            data-original-title="Birthday" value="" maxlength="8">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label"><spring:message code="blog.label.gender"/></label>
                     <div class="controls">
-                        <select name="gender" id="gender">
+                        <select class="span2" name="gender" id="gender">
                             <option value=""><spring:message code="blog.label.gender.select"/></option>
                             <option value="m"><spring:message code="blog.label.gender.male"/></option>
                             <option value="f"><spring:message code="blog.label.gender.female"/></option>
@@ -264,10 +240,10 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label"></label>
+                    <label class="control-label">개인정보 수신동의</label>
                     <div class="controls">
                         <label class="checkbox">
-						  <input type="checkbox" id="agree" name="agree"> 개인정보 보호정책 동의
+						      <input type="checkbox" id="agree" name="agree">
 						</label>
                     </div>
                 </div>

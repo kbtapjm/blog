@@ -114,6 +114,27 @@ public class UserController {
         return resultMap;
     }
     
+    @RequestMapping(value = "/loginProc", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> loginProc(Model model, @RequestParam String memberId, @RequestParam String password) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("userController loginProc method start~!!!");    
+        }
+        
+        User user = userService.getUserLoginInfo(memberId, password); 
+        
+        // 로그인정보 일치시 세션에 유저정보 저장, 세션생성
+        if(user != null) {
+            
+        }
+        
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("result", (user != null) ? true : false);
+        resultMap.put("user", user);
+        
+        return resultMap;
+    }
+    
     
 
 }

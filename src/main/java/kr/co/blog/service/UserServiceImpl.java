@@ -51,6 +51,15 @@ public class UserServiceImpl implements UserService  {
     }
 
     @Override
+    public User getUserLoginInfo(String memberId, String password) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("UserService getUserLoginInfo method Call~!!!");    
+        }
+        
+        return userDao.getUserLoginInfo(memberId, password);
+    }
+
+    @Override
     public User getUserBymemberId(String memberId) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("UserService getUserBymemberId method Call~!!!");    
