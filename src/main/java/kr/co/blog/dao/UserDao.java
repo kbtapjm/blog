@@ -7,8 +7,12 @@ import kr.co.blog.domain.User;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.StringTypeHandler;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,7 +24,7 @@ import org.springframework.stereotype.Component;
 public interface UserDao {
     final String MQL_GET_ALL_USERS  = "select * from user";
     final String MQL_GET_USER_BY_ID = "select * from user where userid = #{userId}";
-    final String MQL_GET_USER_BY_MEMBERID = "select * from user where memberid = #{memberid}";
+    final String MQL_GET_USER_BY_MEMBERID = "select userid, memberid, username, password, email, birthday, gender from user where memberid = #{memberid}";
     final String MQL_CREATE_USER = "insert into user (userid, memberid, username, password, email, birthday, gender) values (#{userId},#{memberId},#{userName},#{password},#{email},#{birthday},#{gender})";
     final String MQL_UPDATE_USER = "update user set userName=#{userName}, password=#{password}, email=#{email} where userid=#{userId}";
     final String MQL_DELETE_USER = "delete from user where userid=#{userId}";
@@ -46,13 +50,22 @@ public interface UserDao {
     
     /**
      * 유저정보 중복확인
+     * http://www.mybatis.org/core/ko/sqlmap-xml.html 참조
      * @param memberId
-     * @return
+     * @return 
      * @throws Exception
      */
     @Select(MQL_GET_USER_BY_MEMBERID)
     @Options(useCache=true)
-    // http://loianegroner.com/2011/02/getting-started-with-ibatis-mybatis-annotations/
+    @Results(value = {
+            @Result(property="userId", column="userid"),
+            @Result(property="memberId", column="memberid"),
+            @Result(property="userName", column="username"),
+            @Result(property="password", column="password"),
+            @Result(property="email", column="email"),
+            @Result(property="birthday", column="birthday"),
+            @Result(property="gender", column="gender")
+    }) 
     public User getUserByMemberId(String memberId) throws Exception;
 
     /**

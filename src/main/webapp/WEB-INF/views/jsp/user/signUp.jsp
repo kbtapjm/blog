@@ -27,7 +27,7 @@
             location.href = "../user/login.do";
         });
         
-        // 중복체크
+        // 중복체크(버튼 클릭시)
         $('#memberCheck').bind('click', function() {
             var memberId = $('#memberId').val();
             
@@ -42,24 +42,22 @@
                 cache: false,
                 dataType: "json",
                 data: "memberId=" + memberId,
-                success: function(result) {
-                    console.log(JSON.stringify(result));
+                success: function(data) {
+                    var result = data.result;
                     
-                    if(result == null) {
-                        console.log("111");
-                        
+                    if(result == true) {
+                        $('#memberIdcheck').val("N");
+                        getErrMsg("이미 존재하는 아이디입니다.");
                     } else {
-                        console.log("222");
-                        
+                        $('#memberIdcheck').val("Y");
                     }
                 },
-                error: function(result) {
-                    console.log(JSON.stringify(result));
+                error: function(data) {
+                    console.log(JSON.stringify(data));
                     // {"readyState":0,"responseText":"","status":0,"statusText":"error"} 
                     getErrMsg("에러가 발생하여 중복확인이 실패하였습니다.");
                 }
             });
-            
         });
 
         // Popover 
@@ -67,23 +65,92 @@
             $(this).popover('show');
         });
         
-        // Validation
+        // Validation(http://docs.jquery.com/Plugins/Validation/validate#options)   
         $("#registerHere").validate({
+            submitHandler: function(form) {
+                // 아이디 중복확인 체크유무 
+                /*
+                if($('#memberIdcheck').val() != "Y") {
+                    getErrMsg("아이디 중복확인을 하세요.");
+                    return false;
+                }
+                */
+                form.submit();
+                var pattern1 = /(^[a-zA-Z])/;
+                var pattern2 = /([^a-zA-Z0-9\-_])/;
+                var memberId = $.trim($('input[name=memberId]').val());
+
+                if(!pattern1.test(memberId)){
+                    getErrMsg("아이디의 첫글자는 영문이어야 합니다.");
+                    return false;
+                }
+                if(pattern2.test(memberId)){
+                    getErrMsg("아이디는 영문, 숫자, -, _ 만 사용할 수 있습니다.");
+                    return false;
+                }
+                
+                form.submit();
+            },
             rules:{
-                memberId:"required",
+                memberId:{
+                    required:true,
+                    minlength: 4,
+                    maxlength: 12,
+                    remote: { // 아이디 중복 확인
+                        url: "../user/membercheck.do",
+                        type: "GET",
+                        cache: false,
+                        dataType: "json",
+                        data: {
+                            memberId: function() {
+                                var memberId = $("#memberId").val();
+                                return $.trim(memberId);
+                            }
+                        },
+                        success: function(data) {
+                            var result = data.result;
+                            
+                            if(result == true) {
+                                $("#memberId").val("");
+                                getErrMsg("이미 존재하는 아이디입니다.");
+                            } 
+                        },
+                        error: function(data) {
+                            getErrMsg("에러가 발생하여 중복확인이 실패하였습니다.");
+                        }
+                    }
+                },
                 userName:"required",
-                password:{required:true,minlength: 6},
-                cpassword:{required:true,equalTo: "#password"},
-                email:{required:true,email: true},
-                birthday:{required:true,minlength: 8},
-                gender:"required"
+                password:{
+                    required:true,
+                    minlength: 6
+                },
+                cpassword:{
+                    required:true,
+                    equalTo: "#password"
+                },
+                email:{
+                    required:true,
+                    email: true
+                },
+                birthday:{
+                    required:true,
+                    minlength:8, 
+                    number:true
+                },
+                gender:"required",
+                agree:"required"
             },
 
             messages:{
-                memberId:"Enter your ID",
+                memberId:{
+                    required:"Enter your ID",
+                    minlength:jQuery.format("ID must be minimum {0} characters"),
+                    maxlength:jQuery.format("ID must be maxmum {0} characters")
+                },
                 password:{
                     required:"Enter your password",
-                    minlength:"Password must be minimum 6 characters"
+                    minlength:jQuery.format("Password must be minimum {0} or more characters")
                 },
                 cpassword:{
                     required:"Enter confirm password",
@@ -96,11 +163,12 @@
                 },
                 birthday:{
                     required:"Enter your birthday",
-                    minlength:"birthday must be minimum 8 characters"
+                    minlength:jQuery.format("birthday must be minimum {0} characters"),
+                    number: "Numeric only."
                 },
-                gender:"Select Gender"
+                gender:"Select Gender",
+                agree:"Agree check"
             },
-
             errorClass: "help-inline",
             errorElement: "span",
             highlight:function(element, errorClass, validClass) {
@@ -134,8 +202,11 @@
                         <input type="text" class="input-small" id="memberId"
                             name="memberId" rel="popover"
                             data-content="Enter ID."
-                            data-original-title="ID" value="kbtapjm">
+                            data-original-title="ID" value="" maxlength="12">
+                            <!-- 중복확인 버튼 
                             <button type="button" class="btn btn-info" id="memberCheck"><spring:message code="blog.label.member.check"/></button>
+                            <input type="hidden" name="memberIdcheck" id="memberIdcheck">
+                             -->
                     </div>
                 </div>
                 <div class="control-group">
@@ -143,7 +214,7 @@
                     <div class="controls">
                         <input type="password" class="input-xlarge" id="password" name="password"
                             rel="popover" data-content="6 characters or more! Be tricky"
-                            data-original-title="Password" value="123456">
+                            data-original-title="Password" value="" maxlength="12">
                     </div>
                 </div>
                 <div class="control-group">
@@ -152,7 +223,7 @@
                         <input type="password" class="input-xlarge" id="cpassword" name="cpassword"
                             rel="popover"
                             data-content="Re-enter your password for confirmation."
-                            data-original-title="Re-Password" value="123456">
+                            data-original-title="Re-Password" value="" maxlength="12">
                     </div>
                 </div>
                 <div class="control-group">
@@ -161,7 +232,7 @@
                         <input type="text" class="input-xlarge" id="userName"
                             name="userName" rel="popover"
                             data-content="Enter your first and last name."
-                            data-original-title="Full Name" value="검은몽스">
+                            data-original-title="Full Name" value="" maxlength="50">
                     </div>
                 </div>
                 <div class="control-group">
@@ -170,7 +241,7 @@
                         <input type="text" class="input-xlarge" id="email"
                             name="email" rel="popover"
                             data-content="What’s your email address?"
-                            data-original-title="Email" value="kbtapjm@gmai.com">
+                            data-original-title="Email" value="kbtapjm@gmai.com" maxlength="30">
                     </div>
                 </div>
                 <div class="control-group">
@@ -178,8 +249,8 @@
                     <div class="controls">
                         <input type="text" class="input-small" id="birthday"
                             name="birthday" rel="popover"
-                            data-content="Enter your birthday"
-                            data-original-title="Birthday" value="19820509">
+                            data-content="Enter your birthday(19820101)"
+                            data-original-title="Birthday" value="19820101" maxlength="8">
                     </div>
                 </div>
                 <div class="control-group">
@@ -190,6 +261,14 @@
                             <option value="m"><spring:message code="blog.label.gender.male"/></option>
                             <option value="f"><spring:message code="blog.label.gender.female"/></option>
                         </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"></label>
+                    <div class="controls">
+                        <label class="checkbox">
+						  <input type="checkbox" id="agree" name="agree"> 개인정보 보호정책 동의
+						</label>
                     </div>
                 </div>
                 <div class="control-group">

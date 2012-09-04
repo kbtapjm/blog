@@ -108,7 +108,8 @@ public class UserController {
         User user = userService.getUserBymemberId(memberId);
         
         Map<String, Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("result", user);
+        resultMap.put("result", (user != null) ? true : false);
+        resultMap.put("user", user);
         
         return resultMap;
     }
