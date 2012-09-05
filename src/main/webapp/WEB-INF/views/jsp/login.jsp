@@ -23,11 +23,14 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        
-        console.log("login result : " + "${result}");
+        getLogin();
         
         $('#signup').bind('click', function() {
             location.href = "../user/signUp.do";
+        });
+        
+        $('#idSave').bind('click', function() {
+            saveMemberId();
         });
         
         // Popover 
@@ -60,10 +63,63 @@
                 $(element).parents('.control-group').addClass('success');
             },
             submitHandler: function(form) {
+                if($("#idSave").attr("checked")) {
+                    saveMemberId();
+                }
+                
                 form.submit();
             }
         });
+        
+        if("${result}" == "false") {
+            getErrMsg("로그인 정보가 일치하지 않아 로그인이 실패 하였습니다..");
+        }
     });
+
+    // 쿠키값 가져오기
+    function getCookie(key){
+        var cook = document.cookie + ";";
+        var idx =  cook.indexOf(key, 0);
+        var val = "";
+        if(idx != -1)  {
+            cook = cook.substring(idx, cook.length);
+            begin = cook.indexOf("=", 0) + 1;
+            end = cook.indexOf(";", begin);
+            val = unescape( cook.substring(begin, end) );
+        }
+        return val;
+    }
+    
+    // 쿠키값 설정
+    function setCookie(name, value, expiredays){
+        var today = new Date();
+        today.setDate( today.getDate() + expiredays );
+        document.cookie = name + "=" + escape( value ) + "; path=/; expires=" + today.toGMTString() + ";";
+    }
+    
+    // 쿠키에서 로그인 정보 가져오기
+    function getLogin() {
+        // userid 쿠키에서 id 값을 가져온다.
+        var memberId = getCookie("memberId");
+        // 가져온 쿠키값이 있으면
+        if(memberId != "") {
+            $("#memberId").val(memberId);
+            $("#idSave").attr("checked","checked");
+        }
+    }
+    
+    // 쿠키에 로그인 정보 저장
+    function saveMemberId(){
+        var memberId = $("#memberId").val();
+        
+        if(memberId != "")  {
+            // userid 쿠키에 id 값을 7일간 저장
+            setCookie("memberId", memberId, 7);
+        } else {
+            // userid 쿠키 삭제
+            setCookie("memberId", memberId, -1);
+        }
+    }
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -101,7 +157,7 @@
                     <div class="control-group">
                         <label class="control-label"></label>
                         <div class="controls">
-                            <label class="checkbox"> <input type="checkbox"><spring:message code="blog.label.remember.id"/></label>
+                            <label class="checkbox"> <input type="checkbox" id="idSave" name="idSave"><spring:message code="blog.label.remember.id"/></label>
                             <button id="signin" class="btn btn-success" rel="tooltip" title="first tooltip"><spring:message code="blog.label.login"/></button>
                             <a href="#" id="signup" class="btn btn-primary" data-bitly-type="bitly_hover_card"><spring:message code="blog.label.signup"/></a>
                         </div>

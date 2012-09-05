@@ -48,7 +48,7 @@ public class UserController {
     }
     
     /**
-     * 회원가입
+     * 회원가입 화면
      * @param model
      * @return
      * @throws Exception
