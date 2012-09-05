@@ -24,6 +24,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
         
+        console.log("login result : " + "${result}");
+        
         $('#signup').bind('click', function() {
             location.href = "../user/signUp.do";
         });
@@ -36,12 +38,12 @@
         // Validation
         $("#login").validate({
             rules:{
-                memberid:"required",
+                memberId:"required",
                 password:{required:true,minlength: 6}
             },
 
             messages:{
-                memberid:"Enter your ID",
+                memberId:"Enter your ID",
                 password:{
                     required:"Enter your password",
                     minlength:"Password must be minimum 6 characters"
@@ -56,6 +58,9 @@
             unhighlight: function(element, errorClass, validClass) {
                 $(element).parents('.control-group').removeClass('error');
                 $(element).parents('.control-group').addClass('success');
+            },
+            submitHandler: function(form) {
+                form.submit();
             }
         });
     });
@@ -72,15 +77,14 @@
     <!-- contents 영역 -->
     <div class="container">
         <div class="content">
-            <form class="form-horizontal" id="login" method="post" action="../user/loginProc.do"
-                novalidate="novalidate">
+            <form class="form-horizontal" id="login" method="post" action="../user/loginProc.do" novalidate="novalidate">
                 <fieldset>
                     <legend>Login</legend>
                     <div class="control-group">
                         <label class="control-label"><spring:message code="blog.label.memberid"/></label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="memberid"
-                                name="memberid" rel="popover"
+                            <input type="text" class="input-xlarge" id="memberId"
+                                name="memberId" rel="popover"
                                 data-content="Enter your ID"
                                 data-original-title="ID" placeholder="Enter your ID">
                         </div>

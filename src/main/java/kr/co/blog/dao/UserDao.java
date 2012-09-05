@@ -7,12 +7,11 @@ import kr.co.blog.domain.User;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.StringTypeHandler;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,7 +23,7 @@ import org.springframework.stereotype.Component;
 public interface UserDao {
     final String MQL_GET_ALL_USERS  = "select * from user";
     final String MQL_GET_USER_BY_ID = "select * from user where userid = #{userId}";
-    final String MQL_GET_USER_LOGIN_INFO = "select * from user where userid = #{userId} and password=#{password}";
+    final String MQL_GET_USER_LOGIN_INFO = "select * from user where memberid = #{memberId} and password=#{password}";
     final String MQL_GET_USER_BY_MEMBERID = "select userid, memberid, username, password, email, birthday, gender from user where memberid = #{memberid}";
     final String MQL_CREATE_USER = "insert into user (userid, memberid, username, password, email, birthday, gender) values (#{userId},#{memberId},#{userName},#{password},#{email},#{birthday},#{gender})";
     final String MQL_UPDATE_USER = "update user set userName=#{userName}, password=#{password}, email=#{email} where userid=#{userId}";
@@ -58,7 +57,7 @@ public interface UserDao {
      */
     @Select(MQL_GET_USER_LOGIN_INFO)
     @Options(useCache=true)
-    public User getUserLoginInfo(String memberId, String password) throws Exception;
+    public User getUserLoginInfo(@Param("memberId") String memberId, @Param("password") String password) throws Exception;
     
     /**
      * 유저정보 중복확인

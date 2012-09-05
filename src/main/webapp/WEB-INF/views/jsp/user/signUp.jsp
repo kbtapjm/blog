@@ -157,6 +157,10 @@
                 $(element).parents('.control-group').addClass('success');
             }
         });
+        
+        if("${result}" == "N") {
+            getErrMsg("회원가입이 실패하였습니다..");
+        }
     });
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
