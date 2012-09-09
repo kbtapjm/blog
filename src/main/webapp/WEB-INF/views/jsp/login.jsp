@@ -157,7 +157,7 @@
                     <div class="control-group">
                         <label class="control-label"></label>
                         <div class="controls">
-                            <label class="checkbox"> <input type="checkbox" id="idSave" name="idSave"><spring:message code="blog.label.remember.id"/></label>
+                            <label class="checkbox"> <input type="checkbox" id="idSave" name="idSave"><spring:message code="blog.label.remember.id"/>&nbsp;&nbsp; <a href="#" >회원정보 찾기</a></label>
                             <button id="signin" class="btn btn-success" rel="tooltip" title="first tooltip"><spring:message code="blog.label.login"/></button>
                             <a href="#" id="signup" class="btn btn-primary" data-bitly-type="bitly_hover_card"><spring:message code="blog.label.signup"/></a>
                         </div>

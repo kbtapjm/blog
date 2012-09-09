@@ -4,11 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import kr.co.blog.domain.User;
 import kr.co.blog.service.UserService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.support.SessionStatus;
 
 /**
  * User 웹요청 처리
@@ -69,7 +74,8 @@ public class UserController {
      * @throws Exception
      */
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
-    public String createUser(Model model, @ModelAttribute User user, BindingResult bindingResult) throws Exception {
+    public String createUser(HttpServletRequest request, 
+                                                Model model, @ModelAttribute User user, BindingResult bindingResult, SessionStatus sessionStatus) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("userController createUser method start~!!!");    
         }
@@ -77,6 +83,8 @@ public class UserController {
         if(bindingResult.hasErrors()) {
             return "/user/signUp";
         }
+        
+        HttpSession session = request.getSession();
         
         String userId = UUID.randomUUID().toString(); 
         
@@ -88,6 +96,8 @@ public class UserController {
             user = userService.getUserByUserId(userId);
             
             // 세션에 유저정보 저장
+            session.setAttribute("sessionuser", user);
+            sessionStatus.setComplete();
             
             // home으로 이동
             return "redirect:home.do";
@@ -130,7 +140,10 @@ public class UserController {
      * @throws Exception
      */
     @RequestMapping(value = "/loginProc", method = RequestMethod.POST)
-    public String loginProc(Model model, @RequestParam String memberId, @RequestParam String password) throws Exception {
+    public String loginProc(HttpServletRequest request, Model model, 
+                                            @RequestParam String memberId, 
+                                            @RequestParam String password, 
+                                            SessionStatus sessionStatus) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("userController loginProc method start~!!!");    
         }
@@ -139,6 +152,9 @@ public class UserController {
         
         if(user != null) {
             // 세션에 유저정보 세팅
+            HttpSession session = request.getSession();
+            session.setAttribute("sessionuser", user);
+            sessionStatus.setComplete();
             
             // home으로 이동
             return "redirect:home.do";

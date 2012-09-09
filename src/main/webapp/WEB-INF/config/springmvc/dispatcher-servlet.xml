@@ -21,7 +21,7 @@
     <context:annotation-config />
  
     <!-- ============================================================================================ -->
-    <!-- annotation scan -->
+    <!-- annotation scan : 컨트롤러를 자동으로 스캔 -->
     <!-- ============================================================================================ -->
     <context:component-scan base-package="kr.co.blog">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
@@ -54,13 +54,31 @@
     <!-- classpath 로딩시 locale parameter 가 정상적으로 동작하지 않음. <mvc:annotation-driven> 과 같은 파일내에서 사용-->
     <!-- ============================================================================================ -->
     <mvc:interceptors>
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
         <bean id="webContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
             <property name="cacheSeconds" value="0"/>
             <property name="useExpiresHeader" value="true"/>
             <property name="useCacheControlHeader" value="true"/>
             <property name="useCacheControlNoStore" value="true"/>
         </bean>
+        <mvc:interceptor>
+            <mvc:mapping path="/board/**" />
+            <mvc:mapping path="/user/home.do" />
+            <bean class="kr.co.blog.web.security.SecurityInterceptor" />
+        </mvc:interceptor>
     </mvc:interceptors>
+    
+    <!-- ============================================================================================ -->
+    <!-- Exception Resolver-->
+    <!-- ============================================================================================ -->
+    <bean   id="exceptionResolver"  class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="defaultErrorView" value="defaultErrorView"/> 
+        <property name="exceptionMappings">
+            <props>
+                <prop key="user.SecurityException">/user/login</prop>
+            </props>
+        </property>
+    </bean>
  
     <!-- ============================================================================================ -->
     <!--view name tanslator : 논리적인 View 이름을 생성하여 ViewResolver 에서 넘겨준다.   -->
