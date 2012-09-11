@@ -1,8 +1,13 @@
 package kr.co.blog.web.security;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import kr.co.blog.common.CommonUtil;
 
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,16 +23,33 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         }
         
         // session검사
-        Object siteLogin = request.getSession().getAttribute("sessionuser");
-        if (siteLogin == null) {
+        HttpSession session = request.getSession();
+        Object sessionuser = session.getAttribute("sessionuser");
+        if (sessionuser == null) {
             if (log.isDebugEnabled()) {
                 log.debug(" 인증값이 없습니다. ");
             }
-            response.sendRedirect(request.getContextPath() + "/user/login.do");
-           // throw new SecurityException();
+            
+            throw new SecurityException();
+            //response.sendRedirect(request.getContextPath() + "/user/login.do");
+            //return false;
+        } else {
+            String sessionId = session.getId();
+            String sessionCreationTime = CommonUtil.getStrDateTime(session.getCreationTime());
+            String sessionLastAccessedTime = CommonUtil.getStrDateTime(session.getLastAccessedTime());
+            String sessionControlValue = request.getParameter("sessionuser");
+            session.setAttribute("sessionuser", sessionuser);
+            
+            if (log.isDebugEnabled()) {
+                log.debug(" ==== > session-id: " + sessionId);
+                log.debug(" ==== > session-creation-time: " + sessionCreationTime);
+                log.debug(" ==== > session-last-accessed-time: " + sessionLastAccessedTime);
+                log.debug(" ==== > session-control-value: " + sessionControlValue);
+                log.debug(" ==== > sessionuser: " + sessionuser);
+            }
         }
         
-        return super.preHandle(request, response, handler);
+        return true;
     }
 
     @Override

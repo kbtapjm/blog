@@ -84,8 +84,6 @@ public class UserController {
             return "/user/signUp";
         }
         
-        HttpSession session = request.getSession();
-        
         String userId = UUID.randomUUID().toString(); 
         
         user.setUserId(userId);
@@ -96,6 +94,7 @@ public class UserController {
             user = userService.getUserByUserId(userId);
             
             // 세션에 유저정보 저장
+            HttpSession session = request.getSession();
             session.setAttribute("sessionuser", user);
             sessionStatus.setComplete();
             
