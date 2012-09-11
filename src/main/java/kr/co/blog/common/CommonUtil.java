@@ -2,6 +2,7 @@ package kr.co.blog.common;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class CommonUtil {
     
@@ -13,7 +14,7 @@ public class CommonUtil {
     public static String getStrDateTime(Long time) {
         if(time == null || time == 0) return ""; 
         
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/dd HH:mm:ss"); 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault()); 
         Date date = new Date(time);
         
         String retTime = sdf.format(date);

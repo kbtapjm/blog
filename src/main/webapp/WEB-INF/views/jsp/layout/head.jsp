@@ -19,7 +19,7 @@
                     </ul>
                     <ul class="nav pull-right">
                         <c:if test="${sessionScope.sessionuser != null}">
-                            <li class="about-menu"><a href="#" id="myProfile">MyProfile</a></li>
+                            <li class="about-menu"><a href="../user/userInfo.do" id="myProfile">${sessionuser.userName } </a></li>
                             <li class="about-menu"><a href="../login.html">Logout</a></li>
                         </c:if>
                     </ul>

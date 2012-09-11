@@ -75,7 +75,7 @@
         <property name="defaultErrorView" value="/error/defaultErrorView"/> 
         <property name="exceptionMappings">
             <props>
-                <prop key="user.SecurityException">/blog/login</prop>
+                <prop key="user.SecurityException">login</prop>
             </props>
         </property>
     </bean>

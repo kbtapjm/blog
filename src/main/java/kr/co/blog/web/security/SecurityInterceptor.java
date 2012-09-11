@@ -30,9 +30,9 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
                 log.debug(" 인증값이 없습니다. ");
             }
             
-            throw new SecurityException();
-            //response.sendRedirect(request.getContextPath() + "/user/login.do");
-            //return false;
+            //throw new SecurityException();
+            response.sendRedirect(request.getContextPath() + "/user/login.do");
+            return false;
         } else {
             String sessionId = session.getId();
             String sessionCreationTime = CommonUtil.getStrDateTime(session.getCreationTime());

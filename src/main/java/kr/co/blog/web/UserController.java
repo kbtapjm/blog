@@ -12,7 +12,6 @@ import kr.co.blog.service.UserService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 /**
@@ -30,6 +30,7 @@ import org.springframework.web.bind.support.SessionStatus;
  */
 @RequestMapping("/user")
 @Controller(value = "userController")
+@SessionAttributes("user")
 public class UserController {
     private static Logger log = Logger.getLogger(UserController.class);
     
@@ -139,10 +140,7 @@ public class UserController {
      * @throws Exception
      */
     @RequestMapping(value = "/loginProc", method = RequestMethod.POST)
-    public String loginProc(HttpServletRequest request, Model model, 
-                                            @RequestParam String memberId, 
-                                            @RequestParam String password, 
-                                            SessionStatus sessionStatus) throws Exception {
+    public String loginProc(HttpServletRequest request, Model model, @RequestParam String memberId, @RequestParam String password) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("userController loginProc method start~!!!");    
         }
@@ -153,7 +151,7 @@ public class UserController {
             // 세션에 유저정보 세팅
             HttpSession session = request.getSession();
             session.setAttribute("sessionuser", user);
-            sessionStatus.setComplete();
+            model.addAttribute("user", user);
             
             // home으로 이동
             return "redirect:home.do";
@@ -178,6 +176,26 @@ public class UserController {
         }
         
         return "home";
+    }
+    
+    /**
+     * 회원정보
+     * @param request
+     * @param model
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/userInfo", method = RequestMethod.GET)
+    public String userInfo(HttpServletRequest request, Model model, @ModelAttribute User user) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("userController userInfo method start~!!!");    
+        }
+     
+        user.userToString();
+
+
+        return "/user/signUp";
     }
 
 }
