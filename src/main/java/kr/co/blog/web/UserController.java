@@ -202,7 +202,7 @@ public class UserController {
     }
     
     /**
-     * 회원정보
+     * 회원정보(세션정보에서 데이터 가져옴)
      * @param request
      * @param model
      * @param user
@@ -216,6 +216,89 @@ public class UserController {
         }
     
         return "/user/userInfo";
+    }
+    
+    /**
+     * 유저정보 수정(세션정보에서 데이터 가져옴)
+     * @param model
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/userEdit", method = RequestMethod.GET)
+    public String userEdit(Model model, @ModelAttribute User user) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("userController userEdit method start~!!!");    
+        }
+    
+        return "/user/userEdit";
+    }
+    
+    /**
+     * 유저정보 수정
+     * @param request
+     * @param model
+     * @param user
+     * @param bindingResult
+     * @param sessionStatus
+     * @param redirectAttr
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
+    public String updateUser(HttpServletRequest request, 
+                            Model model, 
+                            @Valid @ModelAttribute User user, 
+                            BindingResult bindingResult, 
+                            SessionStatus sessionStatus,
+                            RedirectAttributes redirectAttr) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("userController updateUser method start~!!!");    
+        }
+        
+        if(bindingResult.hasErrors()) {
+            return "redirect:/user/userEdit.do";
+        }
+        
+        int result = userService.updateUser(user);
+        
+        // 성공일 경우 login 처리
+        if(result > 0) {
+            user = userService.getUserByUserId(user.getUserId());
+            
+            // 세션에 유저정보 저장
+            HttpSession session = request.getSession();
+            session.setAttribute("sessionuser", user);
+            sessionStatus.isComplete();
+            model.addAttribute("user", user);   // @SessionAttributes에서 사용하기 위해서 저장
+            
+            // home으로 이동
+            return "redirect:/user/userInfo.do";
+        }
+        
+        // 실패시 회원정보 수정화면
+        redirectAttr.addAttribute("result", "N");   // parameter uri세팅
+        
+        return "redirect:/user/userEdit.do";
+    }
+    
+    /***
+     * 로그아웃
+     * @param model
+     * @param session
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/signout", method = RequestMethod.GET)
+    public String signout(Model model, HttpSession session) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("userController signout method start~!!!");    
+        }
+        
+        session.removeAttribute("sessionuser");
+        session.invalidate();
+        
+        return "redirect:login.do";
     }
 
 }

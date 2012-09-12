@@ -8,7 +8,7 @@
             <a class="btn btn-navbar" data-toggle="collapse"
                 data-target=".nav-collapse"> <span class="icon-bar"></span> <span
                 class="icon-bar"></span> <span class="icon-bar"></span>
-            </a> <a class="brand" href="#">MyBlog</a>
+            </a> <a class="brand" href="../user/home.do">MyBlog</a>
             <div class="nav-collapse">
                     <ul class="nav">
                         
@@ -19,12 +19,11 @@
                     </ul>
                     <ul class="nav pull-right">
                         <c:if test="${sessionScope.sessionuser != null}">
-                            <li class="about-menu"><a href="../user/userInfo.do" id="myProfile">${sessionuser.userName } </a></li>
-                            <li class="about-menu"><a href="../login.html">Logout</a></li>
+                            <li class="about-menu" id="userInfo"><a href="../user/userInfo.do">${sessionuser.userName } </a></li>
+                            <li class="about-menu"  id="signout"><a href="../user/signout.do">Logout</a></li>
                         </c:if>
                     </ul>
                 </div>
-             session : ${sessionScope.sessionuser.userName }
         </div>
     </div>
 </div>

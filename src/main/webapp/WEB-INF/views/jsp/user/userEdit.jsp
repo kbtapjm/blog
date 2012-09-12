@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="description" content="This is description" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title><spring:message code="blog.label.signup"/></title>
+<title><spring:message code="blog.label.update"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -24,80 +24,17 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#cancel').bind('click', function() {
-            location.href = "../user/login.do";
+            location.href = "../user/userInfo.do";
         });
         
-        // 중복체크(버튼 클릭시)
-        $('#memberCheck').bind('click', function() {
-            var memberId = $('#memberId').val();
-            
-            if($.trim(memberId).length == 0) {
-                getErrMsg('아이디를 입력하세요.');
-                return false;
-            }
-            
-            $.ajax({
-                url: "../user/membercheck.do",
-                type: "GET",
-                cache: false,
-                dataType: "json",
-                data: "memberId=" + memberId,
-                success: function(data) {
-                    var result = data.result;
-                    
-                    if(result == true) {
-                        $('#memberId').val("");
-                        
-                        var memberIdFocus = function() {
-                            $('#memberId').focus();
-                        };
-                        
-                        getErrMsg("이미 존재하는 아이디입니다.", memberIdFocus);
-                    } else {
-                        $('#memberIdcheck').val("Y");
-                    }
-                },
-                error: function(data) {
-                    getErrMsg("에러가 발생하여 중복확인이 실패하였습니다.");
-                }
-            });
-        });
-
-        // Popover 
-        $('#registerHere input').hover(function() {
-            $(this).popover('show');
-        });
+        $('#gender').val("${user.gender}");
         
         // Validation(http://docs.jquery.com/Plugins/Validation/validate#options)   
         $("#registerHere").validate({
             submitHandler: function(form) {
-                // 아이디 중복확인 체크유무 
-                if($('#memberIdcheck').val() != "Y") {
-                    getErrMsg("아이디 중복확인을 하세요.");
-                    return false;
-                }
-                
-                var pattern1 = /(^[a-zA-Z])/;
-                var pattern2 = /([^a-zA-Z0-9\-_])/;
-                var memberId = $.trim($('input[name=memberId]').val());
-
-                if(!pattern1.test(memberId)){
-                    getErrMsg("아이디의 첫글자는 영문이어야 합니다.");
-                    return false;
-                }
-                if(pattern2.test(memberId)){
-                    getErrMsg("아이디는 영문, 숫자, -, _ 만 사용할 수 있습니다.");
-                    return false;
-                }
-                
                 form.submit();
             },
             rules:{
-                memberId:{
-                    required:true,
-                    minlength: 4,
-                    maxlength: 12
-                },
                 userName:"required",
                 password:{
                     required:true,
@@ -116,16 +53,10 @@
                     minlength:8, 
                     number:true
                 },
-                gender:"required",
-                agree:"required"
+                gender:"required"
             },
 
             messages:{
-                memberId:{
-                    required:"Enter your ID",
-                    minlength:jQuery.format("ID must be minimum {0} characters"),
-                    maxlength:jQuery.format("ID must be maxmum {0} characters")
-                },
                 password:{
                     required:"Enter your password",
                     minlength:jQuery.format("Password must be minimum {0} or more characters")
@@ -144,8 +75,7 @@
                     minlength:jQuery.format("birthday must be minimum {0} characters"),
                     number: "Numeric only."
                 },
-                gender:"Select Gender",
-                agree:"Agree Check out"
+                gender:"Select Gender"
             },
             errorClass: "help-inline",
             errorElement: "span",
@@ -157,10 +87,6 @@
                 $(element).parents('.control-group').addClass('success');
             }
         });
-        
-        if("${result}" == "N") {
-            getErrMsg("회원가입이 실패하였습니다..");
-        }
     });
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -174,19 +100,14 @@
 
     <!-- contents 영역 -->
     <div class="container">
-        <form class="form-horizontal" id="registerHere" method='post' action='../user/createUser.do'>
-            <input type="hidden" name="userId" value="">
+        <form class="form-horizontal" id="registerHere" method='post' action='../user/updateUser.do'>
+            <input type="hidden" name="userId" value="${user.userId }">
             <fieldset>
-                <legend><spring:message code="blog.label.signup"/></legend>
+                <legend><spring:message code="blog.label.user.edit"/></legend>
                 <div class="control-group">
                     <label class="control-label"><spring:message code="blog.label.memberid"/></label>
                     <div class="controls">
-                        <input type="text" class="input-small" id="memberId"
-                            name="memberId" rel="popover"
-                            data-content="Enter ID."
-                            data-original-title="ID" value="" maxlength="12">
-                            <button type="button" class="btn btn-info" id="memberCheck"><spring:message code="blog.label.member.check"/></button>
-                            <input type="hidden" name="memberIdcheck" id="memberIdcheck" value="N">
+                        <input type="text" class="input-small" id="memberId"  name="memberId" value="${user.memberId }" disabled>
                     </div>
                 </div>
                 <div class="control-group">
@@ -194,7 +115,7 @@
                     <div class="controls">
                         <input type="password" class="input-medium" id="password" name="password"
                             rel="popover" data-content="6 characters or more! Be tricky"
-                            data-original-title="Password" value="" maxlength="12">
+                            data-original-title="Password" value="${user.memberId }" maxlength="12">
                     </div>
                 </div>
                 <div class="control-group">
@@ -212,7 +133,7 @@
                         <input type="text" class="input-xlarge" id="userName"
                             name="userName" rel="popover"
                             data-content="Enter your first and last name."
-                            data-original-title="Full Name" value="" maxlength="50">
+                            data-original-title="Full Name" value="${user.userName }" maxlength="50">
                     </div>
                 </div>
                 <div class="control-group">
@@ -221,7 +142,7 @@
                         <input type="text" class="input-xlarge" id="email"
                             name="email" rel="popover"
                             data-content="What’s your email address?"
-                            data-original-title="Email" value="" maxlength="30">
+                            data-original-title="Email" value="${user.email }" maxlength="30">
                     </div>
                 </div>
                 <div class="control-group">
@@ -230,7 +151,7 @@
                         <input type="text" class="input-small" id="birthday"
                             name="birthday" rel="popover"
                             data-content="Enter your birthday(19820101)"
-                            data-original-title="Birthday" value="" maxlength="8">
+                            data-original-title="Birthday" value="${user.birthday }" maxlength="8">
                     </div>
                 </div>
                 <div class="control-group">
@@ -244,17 +165,9 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label">개인정보 수신동의</label>
-                    <div class="controls">
-                        <label class="checkbox">
-						      <input type="checkbox" id="agree" name="agree">
-						</label>
-                    </div>
-                </div>
-                <div class="control-group">
                     <label class="control-label"></label>
                     <div class="controls">
-                        <button type="submit" class="btn btn-success"><spring:message code="blog.label.signup"/></button>
+                        <button type="submit" class="btn btn-success"><spring:message code="blog.label.update"/></button>
                         <button type="button" class="btn" id="cancel"><spring:message code="blog.label.cancel"/></button>
                     </div>
                 </div>

@@ -23,7 +23,12 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-       
+        $('#update').bind('click', function() {
+            location.href = "../user/userEdit.do";
+        });
+        
+        $('.active').removeClass();
+        $('#userInfo').addClass('active');
     });
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -37,50 +42,41 @@
 
     <!-- contents 영역 -->
     <div class="container">
-        <form class="form-horizontal" id="registerHere" method='post' action='../user/createUser.do'>
-            <input type="hidden" name="userId" value="">
+        <form class="form-horizontal" method='get' action='../user/userEdit.do'>
             <fieldset>
-                <legend><spring:message code="blog.label.signup"/></legend>
+                <legend><spring:message code="blog.label.userInfo"/></legend>
                 <div class="control-group">
-                    <label class="control-label"><spring:message code="blog.label.memberid"/></label>
-                    <div class="controls">
-                    </div>
+                    <label class="control-label" for="title"><spring:message code="blog.label.memberid"/></label>
+                    <label class="control-label" for="title">${user.memberId }</label>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for=""><spring:message code="blog.label.password"/></label>
-                    <div class="controls">
-                    </div>
+                    <label class="control-label" for="username"><spring:message code="blog.label.name"/></label>
+                    <label class="control-label" for="username">${user.userName }</label>
                 </div>
                 <div class="control-group">
-                    <label class="control-label"><spring:message code="blog.label.confirm.password"/></label>
-                    <div class="controls">
-                    </div>
+                    <label class="control-label" for="email"><spring:message code="blog.label.email"/></label>
+                    <label class="control-label" for="email">${user.email }</label>
                 </div>
                 <div class="control-group">
-                    <label class="control-label"><spring:message code="blog.label.name"/></label>
-                    <div class="controls">
-                    </div>
+                    <label class="control-label" for="birthday"><spring:message code="blog.label.birthday"/></label>
+                    <label class="control-label" for="birthday">${fn:substring(user.birthday , 0, 4)}/${fn:substring(user.birthday , 4, 6)}/${fn:substring(user.birthday , 6, 8)}</label>
                 </div>
                 <div class="control-group">
-                    <label class="control-label"><spring:message code="blog.label.email"/></label>
-                    <div class="controls">
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label"><spring:message code="blog.label.birthday"/></label>
-                    <div class="controls">
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label"><spring:message code="blog.label.gender"/></label>
-                    <div class="controls">
-                    </div>
+                    <label class="control-label" for="gender"><spring:message code="blog.label.gender"/></label>
+                    <label class="control-label" for="gender">
+                        <c:choose>
+                            <c:when test="${user.gender eq 'M' }">
+                                <spring:message code="blog.label.gender.male"/>
+                            </c:when>
+                            <c:otherwise>
+                                <spring:message code="blog.label.gender.female"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </label>
                 </div>
                 <div class="control-group">
                     <label class="control-label"></label>
-                    <div class="controls">
-                        <button type="submit" class="btn btn-success">update</button>
-                    </div>
+                    <button type="button" class="btn btn-success" id="update" ><spring:message code="blog.label.update"/></button>
                 </div>
             </fieldset>
         </form>
