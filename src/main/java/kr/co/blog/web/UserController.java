@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import kr.co.blog.domain.User;
 import kr.co.blog.service.UserService;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * User 웹요청 처리
@@ -34,7 +36,18 @@ import org.springframework.web.bind.support.SessionStatus;
 public class UserController {
     private static Logger log = Logger.getLogger(UserController.class);
     
-    @Autowired private UserService userService;
+    @Autowired 
+    private UserService userService;
+    
+    /**
+     *  최초 처음 model 최초 바인딩 하기위함
+     *  참조 : http://springmvc.egloos.com/535572
+     * @return
+     */
+    @ModelAttribute("user")
+    public User user() {
+        return new User();
+    }
     
     /**
      * 로그인 화면
@@ -50,6 +63,8 @@ public class UserController {
             log.debug("userController login method start~!!!");    
         }
         
+        model.addAttribute("user", user());
+        
         return "login";
     }
     
@@ -60,10 +75,12 @@ public class UserController {
      * @throws Exception
      */
     @RequestMapping(value = "/signUp", method = RequestMethod.GET)
-    public String signUp(Model model) throws Exception {
+    public String signUp(Model model, @RequestParam(value="result", required=false) String result) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("userController signUp method start~!!!");    
         }
+        
+        model.addAttribute("result", result);
         
         return "/user/signUp";
     }
@@ -76,7 +93,11 @@ public class UserController {
      */
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
     public String createUser(HttpServletRequest request, 
-                                                Model model, @ModelAttribute User user, BindingResult bindingResult, SessionStatus sessionStatus) throws Exception {
+                            Model model, 
+                            @Valid @ModelAttribute User user, 
+                            BindingResult bindingResult, 
+                            SessionStatus sessionStatus,
+                            RedirectAttributes redirectAttr) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("userController createUser method start~!!!");    
         }
@@ -97,15 +118,17 @@ public class UserController {
             // 세션에 유저정보 저장
             HttpSession session = request.getSession();
             session.setAttribute("sessionuser", user);
-            sessionStatus.setComplete();
+            model.addAttribute("user", user);   // @SessionAttributes에서 사용하기 위해서 저장
             
             // home으로 이동
             return "redirect:home.do";
         }
         
         // 실패시 회원가입 화면
-        model.addAttribute("result", "N");
-        return "/user/signUp";
+        //model.addAttribute("result", "N");
+        redirectAttr.addAttribute("result", "N");   // parameter uri세팅
+        
+        return "redirect:/user/signUp.do";
     }
     
     /**
@@ -187,15 +210,12 @@ public class UserController {
      * @throws Exception
      */
     @RequestMapping(value = "/userInfo", method = RequestMethod.GET)
-    public String userInfo(HttpServletRequest request, Model model, @ModelAttribute User user) throws Exception {
+    public String userInfo(Model model, @ModelAttribute User user) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("userController userInfo method start~!!!");    
         }
-     
-        user.userToString();
-
-
-        return "/user/signUp";
+    
+        return "/user/userInfo";
     }
 
 }

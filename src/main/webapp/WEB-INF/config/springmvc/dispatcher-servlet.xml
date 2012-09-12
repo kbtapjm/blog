@@ -62,7 +62,6 @@
             <property name="useCacheControlNoStore" value="true"/>
         </bean>
         <mvc:interceptor>
-            <mvc:mapping path="/board/**" />
             <mvc:mapping path="/user/home.do" />
             <bean class="kr.co.blog.web.security.SecurityInterceptor" />
         </mvc:interceptor>
@@ -71,11 +70,11 @@
     <!-- ============================================================================================ -->
     <!-- Exception Resolver-->
     <!-- ============================================================================================ -->
-    <bean   id="exceptionResolver"  class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+    <bean id="exceptionResolver"  class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
         <property name="defaultErrorView" value="/error/defaultErrorView"/> 
         <property name="exceptionMappings">
             <props>
-                <prop key="user.SecurityException">login</prop>
+                <prop key="SecurityException">login</prop>
             </props>
         </property>
     </bean>

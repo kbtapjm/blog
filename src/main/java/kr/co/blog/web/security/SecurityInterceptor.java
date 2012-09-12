@@ -1,8 +1,5 @@
 package kr.co.blog.web.security;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,6 +10,11 @@ import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+/**
+ * 웹 요청처리시 인증값 확인
+ * @author jmpark
+ *
+ */
 public class SecurityInterceptor extends HandlerInterceptorAdapter {
     private static Logger log = Logger.getLogger(SecurityInterceptor.class);
 
@@ -30,9 +32,9 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
                 log.debug(" 인증값이 없습니다. ");
             }
             
-            //throw new SecurityException();
-            response.sendRedirect(request.getContextPath() + "/user/login.do");
-            return false;
+            throw new SecurityException();
+            //response.sendRedirect(request.getContextPath() + "/user/login.do");
+            //return false;
         } else {
             String sessionId = session.getId();
             String sessionCreationTime = CommonUtil.getStrDateTime(session.getCreationTime());
