@@ -63,6 +63,9 @@
         </bean>
         <mvc:interceptor>
             <mvc:mapping path="/user/home.do" />
+            <mvc:mapping path="/user/userInfo.do" />
+            <mvc:mapping path="/user/userEdit.do" />
+            <!-- <mvc:mapping path="/user/**" /> -->
             <bean class="kr.co.blog.web.security.SecurityInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>

@@ -10,20 +10,19 @@
                 class="icon-bar"></span> <span class="icon-bar"></span>
             </a> <a class="brand" href="../user/home.do">MyBlog</a>
             <div class="nav-collapse">
-                    <ul class="nav">
-                        
-                        <c:if test="${sessionScope.sessionuser != null}">
-	                        <li class="active"><a href="#">Board</a></li>
-	                        <li><a href="#">Photo</a></li>
-                        </c:if>
-                    </ul>
-                    <ul class="nav pull-right">
-                        <c:if test="${sessionScope.sessionuser != null}">
-                            <li class="about-menu" id="userInfo"><a href="../user/userInfo.do">${sessionuser.userName } </a></li>
-                            <li class="about-menu"  id="signout"><a href="../user/signout.do">Logout</a></li>
-                        </c:if>
-                    </ul>
-                </div>
+               <ul class="nav">
+                   <c:if test="${sessionScope.sessionuser != null}">
+                    <li><a href="#">Board</a></li>
+                    <li><a href="#">Photo</a></li>
+                   </c:if>
+               </ul>
+               <ul class="nav pull-right">
+                   <c:if test="${sessionScope.sessionuser != null}">
+                       <li class="about-menu" id="userInfo"><a href="../user/userInfo.do">${sessionuser.userName } </a></li>
+                       <li class="about-menu"  id="signout"><a href="../user/signout.do">Logout</a></li>
+                   </c:if>
+               </ul>
+           </div>
         </div>
     </div>
 </div>

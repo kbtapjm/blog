@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="description" content="This is description" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>UserInfo</title>
+<title><spring:message code="blog.label.userInfo"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -23,8 +23,16 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+        // 회원정보 수정
         $('#update').bind('click', function() {
             location.href = "../user/userEdit.do";
+        });
+        
+        // 회원탈퇴
+        $('#delete').bind('click', function() {
+            if(confirm("회원을 탈퇴하시겠습니까?")) {
+                location.href = "../user/deleteUser.do";        
+            }
         });
         
         $('.active').removeClass();
@@ -47,15 +55,15 @@
                 <legend><spring:message code="blog.label.userInfo"/></legend>
                 <div class="control-group">
                     <label class="control-label" for="title"><spring:message code="blog.label.memberid"/></label>
-                    <label class="control-label" for="title">${user.memberId }</label>
+                    <label class="control-label" for="title">${user.memberId}</label>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="username"><spring:message code="blog.label.name"/></label>
-                    <label class="control-label" for="username">${user.userName }</label>
+                    <label class="control-label" for="username">${user.userName}</label>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="email"><spring:message code="blog.label.email"/></label>
-                    <label class="control-label" for="email">${user.email }</label>
+                    <label class="control-label" for="email">${user.email}</label>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="birthday"><spring:message code="blog.label.birthday"/></label>
@@ -77,6 +85,7 @@
                 <div class="control-group">
                     <label class="control-label"></label>
                     <button type="button" class="btn btn-success" id="update" ><spring:message code="blog.label.update"/></button>
+                    <button type="button" class="btn btn-danger" id="delete" ><spring:message code="blog.label.delete.user"/></button>
                 </div>
             </fieldset>
         </form>

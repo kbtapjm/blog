@@ -101,13 +101,13 @@
     <!-- contents 영역 -->
     <div class="container">
         <form class="form-horizontal" id="registerHere" method='post' action='../user/updateUser.do'>
-            <input type="hidden" name="userId" value="${user.userId }">
+            <input type="hidden" name="userId" value="${user.userId}">
             <fieldset>
                 <legend><spring:message code="blog.label.user.edit"/></legend>
                 <div class="control-group">
                     <label class="control-label"><spring:message code="blog.label.memberid"/></label>
                     <div class="controls">
-                        <input type="text" class="input-small" id="memberId"  name="memberId" value="${user.memberId }" disabled>
+                        <input type="text" class="input-small" id="memberId"  name="memberId" value="${user.memberId}" disabled>
                     </div>
                 </div>
                 <div class="control-group">
@@ -115,7 +115,7 @@
                     <div class="controls">
                         <input type="password" class="input-medium" id="password" name="password"
                             rel="popover" data-content="6 characters or more! Be tricky"
-                            data-original-title="Password" value="${user.memberId }" maxlength="12">
+                            data-original-title="Password" value="${user.memberId}" maxlength="12">
                     </div>
                 </div>
                 <div class="control-group">
@@ -133,7 +133,7 @@
                         <input type="text" class="input-xlarge" id="userName"
                             name="userName" rel="popover"
                             data-content="Enter your first and last name."
-                            data-original-title="Full Name" value="${user.userName }" maxlength="50">
+                            data-original-title="Full Name" value="${user.userName}" maxlength="50">
                     </div>
                 </div>
                 <div class="control-group">
@@ -142,7 +142,7 @@
                         <input type="text" class="input-xlarge" id="email"
                             name="email" rel="popover"
                             data-content="What’s your email address?"
-                            data-original-title="Email" value="${user.email }" maxlength="30">
+                            data-original-title="Email" value="${user.email}" maxlength="30">
                     </div>
                 </div>
                 <div class="control-group">
@@ -151,7 +151,7 @@
                         <input type="text" class="input-small" id="birthday"
                             name="birthday" rel="popover"
                             data-content="Enter your birthday(19820101)"
-                            data-original-title="Birthday" value="${user.birthday }" maxlength="8">
+                            data-original-title="Birthday" value="${user.birthday}" maxlength="8">
                     </div>
                 </div>
                 <div class="control-group">

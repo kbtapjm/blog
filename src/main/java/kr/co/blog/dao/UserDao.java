@@ -86,7 +86,6 @@ public interface UserDao {
      * @throws Exception
      */
     @Insert(MQL_CREATE_USER)
-    //@Options(useGeneratedKeys = true, keyProperty="id") : 유저아이디 생성
     public int createUser(User user) throws Exception;
 
     /**
@@ -108,5 +107,4 @@ public interface UserDao {
     @Delete(MQL_DELETE_USER)
     @Options(flushCache=true)
     public int deleteUser(User user) throws Exception;  
-
 }

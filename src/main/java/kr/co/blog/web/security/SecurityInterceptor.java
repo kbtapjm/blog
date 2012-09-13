@@ -24,6 +24,16 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
             log.debug("SecurityInterceptor preHandle~!!!");    
         }
         
+        // /user/로 시작하는 uri에서 맵팽처리 제외하는 방법도 있음
+        String uri = request.getRequestURI();
+        String host = request.getRemoteHost();
+        int port = request.getRemotePort();
+        log.debug(" ==================================================");
+        log.debug(" ==== >  uri: " +  uri);
+        log.debug(" ==== >  host: " +  host);
+        log.debug(" ==== >  port: " +  port);
+        log.debug(" ==================================================");
+        
         // session검사
         HttpSession session = request.getSession();
         Object sessionuser = session.getAttribute("sessionuser");
@@ -32,22 +42,25 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
                 log.debug(" 인증값이 없습니다. ");
             }
             
+            // 1) Exception Resolver로 처리
             throw new SecurityException();
+            
+            // 2) redirect로 처리
             //response.sendRedirect(request.getContextPath() + "/user/login.do");
             //return false;
         } else {
             String sessionId = session.getId();
             String sessionCreationTime = CommonUtil.getStrDateTime(session.getCreationTime());
             String sessionLastAccessedTime = CommonUtil.getStrDateTime(session.getLastAccessedTime());
-            String sessionControlValue = request.getParameter("sessionuser");
             session.setAttribute("sessionuser", sessionuser);
             
             if (log.isDebugEnabled()) {
+                log.debug(" ==================================================");
                 log.debug(" ==== > session-id: " + sessionId);
                 log.debug(" ==== > session-creation-time: " + sessionCreationTime);
                 log.debug(" ==== > session-last-accessed-time: " + sessionLastAccessedTime);
-                log.debug(" ==== > session-control-value: " + sessionControlValue);
                 log.debug(" ==== > sessionuser: " + sessionuser);
+                log.debug(" ==================================================");
             }
         }
         

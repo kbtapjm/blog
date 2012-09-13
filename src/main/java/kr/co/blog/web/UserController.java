@@ -118,15 +118,15 @@ public class UserController {
             // 세션에 유저정보 저장
             HttpSession session = request.getSession();
             session.setAttribute("sessionuser", user);
-            model.addAttribute("user", user);   // @SessionAttributes에서 사용하기 위해서 저장
+            // @SessionAttributes에서 사용하기 위해서 저장
+            model.addAttribute("user", user);
             
             // home으로 이동
             return "redirect:home.do";
         }
         
         // 실패시 회원가입 화면
-        //model.addAttribute("result", "N");
-        redirectAttr.addAttribute("result", "N");   // parameter uri세팅
+        redirectAttr.addAttribute("result", "N");
         
         return "redirect:/user/signUp.do";
     }
@@ -174,13 +174,14 @@ public class UserController {
             // 세션에 유저정보 세팅
             HttpSession session = request.getSession();
             session.setAttribute("sessionuser", user);
+            // @SessionAttributes에서 사용하기 위해서 저장
             model.addAttribute("user", user);
             
             // home으로 이동
             return "redirect:home.do";
         } else {
-            model.addAttribute("result", (user != null) ? true : false);
-            model.addAttribute("user", user);
+            model.addAttribute("result", (user != null) ? "Y" : "N");
+            model.addAttribute("user", new User());
         }
         
         return "login";      
@@ -270,14 +271,15 @@ public class UserController {
             HttpSession session = request.getSession();
             session.setAttribute("sessionuser", user);
             sessionStatus.isComplete();
-            model.addAttribute("user", user);   // @SessionAttributes에서 사용하기 위해서 저장
+            // @SessionAttributes에서 사용하기 위해서 저장
+            model.addAttribute("user", user);
             
             // home으로 이동
             return "redirect:/user/userInfo.do";
         }
         
         // 실패시 회원정보 수정화면
-        redirectAttr.addAttribute("result", "N");   // parameter uri세팅
+        redirectAttr.addAttribute("result", "N");
         
         return "redirect:/user/userEdit.do";
     }
@@ -296,10 +298,38 @@ public class UserController {
         }
         
         session.removeAttribute("sessionuser");
+        session.removeAttribute("user");
         session.invalidate();
+        model.addAttribute("user", new User());
         
         return "redirect:login.do";
     }
-
+    
+    /**
+     * 회원탈퇴
+     * @param model
+     * @param session
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
+    public String deleteUser(Model model, HttpSession session) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("userController deleteUser method start~!!!");    
+        }
+        
+        User user = (User)session.getAttribute("user");
+        
+        int result = userService.deleteUser(user);
+        
+        if(result > 0) {
+            session.removeAttribute("sessionuser");
+            session.removeAttribute("user");
+            session.invalidate();
+            model.addAttribute("user", new User());
+        }
+        
+        return "redirect:login.do";
+    }
 }
 

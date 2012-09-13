@@ -20,7 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService  {
     private static Logger log = Logger.getLogger(UserService.class);
     
-    @Autowired private UserDao userDao;
+    @Autowired 
+    private UserDao userDao;
 
     @Override
     @Transactional(propagation=Propagation.REQUIRED)
@@ -83,9 +84,6 @@ public class UserServiceImpl implements UserService  {
             log.debug("UserService deleteUser method Call~!!!");    
         }
         
-        return userDao.updateUser(user);
+        return userDao.deleteUser(user);
     }
-    
-    
-
 }
