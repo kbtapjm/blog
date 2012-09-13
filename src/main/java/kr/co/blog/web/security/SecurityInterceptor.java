@@ -1,5 +1,7 @@
 package kr.co.blog.web.security;
 
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -28,11 +30,30 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         String uri = request.getRequestURI();
         String host = request.getRemoteHost();
         int port = request.getRemotePort();
+        String address = request.getRemoteAddr();
+        String user = request.getRemoteUser();
+        String url = request.getRequestURL().toString();
+        int remotePort = request.getRemotePort();
+        String requestSessionId = request.getRequestedSessionId();
+        Locale locale = request.getLocale();
         log.debug(" ==================================================");
         log.debug(" ==== >  uri: " +  uri);
         log.debug(" ==== >  host: " +  host);
         log.debug(" ==== >  port: " +  port);
+        log.debug(" ==== >  address: " +  address);
+        log.debug(" ==== >  user: " +  user);
+        log.debug(" ==== >  url: " +  url);
+        log.debug(" ==== >  remotePort: " +  remotePort);
+        log.debug(" ==== >  requestSessionId: " +  requestSessionId);
+        log.debug(" ==== >  locale: " +  locale.toString());
         log.debug(" ==================================================");
+        
+        // 인터셉터에서 user 경로의 요청에서 체크제외  mapping
+        /*
+        if(uri.lastIndexOf("login") != -1 || uri.lastIndexOf("signUp") != -1 || uri.lastIndexOf("createUser") != -1 || uri.lastIndexOf("membercheck") != -1 || uri.lastIndexOf("loginProc") != -1) {
+            return true;
+        }
+        */
         
         // session검사
         HttpSession session = request.getSession();

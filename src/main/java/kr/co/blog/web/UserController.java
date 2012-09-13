@@ -331,5 +331,20 @@ public class UserController {
         
         return "redirect:login.do";
     }
+    
+    /**
+     * 회원정보 찾기
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/userSearch", method = RequestMethod.GET)
+    public String userSearch(Model model) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("userController userSearch method start~!!!");    
+        }
+    
+        return "/user/userSearch";
+    }
 }
 
