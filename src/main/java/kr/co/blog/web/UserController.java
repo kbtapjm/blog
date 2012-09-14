@@ -346,5 +346,28 @@ public class UserController {
     
         return "/user/userSearch";
     }
+    
+    /**
+     * 유저정보조회(아이디찾기)
+     * @param model
+     * @param email email
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/userSearchProc", method = RequestMethod.GET, produces="application/json")
+    @ResponseBody
+    public Map<String, Object> userSearchProc(Model model, @RequestParam String email) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("userController memberCheck method start~!!!");    
+        }
+        
+        User user = userService.getUserByUserByEmail(email);
+        
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("result", (user != null) ? true : false);
+        resultMap.put("user", user);
+        
+        return resultMap;
+    }
 }
 

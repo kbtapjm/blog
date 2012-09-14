@@ -23,8 +23,58 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#cancel').bind('click', function() {
+        $('#login').bind('click', function() {
             location.href = "../user/login.do";
+        });
+        
+        var userSearch = function() {
+            
+            var params = "";
+            params += "userName=" + $('#userName').val();
+            params += "&email=" + $('#email').val();
+            
+            $.ajax({
+                url: "../user/userSearchProc.do",
+                type: "GET",
+                cache: false,
+                dataType: "json",
+                data: params,
+                success: function(data) {
+                    console.log("data : " + JSON.stringify(data));
+                    var result = data.result;
+                    
+                },
+                error: function(data) {
+                    
+                }
+            });
+        };
+        
+        // Validation
+        $("#searchFrm").validate({
+            rules:{
+                userName:"required",
+                email:{required:true, email: true}
+            },
+            messages:{
+                userName:"Enter your name",
+                email:{
+                    required:"Enter your email",
+                    email:"Enter valid email address"
+                }
+            },
+            errorClass: "help-inline",
+            errorElement: "span",
+            highlight:function(element, errorClass, validClass) {
+                $(element).parents('.control-group').addClass('error');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).parents('.control-group').removeClass('error');
+                $(element).parents('.control-group').addClass('success');
+            },
+            submitHandler: function(form) {
+                userSearch();
+            }
         });
     });
 
@@ -42,26 +92,43 @@
     <!-- contents 영역 -->
     <div class="container">
         <div class="content">
-            <form class="form-horizontal" id="login" method="post" action="../user/loginProc.do" novalidate="novalidate">
+            <form class="form-horizontal" id="searchFrm" method="post" action="" novalidate="novalidate">
                 <fieldset>
-                    <legend><spring:message code="blog.label.user.search"/></legend>
-                    <div class="control-group">
-                        <label class="control-label"><spring:message code="blog.label.name"/></label>
-                        <div class="controls">
-                            <input type="text" class="input-xlarge" id="userName" name="userName"  placeholder="Enter your Name">
-                        </div>
-                    </div>
+                    <legend>아이디 찾기</legend>
                     <div class="control-group">
                         <label class="control-label"><spring:message code="blog.label.email"/></label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="email" name="email"  placeholder="Enter your E-mail">
+                            <input type="text" class="input-xlarge" id="email" name="email"  placeholder="Enter your email">
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label"></label>
                         <div class="controls">
-                            <button type="button" class="btn btn-primary"  id="search" ><spring:message code="blog.label.user.search"/></button>
-                            <button type="button" class="btn" id="cancel"><spring:message code="blog.label.cancel"/></button>
+                            <button type="submit" class="btn btn-primary" id="search"><spring:message code="blog.label.user.search"/></button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+            <form class="form-horizontal" id="searchFrm" method="post" action="" novalidate="novalidate">
+                <fieldset>
+                    <legend>패스워드 찾기</legend>
+                    <div class="control-group">
+                        <label class="control-label"><spring:message code="blog.label.memberid"/></label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="memberid" name="memberid"  placeholder="Enter your ID">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label"><spring:message code="blog.label.name"/></label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="email" name="email"  placeholder="Enter your email">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label"></label>
+                        <div class="controls">
+                            <button type="submit" class="btn btn-primary" id="search"><spring:message code="blog.label.user.search"/></button>
+                            <button type="button" class="btn" id="login"><spring:message code="blog.label.login"/></button>
                         </div>
                     </div>
                 </fieldset>

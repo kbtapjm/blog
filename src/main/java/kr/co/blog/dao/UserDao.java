@@ -23,8 +23,9 @@ import org.springframework.stereotype.Component;
 public interface UserDao {
     final String MQL_GET_ALL_USERS  = "select * from user";
     final String MQL_GET_USER_BY_ID = "select * from user where userid = #{userId}";
-    final String MQL_GET_USER_LOGIN_INFO = "select * from user where memberid = #{memberId} and password=#{password}";
+    final String MQL_GET_USER_BY_EMAIL = "select * from user where email = #{email}";
     final String MQL_GET_USER_BY_MEMBERID = "select userid, memberid, username, password, email, birthday, gender from user where memberid = #{memberid}";
+    final String MQL_GET_USER_LOGIN_INFO = "select * from user where memberid = #{memberId} and password=#{password}";
     final String MQL_CREATE_USER = "insert into user (userid, memberid, username, password, email, birthday, gender) values (#{userId},#{memberId},#{userName},#{password},#{email},#{birthday},#{gender})";
     final String MQL_UPDATE_USER = "update user set userName=#{userName}, password=#{password}, email=#{email} where userid=#{userId}";
     final String MQL_DELETE_USER = "delete from user where userid=#{userId}";
@@ -47,6 +48,16 @@ public interface UserDao {
     @Select(MQL_GET_USER_BY_ID)
     @Options(useCache=true)
     public User getUserByUserId(String userId) throws Exception;
+    
+    /**
+     * 유저정보조회(아이디찾기)
+     * @param email email
+     * @return
+     * @throws Exception
+     */
+    @Select(MQL_GET_USER_BY_EMAIL)
+    @Options(useCache=true)
+    public User getUserByUserByEmail(String email) throws Exception;
     
     /**
      * 로그인 정보

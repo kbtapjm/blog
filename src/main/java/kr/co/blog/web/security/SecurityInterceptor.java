@@ -36,17 +36,19 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         int remotePort = request.getRemotePort();
         String requestSessionId = request.getRequestedSessionId();
         Locale locale = request.getLocale();
-        log.debug(" ==================================================");
-        log.debug(" ==== >  uri: " +  uri);
-        log.debug(" ==== >  host: " +  host);
-        log.debug(" ==== >  port: " +  port);
-        log.debug(" ==== >  address: " +  address);
-        log.debug(" ==== >  user: " +  user);
-        log.debug(" ==== >  url: " +  url);
-        log.debug(" ==== >  remotePort: " +  remotePort);
-        log.debug(" ==== >  requestSessionId: " +  requestSessionId);
-        log.debug(" ==== >  locale: " +  locale.toString());
-        log.debug(" ==================================================");
+        if(log.isDebugEnabled()) {
+            log.debug(" ==================================================");
+            log.debug(" ==== >  uri: " +  uri);
+            log.debug(" ==== >  host: " +  host);
+            log.debug(" ==== >  port: " +  port);
+            log.debug(" ==== >  address: " +  address);
+            log.debug(" ==== >  user: " +  user);
+            log.debug(" ==== >  url: " +  url);
+            log.debug(" ==== >  remotePort: " +  remotePort);
+            log.debug(" ==== >  requestSessionId: " +  requestSessionId);
+            log.debug(" ==== >  locale: " +  locale.toString());
+            log.debug(" ==================================================");
+        }
         
         // 인터셉터에서 user 경로의 요청에서 체크제외  mapping
         /*
