@@ -55,27 +55,26 @@
                 },
                 gender:"required"
             },
-
             messages:{
+                userName:"<spring:message code='blog.label.input.name'/>",
                 password:{
-                    required:"Enter your password",
-                    minlength:jQuery.format("Password must be minimum {0} or more characters")
+                    required:"<spring:message code='blog.label.input.password'/>",
+                    minlength:jQuery.format("<spring:message code='blog.label.input.minimum.characters'/>")
                 },
                 cpassword:{
-                    required:"Enter confirm password",
-                    equalTo:"Password and Confirm Password must match"
+                    required:"<spring:message code='blog.label.input.confirm.password'/>",
+                    equalTo:"<spring:message code='blog.label.input.password.match'/>"
                 },
-                userName:"Enter your first and last name",
                 email:{
-                    required:"Enter your email address",
-                    email:"Enter valid email address"
+                    required:"<spring:message code='blog.label.input.email.address'/>",
+                    email:"<spring:message code='blog.label.input.vaild.email.address'/>"
                 },
                 birthday:{
-                    required:"Enter your birthday",
-                    minlength:jQuery.format("birthday must be minimum {0} characters"),
-                    number: "Numeric only."
+                    required:"<spring:message code='blog.label.input.birthdy'/>",
+                    minlength:jQuery.format("<spring:message code='blog.label.input.minimum.characters'/>"),
+                    number: "<spring:message code='blog.label.input.only.numbers'/>"
                 },
-                gender:"Select Gender"
+                gender:"<spring:message code='blog.label.select.gender'/>"
             },
             errorClass: "help-inline",
             errorElement: "span",
@@ -96,7 +95,7 @@
 </head>
 <body>
     <!-- 상단 hearder 영역 -->
-    <%@ include file="/WEB-INF/views/jsp/layout/head.jsp" %>
+    <%@ include file="/WEB-INF/views/jsp/layout/header.jsp" %>
 
     <!-- contents 영역 -->
     <div class="container">
@@ -115,7 +114,7 @@
                     <div class="controls">
                         <input type="password" class="input-medium" id="password" name="password"
                             rel="popover" data-content="6 characters or more! Be tricky"
-                            data-original-title="Password" value="${user.memberId}" maxlength="12">
+                            data-original-title="Password" value="${user.password}" maxlength="12">
                     </div>
                 </div>
                 <div class="control-group">
@@ -158,7 +157,7 @@
                     <label class="control-label"><spring:message code="blog.label.gender"/></label>
                     <div class="controls">
                         <select class="span2" name="gender" id="gender">
-                            <option value=""><spring:message code="blog.label.gender.select"/></option>
+                            <option value=""><spring:message code="blog.label.select"/></option>
                             <option value="M"><spring:message code="blog.label.gender.male"/></option>
                             <option value="F"><spring:message code="blog.label.gender.female"/></option>
                         </select>

@@ -44,15 +44,13 @@
                 memberId:"required",
                 password:{required:true,minlength: 6}
             },
-
             messages:{
-                memberId:"Enter your ID",
+                memberId:"<spring:message code='blog.label.input.id'/>",
                 password:{
-                    required:"Enter your password",
+                    required:"<spring:message code='blog.label.input.password'/>",
                     minlength:"Password must be minimum 6 characters"
                 }
             },
-
             errorClass: "help-inline",
             errorElement: "span",
             highlight:function(element, errorClass, validClass) {
@@ -72,7 +70,7 @@
         });
         
         if("${result}" == "N") {
-            getErrMsg("로그인 정보가 일치하지 않아 로그인이 실패 하였습니다..");
+            getErrMsg("<spring:message code='blog.error.login.fail'/>");
         }
     });
 
@@ -128,14 +126,14 @@
 </head>
 <body>
     <!-- 상단 hearder 영역 -->
-    <%@ include file="/WEB-INF/views/jsp/layout/head.jsp" %>
+    <%@ include file="/WEB-INF/views/jsp/layout/header.jsp" %>
 
     <!-- contents 영역 -->
     <div class="container">
         <div class="content">
             <form class="form-horizontal" id="login" method="post" action="../user/loginProc.do" novalidate="novalidate">
                 <fieldset>
-                    <legend>Login</legend>
+                    <legend><spring:message code="blog.label.login"/></legend>
                     <div class="control-group">
                         <label class="control-label"><spring:message code="blog.label.memberid"/></label>
                         <div class="controls">

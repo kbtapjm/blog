@@ -50,16 +50,23 @@ public class UserServiceImpl implements UserService  {
         
         return userDao.getUserByUserId(userId);
     }
-    
-    
 
     @Override
-    public User getUserByUserByEmail(String email) throws Exception {
+    public User getUserId(String email) throws Exception {
         if(log.isDebugEnabled()) {
-            log.debug("UserService getUserByUserKey method Call~!!!");    
+            log.debug("UserService getUserByEmail method Call~!!!");    
         }
         
-        return userDao.getUserByUserByEmail(email);
+        return userDao.getUserId(email);
+    }
+
+    @Override
+    public User getUserPassword(String memberId, String userName) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("UserService getUserPassword method Call~!!!");    
+        }
+        
+        return userDao.getUserPassword(memberId, userName);
     }
 
     @Override

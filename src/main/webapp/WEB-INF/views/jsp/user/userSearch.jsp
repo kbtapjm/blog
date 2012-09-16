@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="description" content="This is description" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title><spring:message code="blog.label.user.search"/></title>
+<title><spring:message code="blog.label.search"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -26,42 +26,70 @@
         $('#login').bind('click', function() {
             location.href = "../user/login.do";
         });
-        
-        var userSearch = function() {
-            
-            var params = "";
-            params += "userName=" + $('#userName').val();
-            params += "&email=" + $('#email').val();
-            
-            $.ajax({
-                url: "../user/userSearchProc.do",
-                type: "GET",
-                cache: false,
-                dataType: "json",
-                data: params,
-                success: function(data) {
-                    console.log("data : " + JSON.stringify(data));
-                    var result = data.result;
-                    
-                },
-                error: function(data) {
-                    
-                }
-            });
-        };
-        
-        // Validation
-        $("#searchFrm").validate({
+
+       // 아이디 찾기
+        $("#idSearchFrm").validate({
             rules:{
-                userName:"required",
                 email:{required:true, email: true}
             },
             messages:{
-                userName:"Enter your name",
                 email:{
-                    required:"Enter your email",
-                    email:"Enter valid email address"
+                    required:"<spring:message code='blog.label.input.email.address'/>",
+                    email:"<spring:message code='blog.label.input.vaild.email.address'/>"
                 }
+            },
+            errorClass: "help-inline",
+            errorElement: "span",
+            highlight:function(element, errorClass, validClass) {
+                $('#emailResult').html("");
+                $(element).parents('.control-group').addClass('error');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $('#emailResult').html("");
+                $(element).parents('.control-group').removeClass('error');
+                $(element).parents('.control-group').addClass('success');
+            },
+            submitHandler: function(form) {
+                var params = "";
+                params += "email=" + $('#email').val();
+                
+                $.ajax({
+                    url: "../user/userIdSearch.do",
+                    type: "GET",
+                    cache: false,
+                    dataType: "json",
+                    data: params,
+                    success: function(data) {
+                        var result = data.result;
+                        var user = data.user;
+                        
+                        var msg;
+                        if(result == true) {
+                            msg = "회원님의 아이디는{memberId} 입니다.";
+                            msg = msg.replace("{memberId}", user.memberId);
+                            $('#emailResult').html(msg);
+                        } else {
+                            $('#emailResult').html("<spring:message code='blog.label.member.not.machting'/>");
+                        }
+                        $('#emailResult').show();
+                    },
+                    error: function(data) {
+                        $('#emailResult').show();
+                        $('#emailResult').html("<spring:message code='blog.error.common.fail'/>");
+                    }
+                });
+            }
+        });
+        
+       // 패스워드 찾기
+        $("#pwdSearchFrm").validate({
+            rules:{
+                memberId:"required",
+                userName:"required"
+            },
+            messages:{
+                memberId:"<spring:message code='blog.label.input.id'/>",
+                userName:"<spring:message code='blog.label.input.name'/>"
             },
             errorClass: "help-inline",
             errorElement: "span",
@@ -73,7 +101,35 @@
                 $(element).parents('.control-group').addClass('success');
             },
             submitHandler: function(form) {
-                userSearch();
+                var params = "";
+                params += "memberId=" + $('#memberId').val();
+                params += "&userName=" + $('#userName').val();
+                
+                $.ajax({
+                    url: "../user/userPasswordSearch.do",
+                    type: "GET",
+                    cache: false,
+                    dataType: "json",
+                    data: params,
+                    success: function(data) {
+                        var result = data.result;
+                        var user = data.user;
+                        
+                        var msg;
+                        if(result == true) {
+                            msg = "회원님의 패스워드는{password} 입니다.";
+                            msg = msg.replace("{password}", user.password);
+                            $('#passwrodlResult').html(msg);
+                        } else {
+                            $('#passwrodlResult').html("<spring:message code='blog.label.member.not.machting'/>");
+                        }
+                        $('#passwrodlResult').show();
+                    },
+                    error: function(data) {
+                        $('#passwrodlResult').show();
+                        $('#passwrodlResult').html("<spring:message code='blog.label.member.not.machting'/>");
+                    }
+                });
             }
         });
     });
@@ -87,47 +143,49 @@
 </head>
 <body>
     <!-- 상단 hearder 영역 -->
-    <%@ include file="/WEB-INF/views/jsp/layout/head.jsp" %>
+    <%@ include file="/WEB-INF/views/jsp/layout/header.jsp" %>
 
     <!-- contents 영역 -->
     <div class="container">
         <div class="content">
-            <form class="form-horizontal" id="searchFrm" method="post" action="" novalidate="novalidate">
+            <form class="form-horizontal" id="idSearchFrm" method="post" action="" novalidate="novalidate">
                 <fieldset>
                     <legend>아이디 찾기</legend>
                     <div class="control-group">
                         <label class="control-label"><spring:message code="blog.label.email"/></label>
                         <div class="controls">
                             <input type="text" class="input-xlarge" id="email" name="email"  placeholder="Enter your email">
+                            <span class="help-inline" id="emailResult"></span>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label"></label>
                         <div class="controls">
-                            <button type="submit" class="btn btn-primary" id="search"><spring:message code="blog.label.user.search"/></button>
+                            <button type="submit" class="btn btn-primary"><spring:message code="blog.label.search"/></button>
                         </div>
                     </div>
                 </fieldset>
             </form>
-            <form class="form-horizontal" id="searchFrm" method="post" action="" novalidate="novalidate">
+            <form class="form-horizontal" id="pwdSearchFrm" method="post" action="" novalidate="novalidate">
                 <fieldset>
-                    <legend>패스워드 찾기</legend>
+                    <legend>비밀번호 찾기</legend>
                     <div class="control-group">
                         <label class="control-label"><spring:message code="blog.label.memberid"/></label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="memberid" name="memberid"  placeholder="Enter your ID">
+                            <input type="text" class="input-xlarge" id="memberId" name="memberId"  placeholder="Enter your id">
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label"><spring:message code="blog.label.name"/></label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="email" name="email"  placeholder="Enter your email">
+                            <input type="text" class="input-xlarge" id="userName" name="userName"  placeholder="Enter your name">
+                            <span class="help-inline" id="passwrodlResult"></span>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label"></label>
                         <div class="controls">
-                            <button type="submit" class="btn btn-primary" id="search"><spring:message code="blog.label.user.search"/></button>
+                            <button type="submit" class="btn btn-primary"><spring:message code="blog.label.search"/></button>
                             <button type="button" class="btn" id="login"><spring:message code="blog.label.login"/></button>
                         </div>
                     </div>

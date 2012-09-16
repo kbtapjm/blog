@@ -30,7 +30,7 @@
         
         // 회원탈퇴
         $('#delete').bind('click', function() {
-            if(confirm("회원을 탈퇴하시겠습니까?")) {
+            if(confirm("<spring:message code='blog.label.members.reave'/>")) {
                 location.href = "../user/deleteUser.do";        
             }
         });
@@ -46,7 +46,7 @@
 </head>
 <body>
     <!-- 상단 hearder 영역 -->
-    <%@ include file="/WEB-INF/views/jsp/layout/head.jsp" %>
+    <%@ include file="/WEB-INF/views/jsp/layout/header.jsp" %>
 
     <!-- contents 영역 -->
     <div class="container">

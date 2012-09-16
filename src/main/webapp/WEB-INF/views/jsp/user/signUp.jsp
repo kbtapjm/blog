@@ -32,7 +32,7 @@
             var memberId = $('#memberId').val();
             
             if($.trim(memberId).length == 0) {
-                getErrMsg('아이디를 입력하세요.');
+                getErrMsg("<spring:message code='blog.label.input.id'/>");
                 return false;
             }
             
@@ -52,13 +52,13 @@
                             $('#memberId').focus();
                         };
                         
-                        getErrMsg("이미 존재하는 아이디입니다.", memberIdFocus);
+                        getErrMsg("<spring:message code='blog.label.input.id.exists'/>", memberIdFocus);
                     } else {
                         $('#memberIdcheck').val("Y");
                     }
                 },
                 error: function(data) {
-                    getErrMsg("에러가 발생하여 중복확인이 실패하였습니다.");
+                    getErrMsg("<spring:message code='blog.error.common.fail'/>");
                 }
             });
         });
@@ -73,7 +73,7 @@
             submitHandler: function(form) {
                 // 아이디 중복확인 체크유무 
                 if($('#memberIdcheck').val() != "Y") {
-                    getErrMsg("아이디 중복확인을 하세요.");
+                    getErrMsg("<spring:message code='blog.label.input.id.perfome.check'/>");
                     return false;
                 }
                 
@@ -82,11 +82,11 @@
                 var memberId = $.trim($('input[name=memberId]').val());
 
                 if(!pattern1.test(memberId)){
-                    getErrMsg("아이디의 첫글자는 영문이어야 합니다.");
+                    getErrMsg("<spring:message code='blog.label.input.id.first.character.enghish'/>");
                     return false;
                 }
                 if(pattern2.test(memberId)){
-                    getErrMsg("아이디는 영문, 숫자, -, _ 만 사용할 수 있습니다.");
+                    getErrMsg("<spring:message code='blog.label.input.id.number.english'/>");
                     return false;
                 }
                 
@@ -122,30 +122,30 @@
 
             messages:{
                 memberId:{
-                    required:"Enter your ID",
-                    minlength:jQuery.format("ID must be minimum {0} characters"),
-                    maxlength:jQuery.format("ID must be maxmum {0} characters")
+                    required:"<spring:message code='blog.label.input.id'/>",
+                    minlength:jQuery.format("<spring:message code='blog.label.input.minimum.characters'/>"),
+                    maxlength:jQuery.format("<spring:message code='blog.label.input.maxinum.characters'/>")
                 },
                 password:{
-                    required:"Enter your password",
-                    minlength:jQuery.format("Password must be minimum {0} or more characters")
+                    required:"<spring:message code='blog.label.input.password'/>",
+                    minlength:jQuery.format("<spring:message code='blog.label.input.minimum.characters'/>")
                 },
                 cpassword:{
-                    required:"Enter confirm password",
-                    equalTo:"Password and Confirm Password must match"
+                    required:"<spring:message code='blog.label.input.confirm.password'/>",
+                    equalTo:"<spring:message code='blog.label.input.password.match'/>"
                 },
-                userName:"Enter your first and last name",
+                userName:"<spring:message code='blog.label.input.name'/>",
                 email:{
-                    required:"Enter your email address",
-                    email:"Enter valid email address"
+                    required:"<spring:message code='blog.label.input.email.address'/>",
+                    email:"<spring:message code='blog.label.input.vaild.email.address'/>"
                 },
                 birthday:{
-                    required:"Enter your birthday",
-                    minlength:jQuery.format("birthday must be minimum {0} characters"),
-                    number: "Numeric only."
+                    required:"<spring:message code='blog.label.input.birthdy'/>",
+                    minlength:jQuery.format("<spring:message code='blog.label.input.minimum.characters'/>"),
+                    number: "<spring:message code='blog.label.input.only.numbers'/>"
                 },
-                gender:"Select Gender",
-                agree:"Agree Check out"
+                gender:"<spring:message code='blog.label.select.gender'/>",
+                agree:"<spring:message code='blog.label.check.privacy.aggree'/>"
             },
             errorClass: "help-inline",
             errorElement: "span",
@@ -159,7 +159,7 @@
         });
         
         if("${result}" == "N") {
-            getErrMsg("회원가입이 실패하였습니다..");
+            getErrMsg("<spring:message code='blog.error.register.failed'/>");
         }
     });
 </script>
@@ -170,7 +170,7 @@
 </head>
 <body>
     <!-- 상단 hearder 영역 -->
-    <%@ include file="/WEB-INF/views/jsp/layout/head.jsp" %>
+    <%@ include file="/WEB-INF/views/jsp/layout/header.jsp" %>
 
     <!-- contents 영역 -->
     <div class="container">
@@ -237,14 +237,14 @@
                     <label class="control-label"><spring:message code="blog.label.gender"/></label>
                     <div class="controls">
                         <select class="span2" name="gender" id="gender">
-                            <option value=""><spring:message code="blog.label.gender.select"/></option>
+                            <option value=""><spring:message code="blog.label.select"/></option>
                             <option value="M"><spring:message code="blog.label.gender.male"/></option>
                             <option value="F"><spring:message code="blog.label.gender.female"/></option>
                         </select>
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label">개인정보 수신동의</label>
+                    <label class="control-label"><spring:message code="blog.label.personal.received"/></label>
                     <div class="controls">
                         <label class="checkbox">
 						      <input type="checkbox" id="agree" name="agree">

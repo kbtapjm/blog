@@ -23,7 +23,8 @@ import org.springframework.stereotype.Component;
 public interface UserDao {
     final String MQL_GET_ALL_USERS  = "select * from user";
     final String MQL_GET_USER_BY_ID = "select * from user where userid = #{userId}";
-    final String MQL_GET_USER_BY_EMAIL = "select * from user where email = #{email}";
+    final String MQL_GET_USER_ID = "select * from user where email = #{email}";
+    final String MQL_GET_USER_PASSWORD = "select * from user where memberid = #{memberId} and username=#{userName}";
     final String MQL_GET_USER_BY_MEMBERID = "select userid, memberid, username, password, email, birthday, gender from user where memberid = #{memberid}";
     final String MQL_GET_USER_LOGIN_INFO = "select * from user where memberid = #{memberId} and password=#{password}";
     final String MQL_CREATE_USER = "insert into user (userid, memberid, username, password, email, birthday, gender) values (#{userId},#{memberId},#{userName},#{password},#{email},#{birthday},#{gender})";
@@ -55,9 +56,20 @@ public interface UserDao {
      * @return
      * @throws Exception
      */
-    @Select(MQL_GET_USER_BY_EMAIL)
+    @Select(MQL_GET_USER_ID)
     @Options(useCache=true)
-    public User getUserByUserByEmail(String email) throws Exception;
+    public User getUserId(String email) throws Exception;
+    
+    /**
+     * 유저정보조회(패스워드찾기)
+     * @param memberId
+     * @param userName
+     * @return
+     * @throws Exception
+     */
+    @Select(MQL_GET_USER_PASSWORD)
+    @Options(useCache=true)
+    public User getUserPassword(@Param("memberId") String memberId, @Param("userName") String userName) throws Exception;
     
     /**
      * 로그인 정보

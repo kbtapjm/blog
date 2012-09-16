@@ -8,11 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import kr.co.blog.common.DESedeCrypto;
 import kr.co.blog.domain.User;
 import kr.co.blog.service.UserService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,6 +40,9 @@ public class UserController {
     
     @Autowired 
     private UserService userService;
+    
+    @Autowired 
+    MessageSourceAccessor messageSourceAccessor; 
     
     /**
      *  최초 처음 model 최초 바인딩 하기위함
@@ -107,13 +112,21 @@ public class UserController {
         }
         
         String userId = UUID.randomUUID().toString(); 
+        String password = user.getPassword();
+        
+        // 패스워드는 암호화 처리
+        byte[] array = DESedeCrypto.encrypt(password);
         
         user.setUserId(userId);
+        user.setPassword(new String(array));
         int result = userService.createUser(user);
         
         // 성공일 경우 login 처리
         if(result > 0) {
             user = userService.getUserByUserId(userId);
+            
+            // 패스워드는 암호화 되어있기 때문에 입력값으로 세션에 저장
+            user.setPassword(password);
             
             // 세션에 유저정보 저장
             HttpSession session = request.getSession();
@@ -168,9 +181,15 @@ public class UserController {
             log.debug("userController loginProc method start~!!!");    
         }
         
-        User user = userService.getUserLoginInfo(memberId, password); 
+        // 패스워드 암호화 처리
+        byte[] array = DESedeCrypto.encrypt(password);
+        
+        User user = userService.getUserLoginInfo(memberId, new String(array)); 
         
         if(user != null) {
+            // 패스워드는 암호화 되어있기 때문에 입력값으로 세션에 저장
+            user.setPassword(password);
+            
             // 세션에 유저정보 세팅
             HttpSession session = request.getSession();
             session.setAttribute("sessionuser", user);
@@ -261,11 +280,20 @@ public class UserController {
             return "redirect:/user/userEdit.do";
         }
         
+        String password = user.getPassword();
+        
+        // 패스워드 암호화
+        byte[] array = DESedeCrypto.encrypt(password);
+        user.setPassword(new String(array));
+        
         int result = userService.updateUser(user);
         
         // 성공일 경우 login 처리
         if(result > 0) {
             user = userService.getUserByUserId(user.getUserId());
+            
+            // 패스워드는 암호화 되어있기 때문에 입력값으로 세션에 저장
+            user.setPassword(password);
             
             // 세션에 유저정보 저장
             HttpSession session = request.getSession();
@@ -354,14 +382,38 @@ public class UserController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/userSearchProc", method = RequestMethod.GET, produces="application/json")
+    @RequestMapping(value = "/userIdSearch", method = RequestMethod.GET, produces="application/json")
     @ResponseBody
-    public Map<String, Object> userSearchProc(Model model, @RequestParam String email) throws Exception {
+    public Map<String, Object> userIdSearch(Model model, @RequestParam String email) throws Exception {
         if(log.isDebugEnabled()) {
-            log.debug("userController memberCheck method start~!!!");    
+            log.debug("userController userIdSearch method start~!!!");    
         }
         
-        User user = userService.getUserByUserByEmail(email);
+        User user = userService.getUserId(email);
+        
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("result", (user != null) ? true : false);
+        resultMap.put("user", user);
+        
+        return resultMap;
+    }
+    
+    /**
+     * 유저정보조회(비밀번호찾기)
+     * @param model
+     * @param memberId
+     * @param userName
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/userPasswordSearch", method = RequestMethod.GET, produces="application/json")
+    @ResponseBody
+    public Map<String, Object> userPasswordSearch(Model model, @RequestParam String memberId, @RequestParam String userName) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("userController userPasswordSearch method start~!!!");    
+        }
+        
+        User user = userService.getUserPassword(memberId, userName);
         
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("result", (user != null) ? true : false);
