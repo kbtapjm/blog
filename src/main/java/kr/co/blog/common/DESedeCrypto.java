@@ -12,7 +12,7 @@ import javax.crypto.spec.DESedeKeySpec;
  */
 public class DESedeCrypto {
     
-    public static void main(String args) {
+    public static void main(String args[]) {
         DESedeCrypto.encrypt("111111");
     }
     

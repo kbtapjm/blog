@@ -65,8 +65,8 @@
                         
                         var msg;
                         if(result == true) {
-                            msg = "회원님의 아이디는{memberId} 입니다.";
-                            msg = msg.replace("{memberId}", user.memberId);
+                            msg = "<spring:message code='blog.label.member.your.id' arguments='"+user.memberId+"'/>";
+                            //msg = msg.replace("{memberId}", user.memberId);
                             $('#emailResult').html(msg);
                         } else {
                             $('#emailResult').html("<spring:message code='blog.label.member.not.machting'/>");
@@ -117,8 +117,8 @@
                         
                         var msg;
                         if(result == true) {
-                            msg = "회원님의 패스워드는{password} 입니다.";
-                            msg = msg.replace("{password}", user.password);
+                            msg = "<spring:message code='blog.label.member.your.password' arguments='"+user.password+"'/>";
+                            //msg = msg.replace("{password}", user.password);
                             $('#passwrodlResult').html(msg);
                         } else {
                             $('#passwrodlResult').html("<spring:message code='blog.label.member.not.machting'/>");
@@ -150,7 +150,7 @@
         <div class="content">
             <form class="form-horizontal" id="idSearchFrm" method="post" action="" novalidate="novalidate">
                 <fieldset>
-                    <legend>아이디 찾기</legend>
+                    <legend><spring:message code="blog.label.find.id"/></legend>
                     <div class="control-group">
                         <label class="control-label"><spring:message code="blog.label.email"/></label>
                         <div class="controls">
@@ -168,7 +168,7 @@
             </form>
             <form class="form-horizontal" id="pwdSearchFrm" method="post" action="" novalidate="novalidate">
                 <fieldset>
-                    <legend>비밀번호 찾기</legend>
+                    <legend><spring:message code="blog.label.find.password"/></legend>
                     <div class="control-group">
                         <label class="control-label"><spring:message code="blog.label.memberid"/></label>
                         <div class="controls">

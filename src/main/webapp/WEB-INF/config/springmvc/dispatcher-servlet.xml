@@ -49,12 +49,19 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
+    
+    <!-- ============================================================================================ -->
+    <!-- localeResolver 쿠키를 이용 -->
+    <!-- ============================================================================================ -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/>
  
     <!-- ============================================================================================ -->
     <!-- classpath 로딩시 locale parameter 가 정상적으로 동작하지 않음. <mvc:annotation-driven> 과 같은 파일내에서 사용-->
     <!-- ============================================================================================ -->
     <mvc:interceptors>
-        <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+	    <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+	       <property name="paramName" value="locale" />
+	    </bean>
         <bean id="webContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
             <property name="cacheSeconds" value="0"/>
             <property name="useExpiresHeader" value="true"/>

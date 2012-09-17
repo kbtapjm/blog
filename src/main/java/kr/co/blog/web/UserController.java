@@ -1,10 +1,12 @@
 package kr.co.blog.web;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -40,6 +43,9 @@ public class UserController {
     
     @Autowired 
     private UserService userService;
+    
+    @Autowired
+    LocaleResolver localeResolver;
     
     @Autowired 
     MessageSourceAccessor messageSourceAccessor; 
@@ -418,6 +424,29 @@ public class UserController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("result", (user != null) ? true : false);
         resultMap.put("user", user);
+        
+        return resultMap;
+    }
+    
+    /**
+     * locale 변경
+     * @param model
+     * @param request
+     * @param response
+     * @param locale
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/setLocale", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> setLocale(Model model, HttpServletRequest request, HttpServletResponse response, @RequestParam String locale) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("userController setLocale method start~!!!");    
+        }
+        
+        localeResolver.setLocale(request, response, new Locale(locale));
+        
+        Map<String, Object> resultMap = new HashMap<String, Object>();
         
         return resultMap;
     }

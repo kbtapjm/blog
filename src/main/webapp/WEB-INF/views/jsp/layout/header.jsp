@@ -13,25 +13,25 @@
                 class="icon-bar"></span> <span class="icon-bar"></span>
             </a> <a class="brand" href="../user/home.do">Blog</a>
             <div class="nav-collapse">
-               <ul class="nav">
-                   <c:if test="${sessionScope.sessionuser != null}">
+                <ul class="nav">
+                    <c:if test="${sessionScope.sessionuser != null}">
                     <li><a href="#"><spring:message code="blog.label.board"/></a></li>
                     <li><a href="#"><spring:message code="blog.label.photos"/></a></li>
-                   </c:if>
-               </ul>
-               <ul class="nav pull-right">
-                   <c:if test="${sessionScope.sessionuser != null}">
-                       <li class="about-menu" id="userInfo"><a href="../user/userInfo.do">${sessionuser.userName } </a></li>
-                       <li class="about-menu"  id="signout"><a href="../user/signout.do"><spring:message code="blog.label.logout"/></a></li>
-                   </c:if>
-                   <li class="dropdown">
+                    </c:if>
+                </ul>
+                <ul class="nav pull-right">
+                    <c:if test="${sessionScope.sessionuser != null}">
+                        <li class="about-menu" id="userInfo"><a href="../user/userInfo.do">${sessionuser.userName } </a></li>
+                        <li class="about-menu"  id="signout"><a href="../user/signout.do"><spring:message code="blog.label.logout"/></a></li>
+                    </c:if>
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-bitly-type="bitly_hover_card">Language <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                          <li><a href="#" data-bitly-type="bitly_hover_card">Korean</a></li>
-                          <li><a href="#" data-bitly-type="bitly_hover_card">Enghish</a></li>
+                            <li><a href="#" onclick="setLocale('ko_KR')" data-bitly-type="bitly_hover_card">Korean</a></li>
+                            <li><a href="#" onclick="setLocale('en_US')" data-bitly-type="bitly_hover_card">Enghish</a></li>
                         </ul>
-                      </li>
-               </ul>
+                    </li>
+                </ul>
            </div>
         </div>
     </div>

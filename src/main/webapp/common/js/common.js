@@ -16,3 +16,41 @@ function getErrMsg(msg, afterAction) {
         }
     }
 }
+
+/**
+ *로그 출력 
+ * str : 출력할 문자열
+ */
+function log(str) {
+    if(typeof console == "undefined") {
+        return false;
+    };
+    
+    console.log(str);
+}
+
+/**
+ * locale 변경 
+ * locale : 변경할 locale
+ */
+function setLocale(locale) {
+    
+    // 1) localeChangeInterceptor를 사용해서 파라미터 세팅
+    location.href = location.pathname + "?locale=" + locale;
+    return false;
+    
+    // 2) localeResolver를 이용해서 서버에서 변경
+    $.ajax({
+        url: "../user/setLocale.do",
+        type: "GET",
+        cache: false,
+        dataType: "json",
+        data: "locale=" + locale,
+        success: function(data) {
+            location.reload();
+        },
+        error: function(data) {
+            log(data);
+        }
+    });
+}
