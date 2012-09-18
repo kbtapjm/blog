@@ -17,9 +17,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:/config/spring/context-root.xml"})
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
+@Transactional
 public class UserServiceTest {
     private static Logger log = Logger.getLogger(UserServiceTest.class);
     
@@ -87,12 +91,13 @@ public class UserServiceTest {
     @Test
     public void updateUserTest() {
         // 패스워드
-        byte[] array = DESedeCrypto.encrypt("5145a4b4-2e20-4298-a54f-830be06db91a");
+        byte[] array = DESedeCrypto.encrypt("222222");
         
-        user.setUserId("1111111111");
+        user.setUserId("5145a4b4-2e20-4298-a54f-830be06db91a");
         user.setUserName("코비");
         user.setPassword(new String(array));
         user.setEmail("tapjm@daume.net");
+        user.setBirthday("22226655");
         user.setGender("M");
         
         int result = 0;
@@ -106,6 +111,7 @@ public class UserServiceTest {
         assertEquals(1, result);
     }
     
+    @Test
     public void deleteUserTest() {
         user.setUserId("5145a4b4-2e20-4298-a54f-830be06db91a");
         
@@ -124,6 +130,4 @@ public class UserServiceTest {
     public void after() {
         log.debug("UserServiceTest after");
     }
-
-
 }

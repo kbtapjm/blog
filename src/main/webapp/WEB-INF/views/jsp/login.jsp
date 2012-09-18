@@ -70,7 +70,8 @@
         });
         
         if("${result}" == "N") {
-            getErrMsg("<spring:message code='blog.error.login.fail'/>");
+            //getErrMsg("<spring:message code='blog.error.login.fail'/>");
+            $('#loginFail').show();
         }
     });
 
@@ -134,6 +135,10 @@
             <form class="form-horizontal" id="login" method="post" action="../user/loginProc.do" novalidate="novalidate">
                 <fieldset>
                     <legend><spring:message code="blog.label.login"/></legend>
+                    <div class="alert alert-error" style="display:none;" id="loginFail">
+					   <button type="button" class="close" data-dismiss="alert">×</button>
+					   <strong>Error!</strong> <spring:message code="blog.error.login.fail"/>
+					</div>
                     <div class="control-group">
                         <label class="control-label"><spring:message code="blog.label.memberid"/></label>
                         <div class="controls">
@@ -155,7 +160,7 @@
                     <div class="control-group">
                         <label class="control-label"></label>
                         <div class="controls">
-                            <label class="checkbox"> <input type="checkbox" id="idSave" name="idSave"><spring:message code="blog.label.remember.id"/>&nbsp;&nbsp; <a href="../user/userSearch.do" >회원정보 찾기</a></label>
+                            <label class="checkbox"> <input type="checkbox" id="idSave" name="idSave"><spring:message code="blog.label.remember.id"/>&nbsp;&nbsp; <a href="../user/userSearch.do" ><spring:message code="blog.label.find.membership"/></a></label>
                             <button id="signin" class="btn btn-success" rel="tooltip" title="first tooltip"><spring:message code="blog.label.login"/></button>
                             <a href="#" id="signup" class="btn btn-primary" data-bitly-type="bitly_hover_card"><spring:message code="blog.label.signup"/></a>
                         </div>
@@ -165,6 +170,8 @@
         </div>
     </div>
     <!-- /container -->
+    
+     <!-- 하단 footer 영역 -->
 
     <!-- common html include -->
     <%@ include file="/WEB-INF/views/jsp/common/commonHtml.jsp" %>

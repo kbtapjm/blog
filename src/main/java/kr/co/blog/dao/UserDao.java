@@ -28,7 +28,7 @@ public interface UserDao {
     final String MQL_GET_USER_BY_MEMBERID = "select userid, memberid, username, password, email, birthday, gender from user where memberid = #{memberid}";
     final String MQL_GET_USER_LOGIN_INFO = "select * from user where memberid = #{memberId} and password=#{password}";
     final String MQL_CREATE_USER = "insert into user (userid, memberid, username, password, email, birthday, gender) values (#{userId},#{memberId},#{userName},#{password},#{email},#{birthday},#{gender})";
-    final String MQL_UPDATE_USER = "update user set userName=#{userName}, password=#{password}, email=#{email} where userid=#{userId}";
+    final String MQL_UPDATE_USER = "update user set userName=#{userName}, password=#{password}, email=#{email}, birthday=#{birthday}, gender=#{gender} where userid=#{userId}";
     final String MQL_DELETE_USER = "delete from user where userid=#{userId}";
 
     /**

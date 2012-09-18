@@ -36,7 +36,8 @@ function log(str) {
 function setLocale(locale) {
     
     // 1) localeChangeInterceptor를 사용해서 파라미터 세팅
-    location.href = location.pathname + "?locale=" + locale;
+    //location.href = location.pathname + "?locale=" + locale;
+    location.href =  "../user/home.do?locale=" + locale;
     return false;
     
     // 2) localeResolver를 이용해서 서버에서 변경

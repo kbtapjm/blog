@@ -53,7 +53,9 @@
     <!-- ============================================================================================ -->
     <!-- localeResolver 쿠키를 이용 -->
     <!-- ============================================================================================ -->
-    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/>
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="defaultLocale" value="ko"/>
+    </bean>
  
     <!-- ============================================================================================ -->
     <!-- classpath 로딩시 locale parameter 가 정상적으로 동작하지 않음. <mvc:annotation-driven> 과 같은 파일내에서 사용-->
