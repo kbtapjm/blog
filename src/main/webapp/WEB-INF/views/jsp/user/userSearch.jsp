@@ -27,7 +27,7 @@
             location.href = "../user/login.do";
         });
 
-       // 아이디 찾기
+        // 아이디 찾기
         $("#idSearchFrm").validate({
             rules:{
                 email:{required:true, email: true}
@@ -66,7 +66,6 @@
                         var msg;
                         if(result == true) {
                             msg = "<spring:message code='blog.label.member.your.id' arguments='"+user.memberId+"'/>";
-                            //msg = msg.replace("{memberId}", user.memberId);
                             $('#emailResult').html(msg);
                         } else {
                             $('#emailResult').html("<spring:message code='blog.label.member.not.machting'/>");
@@ -81,7 +80,7 @@
             }
         });
         
-       // 패스워드 찾기
+        // 패스워드 찾기
         $("#pwdSearchFrm").validate({
             rules:{
                 memberId:"required",
@@ -118,7 +117,6 @@
                         var msg;
                         if(result == true) {
                             msg = "<spring:message code='blog.label.member.your.password' arguments='"+user.password+"'/>";
-                            //msg = msg.replace("{password}", user.password);
                             $('#passwrodlResult').html(msg);
                         } else {
                             $('#passwrodlResult').html("<spring:message code='blog.label.member.not.machting'/>");

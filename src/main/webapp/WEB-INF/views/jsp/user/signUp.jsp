@@ -187,6 +187,10 @@
                             data-original-title="ID" value="" maxlength="12">
                             <button type="button" class="btn btn-info" id="memberCheck"><spring:message code="blog.label.member.check"/></button>
                             <input type="hidden" name="memberIdcheck" id="memberIdcheck" value="N">
+                            <div class="alert alert-error" id="memberCheckResult">
+		                       <button type="button" class="close" data-dismiss="alert">×</button>
+		                       <strong>Error!</strong> <spring:message code="blog.error.login.fail"/>
+                            </div>
                     </div>
                 </div>
                 <div class="control-group">
