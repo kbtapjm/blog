@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import kr.co.blog.common.DESedeCrypto;
+import kr.co.blog.common.DES;
 import kr.co.blog.domain.User;
 import kr.co.blog.service.UserService;
 
@@ -121,10 +121,10 @@ public class UserController {
         String password = user.getPassword();
         
         // 패스워드는 암호화 처리
-        byte[] array = DESedeCrypto.encrypt(password);
+        String encryptPassword = DES.encrypt(password);
         
         user.setUserId(userId);
-        user.setPassword(new String(array));
+        user.setPassword(encryptPassword);
         int result = userService.createUser(user);
         
         // 성공일 경우 login 처리
@@ -188,9 +188,9 @@ public class UserController {
         }
         
         // 패스워드 암호화 처리
-        byte[] array = DESedeCrypto.encrypt(password);
+        String encryptPassword = DES.encrypt(password);
         
-        User user = userService.getUserLoginInfo(memberId, new String(array)); 
+        User user = userService.getUserLoginInfo(memberId, encryptPassword); 
         
         if(user != null) {
             // 패스워드는 암호화 되어있기 때문에 입력값으로 세션에 저장
@@ -289,8 +289,8 @@ public class UserController {
         String password = user.getPassword();
         
         // 패스워드 암호화
-        byte[] array = DESedeCrypto.encrypt(password);
-        user.setPassword(new String(array));
+        String encryptPassword = DES.encrypt(password);
+        user.setPassword(encryptPassword);
         
         int result = userService.updateUser(user);
         
@@ -388,14 +388,14 @@ public class UserController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/userIdSearch", method = RequestMethod.GET, produces="application/json")
+    @RequestMapping(value = "/userIdSearch", method = RequestMethod.POST, produces="application/json")
     @ResponseBody
-    public Map<String, Object> userIdSearch(Model model, @RequestParam String email) throws Exception {
+    public Map<String, Object> userIdSearch(Model model, @RequestParam String email, @RequestParam String userName) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("userController userIdSearch method start~!!!");    
         }
         
-        User user = userService.getUserId(email);
+        User user = userService.getUserId(email, userName);
         
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("result", (user != null) ? true : false);
@@ -412,7 +412,7 @@ public class UserController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/userPasswordSearch", method = RequestMethod.GET, produces="application/json")
+    @RequestMapping(value = "/userPasswordSearch", method = RequestMethod.POST, produces="application/json")
     @ResponseBody
     public Map<String, Object> userPasswordSearch(Model model, @RequestParam String memberId, @RequestParam String userName) throws Exception {
         if(log.isDebugEnabled()) {
@@ -420,6 +420,12 @@ public class UserController {
         }
         
         User user = userService.getUserPassword(memberId, userName);
+        
+        // 비밀번호는 복호화 처리
+        if(user != null) {
+            String decryptPassword = DES.decrypt(user.getPassword());
+            user.setPassword(decryptPassword);    
+        }
         
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("result", (user != null) ? true : false);

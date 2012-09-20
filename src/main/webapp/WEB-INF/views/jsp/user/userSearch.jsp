@@ -30,13 +30,15 @@
         // 아이디 찾기
         $("#idSearchFrm").validate({
             rules:{
-                email:{required:true, email: true}
+                email:{required:true, email: true},
+                userNameId:"required"
             },
             messages:{
                 email:{
                     required:"<spring:message code='blog.label.input.email.address'/>",
                     email:"<spring:message code='blog.label.input.vaild.email.address'/>"
-                }
+                },
+                userNameId:"<spring:message code='blog.label.input.name'/>"
             },
             errorClass: "help-inline",
             errorElement: "span",
@@ -52,10 +54,11 @@
             submitHandler: function(form) {
                 var params = "";
                 params += "email=" + $('#email').val();
+                params += "&userName=" + $('#userNameId').val();
                 
                 $.ajax({
                     url: "../user/userIdSearch.do",
-                    type: "GET",
+                    type: "POST",
                     cache: false,
                     dataType: "json",
                     data: params,
@@ -106,7 +109,7 @@
                 
                 $.ajax({
                     url: "../user/userPasswordSearch.do",
-                    type: "GET",
+                    type: "POST",
                     cache: false,
                     dataType: "json",
                     data: params,
@@ -153,6 +156,12 @@
                         <label class="control-label"><spring:message code="blog.label.email"/></label>
                         <div class="controls">
                             <input type="text" class="input-xlarge" id="email" name="email"  placeholder="Enter your email">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label"><spring:message code="blog.label.name"/></label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="userNameId" name="userNameId"  placeholder="Enter your name">
                             <span class="help-inline" id="emailResult"></span>
                         </div>
                     </div>

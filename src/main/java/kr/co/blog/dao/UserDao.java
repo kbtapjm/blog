@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 public interface UserDao {
     final String MQL_GET_ALL_USERS  = "select * from user";
     final String MQL_GET_USER_BY_ID = "select * from user where userid = #{userId}";
-    final String MQL_GET_USER_ID = "select * from user where email = #{email}";
+    final String MQL_GET_USER_ID = "select * from user where email = #{email} and username=#{userName}";
     final String MQL_GET_USER_PASSWORD = "select * from user where memberid = #{memberId} and username=#{userName}";
     final String MQL_GET_USER_BY_MEMBERID = "select userid, memberid, username, password, email, birthday, gender from user where memberid = #{memberid}";
     final String MQL_GET_USER_LOGIN_INFO = "select * from user where memberid = #{memberId} and password=#{password}";
@@ -58,7 +58,7 @@ public interface UserDao {
      */
     @Select(MQL_GET_USER_ID)
     @Options(useCache=true)
-    public User getUserId(String email) throws Exception;
+    public User getUserId(@Param("email") String email, @Param("userName") String userName) throws Exception;
     
     /**
      * 유저정보조회(패스워드찾기)

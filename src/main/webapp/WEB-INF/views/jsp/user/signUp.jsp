@@ -32,7 +32,15 @@
             var memberId = $('#memberId').val();
             
             if($.trim(memberId).length == 0) {
-                getErrMsg("<spring:message code='blog.label.input.id'/>");
+                $('#memberId').parents('.control-group').addClass('error');
+                
+                /*
+                var memberIdFocus = function() {
+                    $('#memberId').focus();
+                };
+                
+                getErrMsg("<spring:message code='blog.label.input.id'/>", memberIdFocus);
+                */
                 return false;
             }
             
@@ -48,13 +56,28 @@
                     if(result == true) {
                         $('#memberId').val("");
                         
+                        /*
                         var memberIdFocus = function() {
                             $('#memberId').focus();
                         };
                         
                         getErrMsg("<spring:message code='blog.label.input.id.exists'/>", memberIdFocus);
+                        */
+                        $('#memberId').parents('.control-group').addClass('error');
+                        $('#memberIdCheckMsg').html("<spring:message code='blog.label.input.id.exists'/>");
+                        $('#memberIdCheckMsg').show();
+                        setTimeout(function() {
+                            $('#memberIdCheckMsg').hide();
+                            $('#memberId').focus();
+                        }, 1000);
                     } else {
                         $('#memberIdcheck').val("Y");
+                        $('#memberId').parents('.control-group').addClass('success');
+                        $('#memberIdCheckMsg').html("<spring:message code='blog.label.member.check.vaild.id'/>");
+                        $('#memberIdCheckMsg').show();
+                        setTimeout(function() {
+                            $('#memberIdCheckMsg').hide();    
+                        }, 1000);
                     }
                 },
                 error: function(data) {
@@ -71,32 +94,15 @@
         // Validation(http://docs.jquery.com/Plugins/Validation/validate#options)   
         $("#registerHere").validate({
             submitHandler: function(form) {
-                // 아이디 중복확인 체크유무 
-                if($('#memberIdcheck').val() != "Y") {
-                    getErrMsg("<spring:message code='blog.label.input.id.perfome.check'/>");
-                    return false;
-                }
-                
-                var pattern1 = /(^[a-zA-Z])/;
-                var pattern2 = /([^a-zA-Z0-9\-_])/;
-                var memberId = $.trim($('input[name=memberId]').val());
-
-                if(!pattern1.test(memberId)){
-                    getErrMsg("<spring:message code='blog.label.input.id.first.character.enghish'/>");
-                    return false;
-                }
-                if(pattern2.test(memberId)){
-                    getErrMsg("<spring:message code='blog.label.input.id.number.english'/>");
-                    return false;
-                }
-                
                 form.submit();
             },
             rules:{
                 memberId:{
                     required:true,
                     minlength: 4,
-                    maxlength: 12
+                    maxlength: 12,
+                    chartersCheck:true,
+                    chartersEngCheck:true
                 },
                 userName:"required",
                 password:{
@@ -115,6 +121,7 @@
                     required:true,
                     minlength:8, 
                     number:true
+                    //date:true
                 },
                 gender:"required",
                 agree:"required"
@@ -124,7 +131,9 @@
                 memberId:{
                     required:"<spring:message code='blog.label.input.id'/>",
                     minlength:jQuery.format("<spring:message code='blog.label.input.minimum.characters'/>"),
-                    maxlength:jQuery.format("<spring:message code='blog.label.input.maxinum.characters'/>")
+                    maxlength:jQuery.format("<spring:message code='blog.label.input.maxinum.characters'/>"),
+                    chartersCheck: "<spring:message code='blog.label.input.id.first.character.enghish'/>",
+                    chartersEngCheck: "<spring:message code='blog.label.input.id.number.english'/>"
                 },
                 password:{
                     required:"<spring:message code='blog.label.input.password'/>",
@@ -143,6 +152,7 @@
                     required:"<spring:message code='blog.label.input.birthdy'/>",
                     minlength:jQuery.format("<spring:message code='blog.label.input.minimum.characters'/>"),
                     number: "<spring:message code='blog.label.input.only.numbers'/>"
+                    //date:"<spring:message code='blog.label.input.vaild.birthday'/>"
                 },
                 gender:"<spring:message code='blog.label.select.gender'/>",
                 agree:"<spring:message code='blog.label.check.privacy.aggree'/>"
@@ -158,8 +168,47 @@
             }
         });
         
+        // id 첫글자 체크 g
+        jQuery.validator.addMethod('chartersCheck', function(id) {
+            var pattern1 = /(^[a-zA-Z])/;
+            var memberId = $.trim(id);
+
+            if(!pattern1.test(memberId)){
+                return false;
+            }
+            return true;
+        }, '');
+        
+        // id 유효성 체크
+        jQuery.validator.addMethod('chartersEngCheck', function(id) {
+            var pattern2 = /([^a-zA-Z0-9\-_])/;
+            var memberId = $.trim(id);
+            
+            if(pattern2.test(memberId)){
+                return false;
+            }
+            
+            return true;
+        }, '');
+        
+        // check for unwanted characters
+        $.validator.addMethod('validChars', function (value) {
+	        var result = true;
+	        // unwanted characters
+	        var iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?";
+	
+	        for (var i = 0; i < value.length; i++) {
+	            if (iChars.indexOf(value.charAt(i)) != -1) {
+	                return false;
+	            }
+	        }
+	        return result;
+
+        }, '');
+        
+        // 회원가입 실패 처리
         if("${result}" == "N") {
-            getErrMsg("<spring:message code='blog.error.register.failed'/>");
+            $('#signUpResult').show();
         }
     });
 </script>
@@ -178,10 +227,10 @@
             <input type="hidden" name="userId" value="">
             <fieldset>
                 <legend><spring:message code="blog.label.signup"/></legend>
-                <div class="alert alert-error" id="memberCheckResult">
-                               <button type="button" class="close" data-dismiss="alert">×</button>
-                               <strong>Error!</strong> <spring:message code="blog.error.login.fail"/>
-                            </div>
+                <div class="alert alert-error" id="signUpResult" style="display:none;">
+                   <button type="button" class="close" data-dismiss="alert">×</button>
+                   <strong>Error!</strong> <spring:message code="blog.error.register.failed"/>
+                </div>
                 <div class="control-group">
                     <label class="control-label"><spring:message code="blog.label.memberid"/></label>
                     <div class="controls">
@@ -189,6 +238,7 @@
                             name="memberId" rel="popover"
                             data-content="Enter ID."
                             data-original-title="ID" value="" maxlength="12">
+                            <span for="memberId" generated="true" class="help-inline" style="display:none;" id="memberIdCheckMsg"><spring:message code="blog.label.member.check.vaild.id"/></span>
                             <button type="button" class="btn btn-info" id="memberCheck"><spring:message code="blog.label.member.check"/></button>
                             <input type="hidden" name="memberIdcheck" id="memberIdcheck" value="N">
                     </div>

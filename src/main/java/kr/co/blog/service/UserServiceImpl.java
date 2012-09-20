@@ -52,12 +52,12 @@ public class UserServiceImpl implements UserService  {
     }
 
     @Override
-    public User getUserId(String email) throws Exception {
+    public User getUserId(String email, String userName) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("UserService getUserByEmail method Call~!!!");    
         }
         
-        return userDao.getUserId(email);
+        return userDao.getUserId(email, userName);
     }
 
     @Override
