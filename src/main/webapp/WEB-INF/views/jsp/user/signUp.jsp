@@ -26,65 +26,6 @@
         $('#cancel').bind('click', function() {
             location.href = "../user/login.do";
         });
-        
-        // 중복체크(버튼 클릭시)
-        $('#memberCheck').bind('click', function() {
-            var memberId = $('#memberId').val();
-            
-            if($.trim(memberId).length == 0) {
-                $('#memberId').parents('.control-group').addClass('error');
-                
-                /*
-                var memberIdFocus = function() {
-                    $('#memberId').focus();
-                };
-                
-                getErrMsg("<spring:message code='blog.label.input.id'/>", memberIdFocus);
-                */
-                return false;
-            }
-            
-            $.ajax({
-                url: "../user/membercheck.do",
-                type: "GET",
-                cache: false,
-                dataType: "json",
-                data: "memberId=" + memberId,
-                success: function(data) {
-                    var result = data.result;
-                    
-                    if(result == true) {
-                        $('#memberId').val("");
-                        
-                        /*
-                        var memberIdFocus = function() {
-                            $('#memberId').focus();
-                        };
-                        
-                        getErrMsg("<spring:message code='blog.label.input.id.exists'/>", memberIdFocus);
-                        */
-                        $('#memberId').parents('.control-group').addClass('error');
-                        $('#memberIdCheckMsg').html("<spring:message code='blog.label.input.id.exists'/>");
-                        $('#memberIdCheckMsg').show();
-                        setTimeout(function() {
-                            $('#memberIdCheckMsg').hide();
-                            $('#memberId').focus();
-                        }, 1000);
-                    } else {
-                        $('#memberIdcheck').val("Y");
-                        $('#memberId').parents('.control-group').addClass('success');
-                        $('#memberIdCheckMsg').html("<spring:message code='blog.label.member.check.vaild.id'/>");
-                        $('#memberIdCheckMsg').show();
-                        setTimeout(function() {
-                            $('#memberIdCheckMsg').hide();    
-                        }, 1000);
-                    }
-                },
-                error: function(data) {
-                    getErrMsg("<spring:message code='blog.error.common.fail'/>");
-                }
-            });
-        });
 
         // Popover 
         $('#registerHere input').hover(function() {
@@ -102,7 +43,8 @@
                     minlength: 4,
                     maxlength: 12,
                     chartersCheck:true,
-                    chartersEngCheck:true
+                    chartersEngCheck:true,
+                    memberCheck:true
                 },
                 userName:"required",
                 password:{
@@ -133,7 +75,8 @@
                     minlength:jQuery.format("<spring:message code='blog.label.input.minimum.characters'/>"),
                     maxlength:jQuery.format("<spring:message code='blog.label.input.maxinum.characters'/>"),
                     chartersCheck: "<spring:message code='blog.label.input.id.first.character.enghish'/>",
-                    chartersEngCheck: "<spring:message code='blog.label.input.id.number.english'/>"
+                    chartersEngCheck: "<spring:message code='blog.label.input.id.number.english'/>",
+                    memberCheck: "<spring:message code='blog.label.input.id.exists'/>"
                 },
                 password:{
                     required:"<spring:message code='blog.label.input.password'/>",
@@ -191,6 +134,33 @@
             return true;
         }, '');
         
+        // id 중복체크
+        jQuery.validator.addMethod('memberCheck', function(id) {
+            
+            var ret = true;
+            $.ajax({
+                url: "../user/membercheck.do",
+                type: "GET",
+                cache: false,
+                async: false,
+                dataType: "json",
+                data: "memberId=" + id,
+                success: function(data) {
+                    var result = data.result;
+                    
+                    if(result == true) {
+                        ret =  false;       
+                    } else {
+                        ret =  true;
+                    }
+                },
+                error: function(data) {
+                    return false;
+                }
+            });
+            return ret;
+        }, '');
+        
         // check for unwanted characters
         $.validator.addMethod('validChars', function (value) {
 	        var result = true;
@@ -203,7 +173,6 @@
 	            }
 	        }
 	        return result;
-
         }, '');
         
         // 회원가입 실패 처리
@@ -238,9 +207,6 @@
                             name="memberId" rel="popover"
                             data-content="Enter ID."
                             data-original-title="ID" value="" maxlength="12">
-                            <span for="memberId" generated="true" class="help-inline" style="display:none;" id="memberIdCheckMsg"><spring:message code="blog.label.member.check.vaild.id"/></span>
-                            <button type="button" class="btn btn-info" id="memberCheck"><spring:message code="blog.label.member.check"/></button>
-                            <input type="hidden" name="memberIdcheck" id="memberIdcheck" value="N">
                     </div>
                 </div>
                 <div class="control-group">
