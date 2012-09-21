@@ -13,12 +13,14 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<link href="${root}/common/css/bootstrap.css" rel="stylesheet">
-<link href="${root}/common/css/bootstrap-responsive.css" rel="stylesheet">
+<link href="${root}/common/css/bootstrap/bootstrap.css" rel="stylesheet">
+<link href="${root}/common/css/bootstrap/bootstrap-responsive.css" rel="stylesheet">
+<link href="${root}/common/css/jquery/jquery-ui-1.8.16.custom.css" rel="stylesheet">
 <link href="${root}/common/css/common.css" rel="stylesheet">
 
-<script type="text/javascript" src="${root}/common/js/jQuery/jquery-1.7.1.js"></script>
-<script type="text/javascript" src="${root}/common/js/jQuery/jquery.validate.js"></script>
+<script type="text/javascript" src="${root}/common/js/jquery/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="${root}/common/js/jquery/jquery.validate.js"></script>
+<script type="text/javascript" src="${root}/common/js/jquery/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="${root}/common/js/common.js"></script>
 
 <script type="text/javascript">

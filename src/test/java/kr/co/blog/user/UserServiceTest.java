@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
-import kr.co.blog.common.DESedeCrypto;
+import kr.co.blog.common.DES;
 import kr.co.blog.domain.User;
 import kr.co.blog.service.UserService;
 
@@ -37,14 +37,11 @@ public class UserServiceTest {
     }
     
     @Test
-    public void createUserTest() {
-        // 패스워드
-        byte[] array = DESedeCrypto.encrypt("aaasss");
-        
+    public void createUserTest() throws Exception {
         user.setUserId("5145a4b4-2e20-4298-a54f-830be06db91a");
         user.setMemberId("tapjm");
         user.setUserName("몽스");
-        user.setPassword(new String(array));
+        user.setPassword(DES.encrypt("aaasss"));
         user.setBirthday("18000000");
         user.setEmail("tapjm@naver.com");
         user.setGender("F");
@@ -89,13 +86,10 @@ public class UserServiceTest {
     }
     
     @Test
-    public void updateUserTest() {
-        // 패스워드
-        byte[] array = DESedeCrypto.encrypt("222222");
-        
+    public void updateUserTest() throws Exception {
         user.setUserId("5145a4b4-2e20-4298-a54f-830be06db91a");
         user.setUserName("코비");
-        user.setPassword(new String(array));
+        user.setPassword(DES.encrypt("222222"));
         user.setEmail("tapjm@daume.net");
         user.setBirthday("22226655");
         user.setGender("M");

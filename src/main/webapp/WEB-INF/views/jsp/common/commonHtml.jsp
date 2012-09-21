@@ -5,7 +5,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <!-- Modal popup -->
-<div style="display: none;" class="modal hide fade in" id="errModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div style="display:none;" class="modal hide fade in" id="errModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel"><spring:message code="blog.label.notification"/></h3>
@@ -19,3 +19,12 @@
         <button id="close" class="btn" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true"><spring:message code="blog.label.close"/></button>
     </div>
 </div>
+
+<!--static dialog-->
+ <div style="display:none;" id="dialog-message" title="<spring:message code='blog.label.notification'/>">
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+    <div id="messageText"></div>
+  </p>
+</div>
+<!--end static dialog-->
