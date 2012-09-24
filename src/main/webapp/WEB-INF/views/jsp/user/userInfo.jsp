@@ -35,6 +35,7 @@
             var options = {
                 buttons: {
                     "Ok": function () {
+                        $(this).dialog("close");
                         location.href = "../user/deleteUser.do";
                     },
                     "Cancel": function () {

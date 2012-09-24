@@ -24,7 +24,7 @@
  <div style="display:none;" id="dialog-message" title="<spring:message code='blog.label.notification'/>">
   <p>
     <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
-    <div id="messageText"></div>
+    <span id="messageText"></span>
   </p>
 </div>
 <!--end static dialog-->

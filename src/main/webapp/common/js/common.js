@@ -24,8 +24,8 @@ function getErrMsg(msg, afterAction) {
 function alertMsg(msg, options) {
     var default_value =  {
         autoOpen : false,
-        width : 300,
-        tile:"",
+        width : 350,
+        tile:"<spring:message code='blog.label.notification'/>",
         height: 100,
         modal: true,
         buttons: {
