@@ -1,0 +1,105 @@
+package kr.co.blog.dao;
+
+import java.util.List;
+
+import kr.co.blog.domain.Board;
+import kr.co.blog.domain.User;
+
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.One;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+import org.springframework.stereotype.Component;
+
+/**
+ * BoardDao
+ * @author jmpark
+ *
+ */
+@Component
+public interface BoardDao {
+
+    /**
+     * 게시글 등록
+     * @param board
+     * @return
+     * @throws Exception
+     */
+    @Insert("insert into board (boardid, subject, content, createuser, createdt, modifydt, count, noticeyn, ip, pageurl, filename, filesize, userid) " +
+    		"values (#{boardId},#{subject},#{content},#{createUser},now(),now(),0,#{noticeYn},#{ip},#{pageUrl},#{fileName},#{fileSize},#{userId})")
+    public int createBoard(Board board) throws Exception;
+    
+    /**
+     * 게시글 상세조회
+     * @param boardid
+     * @return
+     * @throws Exception
+     */
+    @Select("select * from board where boardid = #{boardId}")
+    @Options(useCache=true)
+    @Results(value = {
+            @Result(property="boardId", column="boardid"),
+            @Result(property="subject", column="subject"),
+            @Result(property="content", column="content"),
+            @Result(property="createUser", column="createuser"),
+            @Result(property="createDt", column="createdt"),
+            @Result(property="modifyDt", column="modifydt"),
+            @Result(property="count", column="count"),
+            @Result(property="noticeYn", column="noticeyn"),
+            @Result(property="ip", column="ip"),
+            @Result(property="pageUrl", column="pageurl"),
+            @Result(property="fileName", column="filename"),
+            @Result(property="fileSize", column="filesize"),
+            @Result(property="userId",  column="userid",  javaType=User.class, one=@One(select="kr.co.blog.dao.UserDao.getUserByUserId"))
+    }) 
+    public Board getBoardByBoardId(String boardId) throws Exception;
+    
+    /**
+     * 게시글 목록
+     * @return
+     * @throws Exception
+     */
+    @Select("select * from board")
+    @Options(useCache=true)
+    @Results(value = {
+            @Result(property="boardId", column="boardid"),
+            @Result(property="subject", column="subject"),
+            @Result(property="content", column="content"),
+            @Result(property="createUser", column="createuser"),
+            @Result(property="createDt", column="createdt"),
+            @Result(property="modifyDt", column="modifydt"),
+            @Result(property="count", column="count"),
+            @Result(property="noticeYn", column="noticeyn"),
+            @Result(property="ip", column="ip"),
+            @Result(property="pageUrl", column="pageurl"),
+            @Result(property="fileName", column="filename"),
+            @Result(property="fileSize", column="filesize"),
+            @Result(property="userId",  column="userid",  javaType=User.class, one=@One(select="kr.co.blog.dao.UserDao.getUserByUserId"))
+    }) 
+    public List<Board> getAllBoardList() throws Exception;
+    
+    /**
+     * 게시글 수정
+     * @param board
+     * @return
+     * @throws Exception
+     */
+    @Update("update board set subject=#{subject}, content=#{content}, modifydt=now(), pageurl=#{pageUrl}, fileName=#{fileName}, filesize=#{fileSize} where boardid=#{boardId}")
+    @Options(flushCache=true)
+    public int updateBoard(Board board) throws Exception; 
+    
+    /**
+     * 게시글 삭제
+     * @param board
+     * @return
+     * @throws Exception
+     */
+    @Delete("delete from board where boardid=#{boardId}")
+    @Options(flushCache=true)
+    public int deleteBoard(Board board) throws Exception;
+    
+}
