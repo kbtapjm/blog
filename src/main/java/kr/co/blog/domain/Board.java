@@ -18,6 +18,7 @@ public class Board implements Serializable {
     private String fileName;
     private int fileSize;
     private String userId;
+    private User user;
     
     public Board() {
         super();
@@ -146,4 +147,13 @@ public class Board implements Serializable {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
 }

@@ -12,6 +12,7 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Component;
 
@@ -54,7 +55,7 @@ public interface BoardDao {
             @Result(property="pageUrl", column="pageurl"),
             @Result(property="fileName", column="filename"),
             @Result(property="fileSize", column="filesize"),
-            @Result(property="userId",  column="userid",  javaType=User.class, one=@One(select="kr.co.blog.dao.UserDao.getUserByUserId"))
+            @Result(property="user",  column="userid",  javaType=User.class, one=@One(select="kr.co.blog.dao.UserDao.getUserByUserId"))
     }) 
     public Board getBoardByBoardId(String boardId) throws Exception;
     
@@ -63,7 +64,7 @@ public interface BoardDao {
      * @return
      * @throws Exception
      */
-    @Select("select * from board")
+    //@Select("select * from board")
     @Options(useCache=true)
     @Results(value = {
             @Result(property="boardId", column="boardid"),
@@ -78,8 +79,9 @@ public interface BoardDao {
             @Result(property="pageUrl", column="pageurl"),
             @Result(property="fileName", column="filename"),
             @Result(property="fileSize", column="filesize"),
-            @Result(property="userId",  column="userid",  javaType=User.class, one=@One(select="kr.co.blog.dao.UserDao.getUserByUserId"))
+            @Result(property="user",  column="userid",  javaType=User.class, one=@One(select="kr.co.blog.dao.UserDao.getUserByUserId"))
     }) 
+    @SelectProvider(type = BoardQuery.class, method = "getBoardListQuery")
     public List<Board> getAllBoardList() throws Exception;
     
     /**
