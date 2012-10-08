@@ -15,7 +15,7 @@
             <div class="nav-collapse">
                 <ul class="nav">
                     <c:if test="${sessionScope.sessionuser != null}">
-                    <li><a href="#"><spring:message code="blog.label.board"/></a></li>
+                    <li><a href="../board/getAllBoard.do"><spring:message code="blog.label.board"/></a></li>
                     <li><a href="#"><spring:message code="blog.label.photos"/></a></li>
                     </c:if>
                 </ul>

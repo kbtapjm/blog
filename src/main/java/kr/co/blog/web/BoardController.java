@@ -40,15 +40,13 @@ public class BoardController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/signUp", method = RequestMethod.GET)
-    public String createBoardForm(Model model, @RequestParam(value="result", required=false) String result) throws Exception {
+    @RequestMapping(value = "/boardCreate", method = RequestMethod.GET)
+    public String boardCreate(Model model) throws Exception {
         if(log.isDebugEnabled()) {
-            log.debug("BoardController createBoardForm method start~!!!");    
+            log.debug("BoardController boardCreate method start~!!!");    
         }
         
-        model.addAttribute("result", result);
-        
-        return "/board/createBoardForm";
+        return "/board/boardCreate";
     }
     
     /**
@@ -61,19 +59,28 @@ public class BoardController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/createBoard", method = RequestMethod.POST)
-    public String createBoard(HttpServletRequest request, 
+    @RequestMapping(value = "/boardCreateProc", method = RequestMethod.POST)
+    public String boardCreateProc(HttpServletRequest request, 
                             Model model, 
                             @Valid @ModelAttribute Board board, 
                             BindingResult bindingResult, 
                             RedirectAttributes redirectAttr) throws Exception {
         if(log.isDebugEnabled()) {
-            log.debug("BoardController createUser method start~!!!");    
+            log.debug("BoardController boardCreateProc method start~!!!");    
         }
         
         redirectAttr.addAttribute("result", "N");
         
-        return "redirect:/board/createForm.do";
+        return "redirect:/board/getAllBoard.do";
+    }
+    
+    @RequestMapping(value = "/getAllBoard", method = RequestMethod.GET)
+    public String getAllBoard(Model model) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController getAllBoard method start~!!!");    
+        }
+        
+        return "/board/boardList";
     }
 
 }

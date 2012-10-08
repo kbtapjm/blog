@@ -45,7 +45,7 @@ public class BoardServiceTest {
         board.setIp("127.0.0.1");
         board.setFileName("test.jpg");
         board.setFileSize(1234);
-        board.setUserId("d52b4432-7d31-41ce-acad-7e0448b6ddf8");
+        board.setUserId("34a7bf1a-3484-4564-b93c-83ebabe0475d");
         
         int result = boardService.createBoard(board);
         
