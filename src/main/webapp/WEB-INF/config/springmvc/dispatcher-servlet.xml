@@ -126,12 +126,14 @@
         <property name="maxUploadSize">
             <value>10000000</value>
         </property>
-        <property name="uploadTempDir" ref="uploadDirResource" />
+        <!-- <property name="uploadTempDir" ref="uploadDirResource" /> -->
     </bean>
-
+    
+    <!-- 
     <bean id="uploadDirResource" class="org.springframework.core.io.FileSystemResource">
         <constructor-arg>
             <value>/contents/temp/</value>
         </constructor-arg>
     </bean>
+     -->
 </beans>

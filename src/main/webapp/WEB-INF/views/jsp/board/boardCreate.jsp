@@ -38,8 +38,8 @@
         });
         
         // 단축 URL 생성
-        $('#setShortUrl').bind('click', function() {
-            var url = $('#url').val();
+        $('#urlShortening').bind('click', function() {
+            var url = $('#pageUrl').val();
             
             if($.trim(url).length == 0) return false; 
                 
@@ -70,7 +70,7 @@
                         global_hash = result.data.global_hash;
                         new_hash = result.data.new_hash;
                         
-                        $('#url').val(url);
+                        $('#pageUrl').val(url);
                         break;
                     case 403 : 
                         if(statusTxt == "RATE_LIMIT_EXCEEDED") {
@@ -107,10 +107,10 @@
         // validation check
         $('#inputFrm').validate({
             rules:{
-                title:"required"
+                subject:"required"
             },
             messages:{
-                title:"<spring:message code='blog.label.input.subject'/>"
+                subject:"<spring:message code='blog.label.input.subject'/>"
             },
             errorClass: "help-inline",
             errorElement: "span",
@@ -141,14 +141,14 @@
                 <div class="control-group">
                     <label class="control-label" for="title"><spring:message code="blog.label.subject"/></label>
                     <div class="controls">
-                        <input type="text" class="input-xlarge" id="title" name="title">
+                        <input type="text" class="input-xlarge" id="subject" name="subject">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="url"><spring:message code="blog.label.url"/></label>
                     <div class="controls">
-                        <input type="text" class="input-xlarge" id="url" name="url">
-                        <button type="button" class="btn btn-info" id="setShortUrl"><spring:message code="blog.label.url.shortening"/></button>
+                        <input type="text" class="input-xlarge" id="pageUrl" name="pageUrl">
+                        <button type="button" class="btn btn-info" id="urlShortening"><spring:message code="blog.label.url.shortening"/></button>
                     </div>
                 </div>
                 <div class="control-group">
