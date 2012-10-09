@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="description" content="This is description" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title><spring:message code="blog.label.board.create"/></title>
+<title><spring:message code="blog.label.create"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -29,25 +29,20 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        // 목록
-        var cancel = function() {
-            location.href = "./boardList.html";    
-        }
+        // 컨텐츠 HTML 에디트 설정
+        $('#content').redactor();
         
-        // 저장
-        var save = function() {
-            console.log("저장~!!!");
-        }
+        // 취소
+        $('#cancel').bind('click', function() {
+            location.href = "../board/boardList.do";
+        });
         
         // 단축 URL 생성
-        var setShortUrl = function() {
+        $('#setShortUrl').bind('click', function() {
             var url = $('#url').val();
             
-            if($.trim(url).length == 0) {
-                getErrMsg('url을 입력하세요.');
-                return false;
-            }
-            
+            if($.trim(url).length == 0) return false; 
+                
             // bitly API 이용한 URL 단축
             var bitlyUrl = "http://api.bitly.com/v3/shorten";
             var reqParams = "";
@@ -79,50 +74,44 @@
                         break;
                     case 403 : 
                         if(statusTxt == "RATE_LIMIT_EXCEEDED") {
-                            msg = "허용한도 초과로 인해 URL생성을 실패하였습니다.";
+                            msg = "<spring:message code='blog.label.input.rate.limit.exceeded'/>";
                         }
                         getErrMsg(msg + statusMsg);
                         break;
                     case 500 : 
                         if(statusTxt == "INVALID_URI") {
-                            msg = "알수없는 URL로 인해 URL생성을 실패하였습니다.";
+                            msg = "<spring:message code='blog.label.input.invaild.uri'/>";
                         } else if(statusTxt == "MISSING_ARG_LOGIN") {
-                            msg = "사용자 인증이 만료되어 URL생성을 실패하였습니다.";
+                            msg = "<spring:message code='blog.label.input.missing.arg.login'/>";
                         } else if(statusTxt == "ALREADY_A_BITLY_LINK"){
-                            msg = "이미 단축된 URL입니다.";
+                            msg = "<spring:message code='blog.label.input.already.bitly.link'/>";
                         }
-                        getErrMsg(msg + statusMsg);
+                        alertMsg(msg + statusMsg);
                         break;
                     case 503 :
                         if(statusTxt == "UNKNOWN_ERROR") {
-                            msg = "알수없는 에러로 인해 URL생성을 실패하였습니다.";
+                            msg = "<spring:message code='blog.label.input.unknown.error'/>";
                         }
-                        getErrMsg(msg + statusMsg);
+                        alertMsg(msg + statusMsg);
                         break;
                     default :
-                        getErrMsg("에러로 인해 URL생성을 실패하였습니다.");
+                        alertMsg("<spring:message code='blog.label.input.unknown.error'/>");
                     }
                 },
                 error: function(result) {
-                    console.log(JSON.stringify(result));
-                    // {"readyState":0,"responseText":"","status":0,"statusText":"error"} 
-                    getErrMsg("에러로 인해 URL생성을 실패하였습니다.");
+                    alertMsg("<spring:message code='blog.label.input.unknown.error'/>");
                 }
             });
-        }
+        });
         
         // validation check
         $('#inputFrm').validate({
             rules:{
-                title:"required",
-                url:"required"
+                title:"required"
             },
-
             messages:{
-                title:"Enter Title",
-                url:"Enter URL"
+                title:"<spring:message code='blog.label.input.subject'/>"
             },
-
             errorClass: "help-inline",
             errorElement: "span",
             highlight:function(element, errorClass, validClass) {
@@ -133,11 +122,6 @@
                 $(element).parents('.control-group').addClass('success');
             }
         });
-        
-        $('#content').redactor();
-        $('#cancel').bind('click', cancel);
-        $('#save').bind('click', save);
-        $('#setShortUrl').bind('click', setShortUrl);
     });
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -151,45 +135,39 @@
 
     <!-- contents 영역 -->
     <div class="container">
-        <form class="form-horizontal" id="inputFrm">
+        <form class="form-horizontal" id="inputFrm" method="POST" action="../board/boardCreateProc.do" enctype="multipart/form-data">
             <fieldset>
-                <legend><spring:message code="blog.label.board.create"/></legend>
+                <legend><spring:message code="blog.label.create"/></legend>
                 <div class="control-group">
-                    <label class="control-label" for="title">Title</label>
+                    <label class="control-label" for="title"><spring:message code="blog.label.subject"/></label>
                     <div class="controls">
-                        <input type="text" class="input-xlarge" id="title" name="title"
-                            rel="popover" data-content="Enter your Title."
-                            data-original-title="Title" placeholder="Title">
+                        <input type="text" class="input-xlarge" id="title" name="title">
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="url">URL</label>
+                    <label class="control-label" for="url"><spring:message code="blog.label.url"/></label>
                     <div class="controls">
-                        <input type="text" class="input-xlarge" id="url" name="url"
-                            rel="popover" data-content="Enter your URL"
-                            data-original-title="URL" placeholder="URL">
-                        <button type="button" class="btn btn-info" id="setShortUrl">Short
-                            URL</button>
+                        <input type="text" class="input-xlarge" id="url" name="url">
+                        <button type="button" class="btn btn-info" id="setShortUrl"><spring:message code="blog.label.url.shortening"/></button>
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="content">Content</label>
+                    <label class="control-label" for="content"><spring:message code="blog.label.contents"/></label>
                     <div class="controls">
                         <textarea id="content" name="content"></textarea>
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="attachFile">File</label>
+                    <label class="control-label" for="attachFile"><spring:message code="blog.label.attachments"/></label>
                     <div class="controls">
-                        <input class="input-file" id="attachFile" name="attachFile"
-                            type="file">
+                        <input class="input-file" id="attachFile" name="attachFile" type="file">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label"></label>
                     <div class="controls">
-                        <button type="submit" class="btn btn-primary" id="save">Save</button>
-                        <button type="button" class="btn" id="cancel">Cancel</button>
+                        <button type="submit" class="btn btn-primary"><spring:message code="blog.label.save"/></button>
+                        <button type="button" class="btn" id="cancel"><spring:message code="blog.label.cancel"/></button>
                     </div>
                 </div>
             </fieldset>

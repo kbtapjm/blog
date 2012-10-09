@@ -194,7 +194,7 @@
 
     <!-- contents 영역 -->
     <div class="container">
-        <form class="form-horizontal" id="registerHere" method='post' action='../user/createUser.do'>
+        <form class="form-horizontal" id="registerHere" method="POST" action="../user/createUser.do">
             <input type="hidden" name="userId" value="">
             <fieldset>
                 <legend><spring:message code="blog.label.signup"/></legend>

@@ -30,7 +30,6 @@ public class BoardController {
     private static Logger log = Logger.getLogger(BoardController.class);
     
     @Autowired BoardService boardService;
-    @Autowired LocaleResolver localeResolver;
     @Autowired MessageSourceAccessor messageSourceAccessor;
     
     /**
@@ -74,8 +73,8 @@ public class BoardController {
         return "redirect:/board/getAllBoard.do";
     }
     
-    @RequestMapping(value = "/getAllBoard", method = RequestMethod.GET)
-    public String getAllBoard(Model model) throws Exception {
+    @RequestMapping(value = "/boardList", method = RequestMethod.GET)
+    public String boardList(Model model) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("BoardController getAllBoard method start~!!!");    
         }

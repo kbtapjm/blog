@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="description" content="This is description" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title><spring:message code="blog.label.board.list"/></title>
+<title><spring:message code="blog.label.list"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -94,7 +94,7 @@
     <!-- contents 영역 -->
     <div class="container">
         <fieldset>
-            <legend><spring:message code="blog.label.board.list"/></legend>
+            <legend><spring:message code="blog.label.list"/></legend>
 
             <!--  search area  start-->
             <form class="well well-small  form-search">
