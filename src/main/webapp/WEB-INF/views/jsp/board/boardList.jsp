@@ -25,7 +25,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        // 게시판 등록폼
+        // 게시글 등록폼
         $('#boardCreate').bind('click', function() {
             location.href = "../board/boardCreate.do";
         });
@@ -79,6 +79,11 @@
         
         tooltipSet(); 
     });
+    
+    // 게시글 상세조회
+    function boardRead(boardId) {
+        log("boardId : " + boardId);
+    }
 
    
 </script>
@@ -96,72 +101,72 @@
         <fieldset>
             <legend><spring:message code="blog.label.list"/></legend>
 
-            <!--  search area  start-->
-            <form class="well well-small  form-search">
+            <!--  검색영역  start-->
+            <form class="well well-small  form-search" method="GET" action="../board/boardList.do">
                 <div align="right">
-                    <select class="span2">
-                        <option>Title+Content</option>
-                        <option>Title</option>
-                        <option>CreateUser</option>
-                        <option>Content</option>
-                    </select> <input type="text" name="searchword" id="searchword"
-                        class="input-medium search-query" style="margin: 0 auto;"
-                        data-provide="typeahead">
-                    <button type="submit" class="btn btn-primary">Search</button>
+                    <select class="span2" name="searchtype" id="searchtype">
+                        <option value="subject_content"><spring:message code="blog.label.subject"/>+<spring:message code="blog.label.contents"/></option>
+                        <option value="subject"><spring:message code="blog.label.subject"/></option>
+                        <option value="createDt"><spring:message code="blog.label.create.date"/></option>
+                        <option value="content"><spring:message code="blog.label.contents"/></option>
+                    </select>
+                    <input type="text" name="searchword" id="searchword" class="input-medium search-query" style="margin: 0 auto;" data-provide="typeahead">
+                    <button type="submit" class="btn btn-primary"><spring:message code="blog.label.search"/></button>
                 </div>
             </form>
+            <!--  검색영역  end-->
 
-            <!-- table 영역 -->
+            <!-- table 영역 start-->
             <table class="table table-striped ">
                 <thead>
                     <tr>
-                        <th style="width: 10%">No</th>
-                        <th style="width: 40%">Title</th>
-                        <th style="width: 20%">CreateUser</th>
-                        <th style="width: 20%">CreateDate</th>
-                        <th style="width: 10%">ViewCount</th>
+                        <th style="width: 5%">
+	                        <label class="checkbox">
+	                           <input type="checkbox" value="">
+                            </label>
+                        </th>
+                        <th style="width: 10%"><spring:message code="blog.label.no"/></th>
+                        <th style="width: 35%"><spring:message code="blog.label.subject"/></th>
+                        <th style="width: 20%"><spring:message code="blog.label.create.user"/></th>
+                        <th style="width: 20%"><spring:message code="blog.label.create.date"/></th>
+                        <th style="width: 10%"><spring:message code="blog.label.views"/></th>
                     </tr>
                 </thead>
                 <tbody>
+                    <c:if test="${fn:length(resultList) == 0}"> 
+		            <tr>
+		                <td colspan="6" align="center"><spring:message code="blog.label.list.null"/></td>
+		            <tr>
+		            </c:if>
+		            
+		            <c:set var="no" value="${fn:length(resultList) + 1}" />
+		            <c:forEach var="resultList" items="${resultList}" varStatus="stat">
                     <tr>
-                        <td>1</td>
-                        <td><a href="#" onClick="javascript:boardRead('1');"
-                            id="titleTooltip" rel="tooltip" data-placement="bottom"
-                            data-bitly-type="bitly_hover_card"
-                            data-original-title="블로그 개발~!!">블로그 개발~!!</a></td>
-                        <td>검은몽스</td>
-                        <td>2012-08-15 17:03</td>
-                        <td>25</td>
+                        <td>
+                            <label class="checkbox">
+							  <input type="checkbox" name="boardid" id="boardid" value="${resultList.boardId}">
+							</label>
+                        </td>
+                        <td align="center">${no - stat.count}</td>
+                        <td><a href="#" onClick="javascript:boardRead('${resultList.boardId}');" id="titleTooltip" rel="tooltip" data-placement="bottom" data-bitly-type="bitly_hover_card"
+                            data-original-title="${resultList.subject}">${resultList.subject}</a></td>
+                        <td align="center">${resultList.createUser}</td>
+                        <td align="center">${fn:substring(resultList.createDt, 0, 16)}</td>
+                        <td align="center">${resultList.count}</td>
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td><a href="#" onClick="javascript:boardRead('2');"
-                            id="titleTooltip" rel="tooltip" data-placement="bottom"
-                            data-bitly-type="bitly_hover_card"
-                            data-original-title="Twitter boorstrap~!!">Twitter
-                                boorstrap~!!</a></td>
-                        <td>검은몽스</td>
-                        <td>2012-08-17 17:03</td>
-                        <td>25</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td><a href="#" onClick="javascript:boardRead('3');"
-                            id="titleTooltip" rel="tooltip" data-placement="bottom"
-                            data-bitly-type="bitly_hover_card" data-original-title="jQuery">jQuery</a></td>
-                        <td>검은몽스</td>
-                        <td>2012-08-17 17:03</td>
-                        <td>10</td>
-                    </tr>
+                    </c:forEach>
                 </tbody>
             </table>
+            <!-- table 영역 end-->
 
             <div align="right">
-                <button type="button" class="btn btn-primary" id="boardCreate">Create</button>
-                <button type="button" class="btn btn-info disabled">ExcelSava</button>
-                <button type="button" class="btn btn-info disabled">PdfSave</button>
+                <button type="button" class="btn btn-primary" id="boardCreate"><spring:message code="blog.label.create"/></button>
+                <button type="button" class="btn btn-primary" id="boardDelete"><spring:message code="blog.label.delete"/></button>
+                <button type="button" class="btn btn-info disabled"><spring:message code="blog.label.saveexcel"/></button>
+                <button type="button" class="btn btn-info disabled"><spring:message code="blog.label.savepdf"/></button>
             </div>
 
+            <!--  페이징 start-->
             <div class="pagination pagination-centered">
                 <ul>
                     <li class="disabled"><a href="#" data-bitly-type="bitly_hover_card">«</a></li>
@@ -172,6 +177,7 @@
                     <li><a href="#" data-bitly-type="bitly_hover_card">»</a></li>
                 </ul>
             </div>
+            <!--  페이징 end-->
         </fieldset>
     </div>
     <!-- /container -->

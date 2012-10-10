@@ -1,6 +1,8 @@
 package kr.co.blog.web;
 
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,10 +49,11 @@ public class BoardController {
      * @throws Exception
      */
     @RequestMapping(value = "/boardCreate", method = RequestMethod.GET)
-    public String boardCreate(Model model) throws Exception {
+    public String boardCreate(Model model, @RequestParam(value="result", required=false) String result) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("BoardController boardCreate method start~!!!");    
         }
+        model.addAttribute("result", result);
         
         return "/board/boardCreate";
     }
@@ -70,7 +73,8 @@ public class BoardController {
                             Model model, 
                             @Valid @ModelAttribute Board board, 
                             @RequestParam("attachFile") MultipartFile file,
-                            BindingResult bindingResult) throws Exception {
+                            BindingResult bindingResult,
+                            RedirectAttributes redirectAttr) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("BoardController boardCreateProc method start~!!!");    
         }
@@ -91,15 +95,30 @@ public class BoardController {
         board.setCreateUser(user.getUserName());
         
         int result = boardService.createBoard(board);
+        if(result < 0) {
+            redirectAttr.addAttribute("result", "N");
+            return "/board/boardCreate";
+        }
         
         return "redirect:/board/boardList.do";
     }
     
+    /**
+     * 게시글 목록
+     * @param model
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/boardList", method = RequestMethod.GET)
-    public String boardList(Model model) throws Exception {
+    public String boardList(Model model, @RequestParam Map<String, Object> params) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("BoardController getAllBoard method start~!!!");    
         }
+        
+        log.debug("params : " + params.toString());
+        
+        List<Board> resultList = boardService.getAllBoardList(params);
+        model.addAttribute("resultList", resultList);
         
         return "/board/boardList";
     }

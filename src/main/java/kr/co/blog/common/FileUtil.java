@@ -23,14 +23,14 @@ public class FileUtil extends HttpServletRequestWrapper {
         super(request);
     }
     
-    public final static String PATH = "C:\\web_dev\\repasitory\\";
+    public final static String PATH = "C:\\webDev\\repasitory\\";
 
     /**
      * 파일 업로드
      * @param file
      * @return
      */
-    public static String fileUpload(MultipartFile file)  {
+    public static boolean fileUpload(MultipartFile file) {
         String fileName = "";
         boolean uploadResult = false;
         
@@ -39,7 +39,7 @@ public class FileUtil extends HttpServletRequestWrapper {
             
             File uploadedFile = new File(PATH, fileName);
             
-            if (uploadedFile.exists())  {
+            if (uploadedFile.exists()) {
                 for(int k = 0;  true; k++) {
                     uploadedFile = new File(PATH, "(" + k + ")" + fileName);
                     
@@ -57,7 +57,7 @@ public class FileUtil extends HttpServletRequestWrapper {
             System.out.println("Exception :"+e.toString());
         } 
         
-        return (uploadResult) ? fileName : "";
+        return uploadResult;
     }
 
     /**
@@ -65,15 +65,15 @@ public class FileUtil extends HttpServletRequestWrapper {
      * @param fileName
      * @return
      */
-    public static boolean fileDelete(String fileName){
+    public static boolean fileDelete(String fileName) {
         boolean ret = false;
         
-        try{
-            if ( fileName != null) { 
+        try {
+            if(fileName != null) { 
                 File file = new File(PATH + fileName);
                 ret = file.delete();
             }
-        }catch(Exception e) {
+        } catch(Exception e) {
             e.printStackTrace();
         }
         
@@ -87,7 +87,6 @@ public class FileUtil extends HttpServletRequestWrapper {
      * @throws IOException
      */
     public static void fileDownload(HttpServletResponse response, File file) throws IOException {  
-        
         response.setContentLength((int) file.length());
         response.setHeader("Content-Disposition", "attachment; fileName=\"" + java.net.URLEncoder.encode(file.getName(), "UTF-8") + "\";");
         response.setHeader("Content-Transfer-Encoding", "binary");
@@ -130,7 +129,6 @@ public class FileUtil extends HttpServletRequestWrapper {
      * @return
      */
     public static String getFileSize(long cbyte) {
-        
         String result = "";
         long _kb = 1024;
         long _mb = _kb * 1024;

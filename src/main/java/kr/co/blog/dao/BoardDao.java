@@ -1,6 +1,7 @@
 package kr.co.blog.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import kr.co.blog.domain.Board;
 import kr.co.blog.domain.User;
@@ -82,7 +83,7 @@ public interface BoardDao {
             @Result(property="user",  column="userid",  javaType=User.class, one=@One(select="kr.co.blog.dao.UserDao.getUserByUserId"))
     }) 
     @SelectProvider(type = BoardQuery.class, method = "getBoardListQuery")
-    public List<Board> getAllBoardList() throws Exception;
+    public List<Board> getAllBoardList(Map<String, Object> params) throws Exception;
     
     /**
      * 게시글 수정

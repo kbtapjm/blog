@@ -1,6 +1,7 @@
 package kr.co.blog.service;
 
 import java.util.List;
+import java.util.Map;
 
 import kr.co.blog.dao.BoardDao;
 import kr.co.blog.domain.Board;
@@ -33,12 +34,12 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<Board> getAllBoardList() throws Exception {
+    public List<Board> getAllBoardList(Map<String, Object> params) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("BoardService getAllBoardList method Call~!!!");    
         }
         
-        return boardDao.getAllBoardList();
+        return boardDao.getAllBoardList(params);
     }
 
     @Override
