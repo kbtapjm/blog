@@ -80,11 +80,15 @@
         tooltipSet(); 
     });
     
+    // 즉시 실행 함수
+    $(function() { 
+        $('#searchType').val('${params.searchType}');
+    });
+    
     // 게시글 상세조회
     function boardRead(boardId) {
         log("boardId : " + boardId);
     }
-
    
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -110,7 +114,7 @@
                         <option value="createUser"><spring:message code="blog.label.create.user"/></option>
                         <option value="content"><spring:message code="blog.label.contents"/></option>
                     </select>
-                    <input type="text" name="searchWord" id="searchWord" class="input-medium search-query" style="margin: 0 auto;" data-provide="typeahead">
+                    <input type="text" name="searchWord" id="searchWord" value="${params.searchWord }" class="input-medium search-query" style="margin: 0 auto;" data-provide="typeahead">
                     <button type="submit" class="btn btn-primary"><spring:message code="blog.label.search"/></button>
                 </div>
             </form>

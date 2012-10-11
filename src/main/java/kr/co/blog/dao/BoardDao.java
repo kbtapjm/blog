@@ -86,6 +86,15 @@ public interface BoardDao {
     public List<Board> getAllBoardList(Map<String, Object> params) throws Exception;
     
     /**
+     * 게시글 목록 카운트
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    @SelectProvider(type = BoardQuery.class, method = "getBoardListCntQuery")
+    public int getAllBoardListCnt(Map<String, Object> params) throws Exception;
+    
+    /**
      * 게시글 수정
      * @param board
      * @return

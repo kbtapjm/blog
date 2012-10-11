@@ -43,6 +43,15 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public int getAllBoardListCnt(Map<String, Object> params) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardService getAllBoardListCnt method Call~!!!");    
+        }
+        
+        return boardDao.getAllBoardListCnt(params);
+    }
+
+    @Override
     public Board getBoardByBoardId(String boardId) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("BoardService getBoardByBoardId method Call~!!!");    

@@ -115,16 +115,19 @@ public class BoardController {
             log.debug("BoardController getAllBoard method start~!!!");    
         }
         
-        log.debug("params : " + params.toString());
-        
         List<Board> resultList = boardService.getAllBoardList(params);
+        
+        int count = boardService.getAllBoardListCnt(params);
+        log.debug("count  : " + count );
+        
         model.addAttribute("resultList", resultList);
+        model.addAttribute("params", params);
         
         return "/board/boardList";
     }
     
     /**
-     * 게시글 목록
+     * 게시글 검색목록
      * @param model
      * @return
      * @throws Exception
@@ -137,6 +140,7 @@ public class BoardController {
         
         List<Board> resultList = boardService.getAllBoardList(params);
         model.addAttribute("resultList", resultList);
+        model.addAttribute("params", params);
         
         return "/board/boardList";
     }
