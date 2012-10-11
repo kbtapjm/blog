@@ -41,7 +41,7 @@
         
         // typehead
         var alCities = ['Baltimore', 'Boston', 'New York', 'Tampa Bay', 'Toronto', 'Chicago', 'Cleveland', 'Detroit', 'Kansas City', 'Minnesota', 'Los Angeles', 'Oakland', 'Seattle', 'Texas'].sort();
-        $('#searchword').typeahead({
+        $('#searchWord').typeahead({
             /*
             source: function(typeahead, query){
                 $.ajax({
@@ -102,15 +102,15 @@
             <legend><spring:message code="blog.label.list"/></legend>
 
             <!--  검색영역  start-->
-            <form class="well well-small  form-search" method="GET" action="../board/boardList.do">
+            <form class="well well-small  form-search" method="POST" action="../board/boardSearchList.do">
                 <div align="right">
-                    <select class="span2" name="searchtype" id="searchtype">
+                    <select class="span2" name="searchType" id="searchType">
                         <option value="subject_content"><spring:message code="blog.label.subject"/>+<spring:message code="blog.label.contents"/></option>
                         <option value="subject"><spring:message code="blog.label.subject"/></option>
-                        <option value="createDt"><spring:message code="blog.label.create.date"/></option>
+                        <option value="createUser"><spring:message code="blog.label.create.user"/></option>
                         <option value="content"><spring:message code="blog.label.contents"/></option>
                     </select>
-                    <input type="text" name="searchword" id="searchword" class="input-medium search-query" style="margin: 0 auto;" data-provide="typeahead">
+                    <input type="text" name="searchWord" id="searchWord" class="input-medium search-query" style="margin: 0 auto;" data-provide="typeahead">
                     <button type="submit" class="btn btn-primary"><spring:message code="blog.label.search"/></button>
                 </div>
             </form>
@@ -150,7 +150,7 @@
                         <td align="center">${no - stat.count}</td>
                         <td><a href="#" onClick="javascript:boardRead('${resultList.boardId}');" id="titleTooltip" rel="tooltip" data-placement="bottom" data-bitly-type="bitly_hover_card"
                             data-original-title="${resultList.subject}">${resultList.subject}</a></td>
-                        <td align="center">${resultList.createUser}</td>
+                        <td align="center">${resultList.user.userName}</td>
                         <td align="center">${fn:substring(resultList.createDt, 0, 16)}</td>
                         <td align="center">${resultList.count}</td>
                     </tr>

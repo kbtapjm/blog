@@ -122,5 +122,23 @@ public class BoardController {
         
         return "/board/boardList";
     }
+    
+    /**
+     * 게시글 목록
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardSearchList", method = RequestMethod.POST)
+    public String boardSearchList(Model model, @RequestParam Map<String, Object> params) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController getAllBoard method start~!!!");    
+        }
+        
+        List<Board> resultList = boardService.getAllBoardList(params);
+        model.addAttribute("resultList", resultList);
+        
+        return "/board/boardList";
+    }
 
 }

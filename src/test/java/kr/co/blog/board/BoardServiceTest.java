@@ -3,7 +3,10 @@ package kr.co.blog.board;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import kr.co.blog.domain.Board;
 import kr.co.blog.service.BoardService;
@@ -37,15 +40,18 @@ public class BoardServiceTest {
     
     @Test
     public void createBoardTest() throws Exception {
-        board.setBoardId("5145a4b4-2e20-4298-a54f-830be06db91a");
-        board.setSubject("title test");
-        board.setContent("contents test");
+        String boardId = UUID.randomUUID().toString();
+        //String boardId = "5145a4b4-2e20-4298-a54f-830be06db91a";
+        
+        board.setBoardId(boardId);
+        board.setSubject("옵티머스 뷰");
+        board.setContent("옵티머스뷰 별로");
         board.setCreateUser("검은몽스");
         board.setNoticeYn("N");
         board.setIp("127.0.0.1");
         board.setFileName("test.jpg");
         board.setFileSize(1234);
-        board.setUserId("34a7bf1a-3484-4564-b93c-83ebabe0475d");
+        board.setUserId("d52b4432-7d31-41ce-acad-7e0448b6ddf8");
         
         int result = boardService.createBoard(board);
         
@@ -55,7 +61,9 @@ public class BoardServiceTest {
     
     @Test
     public void getBoardListTest() throws Exception {
-        List<Board> resultList = boardService.getAllBoardList();
+        Map<String, Object> params = new HashMap<String, Object>();
+        
+        List<Board> resultList = boardService.getAllBoardList(params);
 
         log.debug("getUserListTest result : " + resultList.size());
         assertNotNull(resultList);
