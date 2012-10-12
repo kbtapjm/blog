@@ -24,6 +24,10 @@
 <script type="text/javascript" src="${root}/common/js/common.js"></script>
 
 <script type="text/javascript">
+	$(function() { 
+	    $('#searchType').val('${params.searchType}');
+	});
+	
     $(document).ready(function() {
         // 게시글 등록폼
         $('#boardCreate').bind('click', function() {
@@ -80,14 +84,15 @@
         tooltipSet(); 
     });
     
-    // 즉시 실행 함수
-    $(function() { 
-        $('#searchType').val('${params.searchType}');
-    });
-    
     // 게시글 상세조회
     function boardRead(boardId) {
         log("boardId : " + boardId);
+    }
+    
+    // 페이지 이동
+    function goPage(page) {
+        $('#pageNo').val(page);
+        $('#searchFrm').submit();
     }
    
 </script>
@@ -106,7 +111,10 @@
             <legend><spring:message code="blog.label.list"/></legend>
 
             <!--  검색영역  start-->
-            <form class="well well-small  form-search" method="POST" action="../board/boardSearchList.do">
+            <form class="well well-small  form-search" id="searchFrm" method="POST" action="../board/boardSearchList.do">
+                <input type="hidden" name="pageNo" id="pageNo" value="${params.pageNo }">
+                <input type="hidden" name="pageSize" id="pageSize" value="${params.pageSize }">
+                
                 <div align="right">
                     <select class="span2" name="searchType" id="searchType">
                         <option value="subject_content"><spring:message code="blog.label.subject"/>+<spring:message code="blog.label.contents"/></option>
@@ -153,7 +161,8 @@
                         </td>
                         <td align="center">${no - stat.count}</td>
                         <td><a href="#" onClick="javascript:boardRead('${resultList.boardId}');" id="titleTooltip" rel="tooltip" data-placement="bottom" data-bitly-type="bitly_hover_card"
-                            data-original-title="${resultList.subject}">${resultList.subject}</a></td>
+                            data-original-title="${resultList.subject}">${resultList.subject}</a>
+                        </td>
                         <td align="center">${resultList.user.userName}</td>
                         <td align="center">${fn:substring(resultList.createDt, 0, 16)}</td>
                         <td align="center">${resultList.count}</td>
@@ -171,16 +180,7 @@
             </div>
 
             <!--  페이징 start-->
-            <div class="pagination pagination-centered">
-                <ul>
-                    <li class="disabled"><a href="#" data-bitly-type="bitly_hover_card">«</a></li>
-                    <li class="active"><a href="#" data-bitly-type="bitly_hover_card">1</a></li>
-                    <li><a href="#" data-bitly-type="bitly_hover_card">2</a></li>
-                    <li><a href="#" data-bitly-type="bitly_hover_card">3</a></li>
-                    <li><a href="#" data-bitly-type="bitly_hover_card">4</a></li>
-                    <li><a href="#" data-bitly-type="bitly_hover_card">»</a></li>
-                </ul>
-            </div>
+            ${pageControl}
             <!--  페이징 end-->
         </fieldset>
     </div>

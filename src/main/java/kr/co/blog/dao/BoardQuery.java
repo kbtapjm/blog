@@ -2,6 +2,8 @@ package kr.co.blog.dao;
 
 import java.util.Map;
 
+import kr.co.blog.common.PageUtil;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -25,12 +27,23 @@ public class BoardQuery {
         // 검색 파라미터
         String searchType = "";
         String searchWord = "";
+        int pageNo = 0;
+        int pageSize = 0;
         if(params.get("searchType") != null) {
             searchType = params.get("searchType").toString();
         }
         if(params.get("searchWord") != null) {
             searchWord = params.get("searchWord").toString();
         }
+        if(params.get("pageNo") != null) {
+            pageNo = Integer.parseInt(params.get("pageNo").toString());
+        }
+        if(params.get("pageSize") != null) {
+            pageSize = Integer.parseInt(params.get("pageSize").toString());
+        }
+        
+        int firstResult = pageSize * (pageNo - 1);
+        int lastResult = PageUtil.ROW_PER_PAGE;
         
         StringBuilder sb = new StringBuilder();
 
@@ -51,7 +64,7 @@ public class BoardQuery {
             }
         }
         sb.append("ORDER BY createdt DESC ");
-        sb.append("LIMIT 0, 10 ");
+        sb.append("LIMIT " + firstResult + ", " + lastResult + " ");
         
         return sb.toString();
     }
@@ -63,7 +76,7 @@ public class BoardQuery {
      */
     public static String getBoardListCntQuery(Map<String, Object> params) {
         if(log.isDebugEnabled()) {
-            log.debug("BoardQuery getBoardListQuery GET~~~!!!");
+            log.debug("BoardQuery getBoardListCntQuery GET~~~!!!");
         }
         
         // 검색 파라미터
@@ -94,7 +107,6 @@ public class BoardQuery {
                 sb.append("WHERE content LIKE '%" + searchWord + "%'");
             }
         }
-        sb.append("ORDER BY createdt DESC ");
         
         return sb.toString();
     }

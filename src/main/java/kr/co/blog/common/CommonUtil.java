@@ -21,5 +21,22 @@ public class CommonUtil {
         
         return retTime;
     }
+    
+    /**
+     * 널 체크
+     * @param parmValue
+     * @param str
+     * @return
+     */
+    public static String Nvl(String parmValue, String str) {
+        String ret = null;
+        if(parmValue == null || parmValue.equals("")) {
+            ret = str;
+        } else {
+            ret = parmValue;
+        }
+        
+        return ret;
+    }
 
 }

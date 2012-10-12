@@ -1,6 +1,5 @@
 package kr.co.blog.web;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -9,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import kr.co.blog.common.CommonUtil;
 import kr.co.blog.common.FileUtil;
+import kr.co.blog.common.PageUtil;
 import kr.co.blog.domain.Board;
 import kr.co.blog.domain.User;
 import kr.co.blog.service.BoardService;
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -115,13 +115,21 @@ public class BoardController {
             log.debug("BoardController getAllBoard method start~!!!");    
         }
         
-        List<Board> resultList = boardService.getAllBoardList(params);
+        String pageNo = CommonUtil.Nvl((String)params.get("pageNo"), "1" );
+        String pageSize = CommonUtil.Nvl((String)params.get("pageSize"), "10" );
+        int pSize = Integer.parseInt(pageSize);
+        int pNo = Integer.parseInt(pageNo);
         
+        params.put("pageNo", pageNo);
+        params.put("pageSize", pageSize);
+        
+        List<Board> resultList = boardService.getAllBoardList(params);
         int count = boardService.getAllBoardListCnt(params);
         log.debug("count  : " + count );
         
         model.addAttribute("resultList", resultList);
         model.addAttribute("params", params);
+        model.addAttribute("pageControl", PageUtil.getPageLink(count, pNo, "goPage", pSize, PageUtil.PAGE_LINK, ""));
         
         return "/board/boardList";
     }
@@ -138,9 +146,21 @@ public class BoardController {
             log.debug("BoardController getAllBoard method start~!!!");    
         }
         
+        String pageNo = CommonUtil.Nvl((String)params.get("pageNo"), "1" );
+        String pageSize = CommonUtil.Nvl((String)params.get("pageSize"), "10" );
+        int pSize = Integer.parseInt(pageSize);
+        int pNo = Integer.parseInt(pageNo);
+        
+        params.put("pageNo", pageNo);
+        params.put("pageSize", pageSize);
+        
         List<Board> resultList = boardService.getAllBoardList(params);
+        int count = boardService.getAllBoardListCnt(params);
+        log.debug("search count  : " + count );
+        
         model.addAttribute("resultList", resultList);
         model.addAttribute("params", params);
+        model.addAttribute("pageControl", PageUtil.getPageLink(count, pNo, "goPage", pSize, PageUtil.PAGE_LINK, ""));
         
         return "/board/boardList";
     }
