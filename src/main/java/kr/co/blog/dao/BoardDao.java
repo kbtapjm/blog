@@ -61,6 +61,16 @@ public interface BoardDao {
     public Board getBoardByBoardId(String boardId) throws Exception;
     
     /**
+     * 게시글 조회수 증가
+     * @param boardId
+     * @return
+     * @throws Exception
+     */
+    @Update("update board set  count = count + 1 where boardid=#{boardId}")
+    @Options(flushCache=true)
+    public int updateBoardCount(String boardId) throws Exception; 
+    
+    /**
      * 게시글 목록
      * @return
      * @throws Exception
@@ -93,6 +103,14 @@ public interface BoardDao {
      */
     @SelectProvider(type = BoardQuery.class, method = "getBoardListCntQuery")
     public int getAllBoardListCnt(Map<String, Object> params) throws Exception;
+    
+    /**
+     * 게시글 제목 가져오기
+     * @return
+     * @throws Exception
+     */
+    @Select("SELECT DISTINCT(subject) as subject FROM board")
+    public List<String> getBoardTypeheadSubject() throws Exception;
     
     /**
      * 게시글 수정

@@ -21,7 +21,7 @@ ROW_FORMAT=DEFAULT
 CREATE TABLE `board` (
     `boardid` VARCHAR(40) NOT NULL,
     `subject` VARCHAR(100) NOT NULL,
-    `content` BLOB NOT NULL,
+    `content` VARCHAR(2000) NOT NULL,
     `createuser` VARCHAR(20) NOT NULL,
     `createdt` DATETIME NOT NULL,
     `modifydt` DATETIME NULL DEFAULT NULL,

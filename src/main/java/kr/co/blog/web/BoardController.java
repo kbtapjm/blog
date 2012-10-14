@@ -1,5 +1,6 @@
 package kr.co.blog.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -163,6 +165,54 @@ public class BoardController {
         model.addAttribute("pageControl", PageUtil.getPageLink(count, pNo, "goPage", pSize, PageUtil.PAGE_LINK, ""));
         
         return "/board/boardList";
+    }
+    
+    /**
+     * Typedhead 가져오기(제목)
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/getBoardTypeheadSubject", method = RequestMethod.GET, produces="application/json")
+    @ResponseBody
+    public Map<String, Object> getBoardTypeheadSubject(Model model) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardTypeheadSubject method start~!!!");    
+        }
+        
+        List<String> list = boardService.getBoardTypeheadSubject();
+        
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("list", list);
+        
+        return resultMap;
+    }
+    
+    /**
+     * 게시글 상세정보
+     * @param model
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardRead", method = RequestMethod.POST)
+    public String boardRead(Model model, @RequestParam Map<String, Object> params) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController getAllBoard method start~!!!");    
+        }
+        
+        String boardId = params.get("boardId").toString();
+        
+        // 조회수 증가
+        boardService.updateBoardCount(boardId);
+        
+        // 게시글 상세정보
+        Board board = boardService.getBoardByBoardId(boardId);
+        
+        model.addAttribute("board", board);
+        model.addAttribute("params", params);
+        
+        return "/board/boardRead";
     }
 
 }

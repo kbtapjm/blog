@@ -26,6 +26,34 @@
 <script type="text/javascript">
 	$(function() { 
 	    $('#searchType').val('${params.searchType}');
+	    
+	    // typehead
+	    var typehead = function() {
+	        $.ajax({
+                url: "../board/getBoardTypeheadSubject.do",
+                type: "GET",
+                cache: false,
+                async: false,
+                dataType: "json",
+                data: "",
+                success: function(data) {
+                    $('#searchWord').typeahead({
+                        source: data.list,
+                        property: 'name',
+                        items:10,
+                        onselect: function (obj) {
+                            log("obj : " + obj);
+                        }
+                    });
+                    
+                },
+                error: function(data) {
+                    log(JSON.stringify(data));
+                }
+            });
+	    };
+	    
+	    typehead();
 	});
 	
     $(document).ready(function() {
@@ -43,50 +71,15 @@
             }    
         };
         
-        // typehead
-        var alCities = ['Baltimore', 'Boston', 'New York', 'Tampa Bay', 'Toronto', 'Chicago', 'Cleveland', 'Detroit', 'Kansas City', 'Minnesota', 'Los Angeles', 'Oakland', 'Seattle', 'Texas'].sort();
-        $('#searchWord').typeahead({
-            /*
-            source: function(typeahead, query){
-                $.ajax({
-                    url: window.location.origin+"/bows/get_manufacturers.json",
-                    type: "POST",
-                    data: "",
-                    dataType: "JSON",
-                    async: false,
-                    success: function(results){
-                        var manufacturers = {};
-                        $.map(results.data.manufacturers, function(data, item){
-                            var group;
-                            group = {
-                                manufacturer_id: data.Manufacturer.id,
-                                manufacturer: data.Manufacturer.manufacturer
-                            };
-                            manufacturers.push(group);
-                        });
-                        typeahead.process(manufacturers);
-                    },
-                    error: function(results){
-                        console.log("results : " + JSON.stringify(results));
-                    }
-                });
-                typeahead.process();
-            },
-            */
-            source: alCities,
-            property: 'name',
-            items:5,
-            onselect: function (obj) {
-                console.log("obj : " + obj);
-            }
-        });
-        
         tooltipSet(); 
     });
     
     // 게시글 상세조회
     function boardRead(boardId) {
-        log("boardId : " + boardId);
+        $('#boardId').val(boardId);
+        $('#searchFrm').attr("action", "../board/boardRead.do");
+        $('#searchFrm').attr("target", "_self");
+        $('#searchFrm').submit();
     }
     
     // 페이지 이동
@@ -114,6 +107,7 @@
             <form class="well well-small  form-search" id="searchFrm" method="POST" action="../board/boardSearchList.do">
                 <input type="hidden" name="pageNo" id="pageNo" value="${params.pageNo }">
                 <input type="hidden" name="pageSize" id="pageSize" value="${params.pageSize }">
+                <input type="hidden" name="boardId" id="boardId" value="">
                 
                 <div align="right">
                     <select class="span2" name="searchType" id="searchType">

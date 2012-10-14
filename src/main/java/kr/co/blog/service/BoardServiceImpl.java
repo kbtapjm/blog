@@ -52,12 +52,30 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public List<String> getBoardTypeheadSubject() throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardService getAllBoardListCnt method Call~!!!");    
+        }
+        
+        return boardDao.getBoardTypeheadSubject();
+    }
+
+    @Override
     public Board getBoardByBoardId(String boardId) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("BoardService getBoardByBoardId method Call~!!!");    
         }
         
         return boardDao.getBoardByBoardId(boardId);
+    }
+
+    @Override
+    public int updateBoardCount(String boardId) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardService updateBoardCount method Call~!!!");    
+        }
+        
+        return boardDao.updateBoardCount(boardId);
     }
 
     @Override
