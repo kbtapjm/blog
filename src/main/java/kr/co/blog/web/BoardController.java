@@ -1,11 +1,13 @@
 package kr.co.blog.web;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -214,5 +216,117 @@ public class BoardController {
         
         return "/board/boardRead";
     }
+    
+    /**
+     * 파일 다운로드
+     * @param response
+     * @param fileName
+     * @throws Exception
+     */
+    @RequestMapping(value = "/fileDownload", method = RequestMethod.GET)
+    public void fileDownload(HttpServletResponse response, @RequestParam("fileName") String fileName) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController fileDownload method start~!!!");    
+        }
+        
+        String downFileName = FileUtil.PATH + fileName;
+        
+        try {
+            FileUtil.fileDownload(response, new File(downFileName));    
+        } catch (Exception e) {
+            log.debug("download error : " + e.toString());
+        }
+    }
+    
+    /**
+     * 게시글 수정화면
+     * @param model
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardUpdate", method = RequestMethod.POST)
+    public String boardUpdate(Model model, @RequestParam Map<String, Object> params) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardUpdate method start~!!!");    
+        }
+        
+        String boardId = params.get("boardId").toString();
+        
+        // 게시글 상세정보
+        Board board = boardService.getBoardByBoardId(boardId);
+        
+        model.addAttribute("board", board);
+        model.addAttribute("params", params);
+        
+        return "/board/boardUpdate";
+    }
+    
+    /**
+     * 게시글 수정
+     * @param request
+     * @param model
+     * @param board
+     * @param file
+     * @param bindingResult
+     * @param redirectAttr
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardUpdateProc", method = RequestMethod.POST)
+    public String boardUpdateProc(HttpServletRequest request, 
+                            Model model, 
+                            @Valid @ModelAttribute Board board, 
+                            @RequestParam("attachFile") MultipartFile file,
+                            RedirectAttributes redirectAttr,
+                            @RequestParam Map<String, Object> params) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardUpdateProc method start~!!!");    
+        }
+        
+        // 파라미터 처리
+        System.out.println("params : " + params.toString());
+        
+        // 파일업로드 처리
+        String oldFileName = params.get("oldFileName").toString();
+        String oldFileSize = params.get("oldFileSize").toString();
+        String newFileName = file.getOriginalFilename();
+        
+        // 새로운 파일이 존재 할 경우
+        if(newFileName.length() > 0) {
+            // 기존 파일 삭제
+            FileUtil.fileDelete(oldFileName);
+            
+            // 파일 업로드
+            FileUtil.fileUpload(file);
+            
+            board.setFileName(file.getOriginalFilename());
+            board.setFileSize((int)file.getSize());
+        } else {
+            // 기존 파일 정보
+            board.setFileName(oldFileName);
+            board.setFileSize(Integer.parseInt(oldFileSize));
+        }
+        
+        // 게시글 수정
+        int result = boardService.updateBoard(board);
+        if(result < 0) {
+            model.addAttribute("board", board);
+            model.addAttribute("params", params);
+            
+            redirectAttr.addAttribute("result", "N");
+            return "/board/boardUpdate";
+        }
+        
+        // 게시글 상세정보
+        board = boardService.getBoardByBoardId(board.getBoardId());
+        
+        model.addAttribute("board", board);
+        model.addAttribute("params", params);
+        
+        return "/board/boardRead";
+    }
+    
+    
 
 }

@@ -33,25 +33,28 @@
     });
     
     $(document).ready(function() {
-        // 수정
-        var boardUpdate = function() {
-             location.href = "./boardUpdate.html";
-        };
-        // 삭제
-        var boardDelete = function() {
-            // 삭제처리
-        };
+        $('#content').redactor();
+        
         // 목록
-        var boardList = function() {
+        $('#boardList').bind('click', function() {
             $('#readFrm').attr("action", "../board/boardSearchList.do");
             $('#readFrm').attr("target", "_self");
             $('#readFrm').attr("method", "POST");
             $('#readFrm').submit();    
-        };
+        });
+ 
+        // 삭제
+        $('#boardDelete').bind('click', function() {
+ 
+        });
         
-        $('#content').redactor();
-        $('#boardList').bind('click', boardList);
-        $('#boardUpdate').bind('click', boardUpdate);
+        // 수정
+        $('#boardUpdate').bind('click', function() {
+            $('#readFrm').attr("action", "../board/boardUpdate.do");
+            $('#readFrm').attr("target", "_self");
+            $('#readFrm').attr("method", "POST");
+            $('#readFrm').submit();
+        });
     });
    
 </script>
@@ -77,24 +80,28 @@
                 <legend><spring:message code="blog.label.read"/></legend>
                 <div class="control-group">
                     <label class="control-label" for="title"><spring:message code="blog.label.subject"/></label>
-                     <label class="control-label" for="title">${board.subject}</label>
+                    <div class="controls">
+                        <span class="input-xxlarge uneditable-input">${board.subject}</span>
+                    </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="url"><spring:message code="blog.label.url"/></label> <label
-                        class="control-label" for="title"><a
-                        href="http://bit.ly/OLF0da" target="_blank">${board.pageUrl}</a></label>
+                    <label class="control-label" for="url"><spring:message code="blog.label.url"/></label>
+                     <label class="control-label" for="title"><a href="http://bit.ly/OLF0da" target="_blank">${board.pageUrl}</a></label>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="content"><spring:message code="blog.label.contents"/></label>
                     <div class="controls">
-	                    <textarea id="content" name="content">
-	                    ${board.content}
-	                    </textarea>
+	                    <textarea id="content" name="content">${board.content}</textarea>
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="attachFile"><spring:message code="blog.label.attachments"/></label>
-                    <div class="controls">${board.fileName}</div>
+                    <div class="controls">
+	                    <c:url var="downURL" value="./fileDownload.do">
+	                       <c:param name="fileName" value="${board.fileName}"></c:param>
+	                    </c:url>  
+	                    <a href="${downURL}">${board.fileName}</a>
+                    </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label"></label>
