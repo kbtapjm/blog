@@ -145,7 +145,7 @@
 		            <tr>
 		            </c:if>
 		            
-		            <c:set var="no" value="${fn:length(resultList) + 1}" />
+		            <c:set var="rowNo" value="${rowNo}" />
 		            <c:forEach var="resultList" items="${resultList}" varStatus="stat">
                     <tr>
                         <td>
@@ -153,7 +153,7 @@
 							  <input type="checkbox" name="boardid" id="boardid" value="${resultList.boardId}">
 							</label>
                         </td>
-                        <td align="center">${no - stat.count}</td>
+                        <td align="center">${rowNo - (stat.count - 1)}</td>
                         <td><a href="#" onClick="javascript:boardRead('${resultList.boardId}');" id="titleTooltip" rel="tooltip" data-placement="bottom" data-bitly-type="bitly_hover_card"
                             data-original-title="${resultList.subject}">${resultList.subject}</a>
                         </td>

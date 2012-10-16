@@ -35,6 +35,53 @@
     $(document).ready(function() {
         $('#content').redactor();
         
+        // 수정
+        $('#boardUpdate').bind('click', function() {
+            $('#readFrm').attr("action", "../board/boardUpdate.do");
+            $('#readFrm').attr("target", "_self");
+            $('#readFrm').attr("method", "POST");
+            $('#readFrm').submit();
+        });
+        
+        // 삭제
+        $('#boardDelete').bind('click', function() {
+            /*
+            var options = {
+                buttons: {
+                    "Ok": function () {
+                        $(this).dialog("close");
+                        
+                        $('#readFrm').attr("action", "../board/boardDelete.do");
+                        $('#readFrm').attr("target", "_self");
+                        $('#readFrm').attr("method", "POST");
+                        $('#readFrm').submit();
+                    },
+                    "Cancel": function () {
+                        $(this).dialog("close");
+                    }
+                }   
+            };
+            
+            alertMsg("<spring:message code='blog.label.delete.confirm'/>", options) ;
+            */
+            
+            var option = {
+                buttons: {
+                    "Ok": function () {
+                        $('#readFrm').attr("action", "../board/boardDelete.do");
+                        $('#readFrm').attr("target", "_self");
+                        $('#readFrm').attr("method", "POST");
+                        $('#readFrm').submit();
+                    },
+                    "Cancel": function () {
+                        
+                    }
+                }
+            };
+            
+            getErrMsg(<spring:message code='blog.label.delete.confirm'/>, option);
+        });
+        
         // 목록
         $('#boardList').bind('click', function() {
             $('#readFrm').attr("action", "../board/boardSearchList.do");
@@ -43,18 +90,17 @@
             $('#readFrm').submit();    
         });
  
-        // 삭제
-        $('#boardDelete').bind('click', function() {
- 
+        // 인쇄
+        $('#boardPrint').bind('click', function() {
+            setPopup(1200, 800);
+
+            var boardId = $('#boardId').val();
+            
+            url="../board/boardPrint.do?boardId="+boardId;
+            wr = window.open(url, '','left='+px+',top='+py+',width='+cw+',height='+ch+',location=no, scrollbars=yes, status=1, resizable=yes');
         });
         
-        // 수정
-        $('#boardUpdate').bind('click', function() {
-            $('#readFrm').attr("action", "../board/boardUpdate.do");
-            $('#readFrm').attr("target", "_self");
-            $('#readFrm').attr("method", "POST");
-            $('#readFrm').submit();
-        });
+        
     });
    
 </script>
@@ -75,9 +121,11 @@
             <input type="hidden" name="pageNo" id="pageNo" value="${params.pageNo }">
             <input type="hidden" name="pageSize" id="pageSize" value="${params.pageSize }">
             <input type="hidden" name="boardId" id="boardId" value="${board.boardId}">
+            <input type="hidden" name="fileName" id="fileName" value="${board.fileName}">
         
             <fieldset>
                 <legend><spring:message code="blog.label.read"/></legend>
+                <div id="print_div">
                 <div class="control-group">
                     <label class="control-label" for="title"><spring:message code="blog.label.subject"/></label>
                     <div class="controls">
@@ -86,7 +134,7 @@
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="url"><spring:message code="blog.label.url"/></label>
-                     <label class="control-label" for="title"><a href="http://bit.ly/OLF0da" target="_blank">${board.pageUrl}</a></label>
+                     <label class="control-label" for="title"><a href="${board.pageUrl}" target="_blank">${board.pageUrl}</a></label>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="content"><spring:message code="blog.label.contents"/></label>
@@ -103,14 +151,15 @@
 	                    <a href="${downURL}">${board.fileName}</a>
                     </div>
                 </div>
+                </div>
                 <div class="control-group">
                     <label class="control-label"></label>
                     <div class="controls">
                         <button type="button" class="btn btn-primary" id="boardUpdate"><spring:message code="blog.label.update"/></button>
                         <button type="button" class="btn btn-primary" id="boardDelete"><spring:message code="blog.label.delete"/></button>
                         <button type="button" class="btn" id="boardList"><spring:message code="blog.label.list"/></button>
-                        <button type="button" class="btn btn-info disabled"><spring:message code="blog.label.print"/></button>
-                        <button type="button" class="btn btn-info disabled"><spring:message code="blog.label.emailsend"/></button>
+                        <button type="button" class="btn btn-info" id="boardPrint"><spring:message code="blog.label.print"/></button>
+                        <button type="button" class="btn btn-info"><spring:message code="blog.label.emailsend"/></button>
 
                         <div align="right">
                             <a id="facebook"><img src="${root}/common/images/facebook.png"alt=""></a>

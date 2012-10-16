@@ -2,13 +2,18 @@
  * 에러 메세지 출력(사용안함)
  * msg : 메세지 내용
  */
-function getErrMsg(msg, afterAction) {
+function getErrMsg(msg, options) {
     $('#errMsg').html(msg);
     $("#errModal").modal({
         "backdrop" : "static",
         "keyboard" : true,
         "show" : true
     });
+    
+    // 버튼 세팅
+    if(options) {
+        
+    }
     
     if(afterAction) {
         if(typeof afterAction == "function") {
@@ -86,4 +91,20 @@ function setLocale(locale) {
             log(data);
         }
     });
+}
+
+/**
+ * 팝업창 크기 세팅
+ * width : 가로넓이 
+ * height : 세로넓이
+ */
+function setPopup(width, height) {
+    cw = width;
+    ch = height;
+
+    sw = screen.availWidth;
+    sh = screen.availHeight;
+
+    px = Math.ceil((sw - cw) / 2);
+    py = Math.ceil((sh - ch) / 2);
 }

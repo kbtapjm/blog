@@ -129,11 +129,14 @@ public class BoardController {
         
         List<Board> resultList = boardService.getAllBoardList(params);
         int count = boardService.getAllBoardListCnt(params);
-        log.debug("count  : " + count );
+        
+        int beginOfPage = (pNo -1) * PageUtil.ROW_PER_PAGE;  
+        int rowNo = count - beginOfPage;
         
         model.addAttribute("resultList", resultList);
         model.addAttribute("params", params);
         model.addAttribute("pageControl", PageUtil.getPageLink(count, pNo, "goPage", pSize, PageUtil.PAGE_LINK, ""));
+        model.addAttribute("rowNo", rowNo);
         
         return "/board/boardList";
     }
@@ -160,11 +163,14 @@ public class BoardController {
         
         List<Board> resultList = boardService.getAllBoardList(params);
         int count = boardService.getAllBoardListCnt(params);
-        log.debug("search count  : " + count );
+        
+        int beginOfPage = (pNo -1) * PageUtil.ROW_PER_PAGE;  
+        int rowNo = count - beginOfPage;
         
         model.addAttribute("resultList", resultList);
         model.addAttribute("params", params);
         model.addAttribute("pageControl", PageUtil.getPageLink(count, pNo, "goPage", pSize, PageUtil.PAGE_LINK, ""));
+        model.addAttribute("rowNo", rowNo);
         
         return "/board/boardList";
     }
@@ -284,9 +290,6 @@ public class BoardController {
             log.debug("BoardController boardUpdateProc method start~!!!");    
         }
         
-        // 파라미터 처리
-        System.out.println("params : " + params.toString());
-        
         // 파일업로드 처리
         String oldFileName = params.get("oldFileName").toString();
         String oldFileSize = params.get("oldFileSize").toString();
@@ -327,6 +330,77 @@ public class BoardController {
         return "/board/boardRead";
     }
     
+    /**
+     * 게시글 삭제
+     * @param model
+     * @param params
+     * @param board
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardDelete", method = RequestMethod.POST)
+    public String boardDelete(Model model, @RequestParam Map<String, Object> params, @Valid @ModelAttribute Board board) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardDelete method start~!!!");    
+        }
+        
+        // 첨부파일 삭제
+        FileUtil.fileDelete(board.getFileName());
+        
+        // 게시글 삭제
+        int result = boardService.deleteBoard(board);
+        
+        // 삭제 실패시
+        if(result < 0) {
+            // 게시글 상세정보
+            String boardId = params.get("boardId").toString();
+            board = boardService.getBoardByBoardId(boardId);
+            
+            model.addAttribute("board", board);
+            model.addAttribute("params", params);
+            
+            return "/board/boardRead";
+        }
+        
+        // 삭제 성공 후 목록으로 이동
+        String pageNo = CommonUtil.Nvl((String)params.get("pageNo"), "1" );
+        String pageSize = CommonUtil.Nvl((String)params.get("pageSize"), "10" );
+        int pSize = Integer.parseInt(pageSize);
+        int pNo = Integer.parseInt(pageNo);
     
+        List<Board> resultList = boardService.getAllBoardList(params);
+        int count = boardService.getAllBoardListCnt(params);
+        
+        int beginOfPage = (pNo -1) * PageUtil.ROW_PER_PAGE;  
+        int rowNo = count - beginOfPage;
+        
+        model.addAttribute("resultList", resultList);
+        model.addAttribute("params", params);
+        model.addAttribute("pageControl", PageUtil.getPageLink(count, pNo, "goPage", pSize, PageUtil.PAGE_LINK, ""));
+        model.addAttribute("rowNo", rowNo);
+        
+        return "/board/boardList";
+    }
+    
+    /**
+     * 게시글 인쇄
+     * @param model
+     * @param boardId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardPrint", method = RequestMethod.GET)
+    public String boardPrint(Model model, @RequestParam(value="boardId", required=true) String boardId) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardPrint method start~!!!");    
+        }
+        
+        // 인쇄할 게시글 정보
+        Board board = boardService.getBoardByBoardId(boardId);
+        
+        model.addAttribute("board", board);
+        
+        return "/board/boardPrint";
+    }
 
 }

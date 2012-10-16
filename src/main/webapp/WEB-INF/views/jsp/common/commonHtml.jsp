@@ -16,7 +16,12 @@
         </p>
     </div>
     <div class="modal-footer">
-        <button id="close" class="btn" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true"><spring:message code="blog.label.close"/></button>
+        <button id="close" class="btn" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">
+            <spring:message code="blog.label.close"/>
+        </button>
+        <button id="close" class="btn btn-primary" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">
+            <spring:message code="blog.label.close"/>
+        </button>
     </div>
 </div>
 
