@@ -34,7 +34,10 @@
         
         // 취소
         $('#cancel').bind('click', function() {
-            location.href = "../board/boardList.do";
+            $('#inputFrm').attr("action", "../board/boardRead.do");
+            $('#inputFrm').attr("target", "_self");
+            $('#inputFrm').attr("method", "POST");
+            $('#inputFrm').submit();    
         });
         
         // 단축 URL 생성

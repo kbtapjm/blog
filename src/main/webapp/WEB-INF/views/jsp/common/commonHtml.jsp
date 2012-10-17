@@ -16,14 +16,15 @@
         </p>
     </div>
     <div class="modal-footer">
-        <button id="close" class="btn" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">
-            <spring:message code="blog.label.close"/>
+        <button id="selectYes" class="btn btn-primary" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">
+            <spring:message code="blog.label.select.yes"/>
         </button>
-        <button id="close" class="btn btn-primary" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">
-            <spring:message code="blog.label.close"/>
+        <button id="selectNo" class="btn" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">
+            <spring:message code="blog.label.select.no"/>
         </button>
     </div>
 </div>
+ 
 
 <!--static dialog-->
  <div style="display:none;" id="dialog-message" title="<spring:message code='blog.label.notification'/>">

@@ -32,19 +32,16 @@
         
         // 회원탈퇴
         $('#delete').bind('click', function() {
-            var options = {
-                buttons: {
-                    "Ok": function () {
-                        $(this).dialog("close");
-                        location.href = "../user/deleteUser.do";
-                    },
-                    "Cancel": function () {
-                        $(this).dialog("close");
-                    }
-                }   
+            var buttons = {
+                "Ok": function () {
+                    location.href = "../user/deleteUser.do";
+                },
+                "Cancel": function () {
+                    
+                }    
             };
             
-            alertMsg("<spring:message code='blog.label.members.reave'/>", options) ;
+            alertModalMsg("<spring:message code='blog.label.members.reave'/>", buttons);
         });
         
         $('.active').removeClass();

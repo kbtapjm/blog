@@ -145,7 +145,6 @@
 		            <tr>
 		            </c:if>
 		            
-		            <c:set var="rowNo" value="${rowNo}" />
 		            <c:forEach var="resultList" items="${resultList}" varStatus="stat">
                     <tr>
                         <td>

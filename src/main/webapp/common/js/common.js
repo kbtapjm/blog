@@ -1,8 +1,10 @@
 /*
- * 에러 메세지 출력(사용안함)
- * msg : 메세지 내용
+ * 모달 메세지 출력
+ * msg : 메세지
+ * options : 옵션(버튼)
  */
-function getErrMsg(msg, options) {
+function alertModalMsg(msg, buttons) {
+    // 메세지 세팅
     $('#errMsg').html(msg);
     $("#errModal").modal({
         "backdrop" : "static",
@@ -10,16 +12,47 @@ function getErrMsg(msg, options) {
         "show" : true
     });
     
-    // 버튼 세팅
-    if(options) {
-        
-    }
+    log(JSON.stringify(buttons.Ok));
     
-    if(afterAction) {
-        if(typeof afterAction == "function") {
-            $('#close').bind('click', afterAction);
-        }
+    if(buttons) {
+        $('#selectYes').bind('click', buttons.Ok);
+        $('#selectNo').bind('click', buttons.Cancel);
     }
+}
+
+/*
+ * 모달팝업 html 생성
+ * msg : 메세지
+ * options : 옵션(버튼)
+ */
+function getModalHtml(msg, options) {
+    var modalHtml = '';
+    modalHtml += '<div style="display:none;" class="modal hide fade in" id="modalPopup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">';
+    modalHtml += '<div class="modal-header">';
+    modalHtml += '    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>';
+    modalHtml += '    <h3 id="myModalLabel"><spring:message code="blog.label.notification"/></h3>';
+    modalHtml += '</div>';
+    modalHtml += '<div class="modal-body">';
+    modalHtml += '    <p>';
+    modalHtml += msg;
+    modalHtml += '    </p>';
+    modalHtml += '</div>';
+    modalHtml += '<div class="modal-footer">';
+    
+    if(options && options.buttons.ok) {
+        modalHtml += '<button id="no" class="btn" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">';
+        modalHtml += '    <spring:message code="blog.label.no"/>';
+        modalHtml += '</button>';
+    }
+    if(options && options.buttons.Ok) {
+        modalHtml += '<button id="yes" class="btn btn-primary" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">';
+        modalHtml += '    <spring:message code="blog.label.yes"/>';
+        modalHtml += '</button>';
+    }
+    modalHtml += '</div>';
+    modalHtml += '</div>';
+    
+    return modalHtml;
 }
 
 /*

@@ -64,22 +64,19 @@
             
             alertMsg("<spring:message code='blog.label.delete.confirm'/>", options) ;
             */
-            
-            var option = {
-                buttons: {
-                    "Ok": function () {
-                        $('#readFrm').attr("action", "../board/boardDelete.do");
-                        $('#readFrm').attr("target", "_self");
-                        $('#readFrm').attr("method", "POST");
-                        $('#readFrm').submit();
-                    },
-                    "Cancel": function () {
-                        
-                    }
-                }
+            var buttons = {
+                "Ok": function () {
+                    $('#readFrm').attr("action", "../board/boardDelete.do");
+                    $('#readFrm').attr("target", "_self");
+                    $('#readFrm').attr("method", "POST");
+                    $('#readFrm').submit();
+                },
+                "Cancel": function () {
+                    
+                }    
             };
             
-            getErrMsg(<spring:message code='blog.label.delete.confirm'/>, option);
+            alertModalMsg("<spring:message code='blog.label.delete.confirm'/>", buttons);
         });
         
         // 목록
@@ -98,6 +95,37 @@
             
             url="../board/boardPrint.do?boardId="+boardId;
             wr = window.open(url, '','left='+px+',top='+py+',width='+cw+',height='+ch+',location=no, scrollbars=yes, status=1, resizable=yes');
+        });
+        
+        // SNS 포스팅
+        $('#facebook').find('img').css('cursor', 'pointer');
+        $('#facebook').bind('click', function() {
+            setPopup(1000, 800);
+            
+            var subject = $('#subject').val();
+            var pageUrl = $('#pageUrl').val();
+            var winurl="http://www.facebook.com/sharer.php?u="+pageUrl+"&t="+encodeURIComponent(subject); 
+            
+            wr = window.open(winurl,"viewer",'left='+px+',top='+py+',width='+cw+',height='+ch+' scrollbars=yes, status=1, resizable=yes');
+        });
+        $('#twitter').find('img').css('cursor', 'pointer');
+        $('#twitter').bind('click', function() {
+            setPopup(1000, 800);
+            
+            var subject = $('#subject').val();
+            var pageUrl = $('#pageUrl').val();
+            winurl="http://twitter.com/home/?status="+pageUrl+", "+encodeURIComponent(subject); 
+            
+            wr = window.open(winurl,"viewer",'left='+px+',top='+py+',width='+cw+',height='+ch+' scrollbars=yes, status=1, resizable=yes');
+        });
+        $('#gplus').find('img').css('cursor', 'pointer');
+        $('#gplus').bind('click', function() {
+            setPopup(1000, 800);
+      
+            var pageUrl = $('#pageUrl').val();
+            winurl="https://plus.google.com/share?url="+pageUrl; 
+            
+            wr = window.open(winurl,"viewer",'left='+px+',top='+py+',width='+cw+',height='+ch+' scrollbars=yes, status=1, resizable=yes');
         });
         
         
@@ -122,6 +150,8 @@
             <input type="hidden" name="pageSize" id="pageSize" value="${params.pageSize }">
             <input type="hidden" name="boardId" id="boardId" value="${board.boardId}">
             <input type="hidden" name="fileName" id="fileName" value="${board.fileName}">
+            <input type="hidden" name="subject" id="subject" value="${board.subject}">
+            <input type="hidden" name="pageUrl" id="pageUrl" value="${board.pageUrl}">
         
             <fieldset>
                 <legend><spring:message code="blog.label.read"/></legend>
