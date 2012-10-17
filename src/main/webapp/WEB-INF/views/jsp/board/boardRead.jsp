@@ -97,6 +97,16 @@
             wr = window.open(url, '','left='+px+',top='+py+',width='+cw+',height='+ch+',location=no, scrollbars=yes, status=1, resizable=yes');
         });
         
+        // E-mail 전송
+        $('#boardEmailSend').bind('click', function() {
+            setPopup(1200, 800);
+
+            var boardId = $('#boardId').val();
+            
+            url="../board/boardEmailSend.do?boardId="+boardId;
+            wr = window.open(url, '','left='+px+',top='+py+',width='+cw+',height='+ch+',location=no, scrollbars=yes, status=1, resizable=yes');
+        });
+        
         // SNS 포스팅
         $('#facebook').find('img').css('cursor', 'pointer');
         $('#facebook').bind('click', function() {
@@ -128,8 +138,43 @@
             wr = window.open(winurl,"viewer",'left='+px+',top='+py+',width='+cw+',height='+ch+' scrollbars=yes, status=1, resizable=yes');
         });
         
-        
     });
+    
+    // 폰트확대 
+    function fontPlus() { 
+        var obj = document.getElementById('content'); 
+        var nSize = obj.style.fontSize  ? obj.style.fontSize  : '9pt'; 
+        var iSize = parseInt(nSize.replace('pt','')); 
+        
+        if (iSize < 12) { 
+            obj.style.fontSize  = (iSize + 1) + 'pt'; 
+            obj.style.lineHeight = '140%'; 
+        } 
+    } 
+
+    // 폰트축소 
+    function fontMinus() { 
+        var obj = document.getElementById('content'); 
+        var nSize = obj.style.fontSize ? obj.style.fontSize : '9pt'; 
+        var iSize = parseInt(nSize.replace('pt','')); 
+        
+        if (iSize > 9)  { 
+            obj.style.fontSize = (iSize - 1) + 'pt'; 
+            obj.style.lineHeight = '140%'; 
+        } 
+    } 
+    
+    // 스크랩
+    function postScrap() {
+        var content = document.getElementById("content").innerText;
+        
+        try {
+            window.clipboardData.setData('Text',content);
+            alertModalMsg("이 포스트의 내용이 복사 되었습니다.\n복사하고자 하는곳에 Ctrl+V을 눌러보세요.");
+        } catch(e) {
+            alertModalMsg("지원하지 않는 브라우져입니다.\nIE에서만 가능합니다.");
+        }
+    }
    
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -164,7 +209,9 @@
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="url"><spring:message code="blog.label.url"/></label>
-                     <label class="control-label" for="title"><a href="${board.pageUrl}" target="_blank">${board.pageUrl}</a></label>
+                     <div class="controls">
+                        <span class="input-xxlarge uneditable-input"><a href="${board.pageUrl}" target="_blank">${board.pageUrl}</a></span>
+                    </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="content"><spring:message code="blog.label.contents"/></label>
@@ -189,7 +236,7 @@
                         <button type="button" class="btn btn-primary" id="boardDelete"><spring:message code="blog.label.delete"/></button>
                         <button type="button" class="btn" id="boardList"><spring:message code="blog.label.list"/></button>
                         <button type="button" class="btn btn-info" id="boardPrint"><spring:message code="blog.label.print"/></button>
-                        <button type="button" class="btn btn-info"><spring:message code="blog.label.emailsend"/></button>
+                        <button type="button" class="btn btn-info" id="boardEmailSendt"><spring:message code="blog.label.emailsend"/></button>
 
                         <div align="right">
                             <a id="facebook"><img src="${root}/common/images/facebook.png"alt=""></a>

@@ -402,5 +402,23 @@ public class BoardController {
         
         return "/board/boardPrint";
     }
+    
+    /**
+     * E-mail 전송화면
+     * @param model
+     * @param boardId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardEmailSend", method = RequestMethod.GET)
+    public String boardEmailSend(Model model, @RequestParam(value="boardId", required=true) String boardId) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardEmailSend method start~!!!");    
+        }
+        
+        model.addAttribute("boardId", boardId);
+        
+        return "/board/boardEmailSend";
+    }
 
 }

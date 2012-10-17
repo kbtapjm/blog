@@ -16,12 +16,20 @@
         </p>
     </div>
     <div class="modal-footer">
-        <button id="selectYes" class="btn btn-primary" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">
-            <spring:message code="blog.label.select.yes"/>
-        </button>
-        <button id="selectNo" class="btn" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">
-            <spring:message code="blog.label.select.no"/>
-        </button>
+        <div id="changeButton" style="display:none;">
+	        <button id="selectNo" class="btn" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">
+	            <spring:message code="blog.label.select.no"/>
+	        </button>
+	        <button id="selectYes" class="btn btn-primary" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">
+	            <spring:message code="blog.label.select.yes"/>
+	        </button>
+        </div>
+        <div id="defaultButton" style="display:none;">
+            <button id="close" class="btn" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">
+                <spring:message code="blog.label.close"/>
+            </button>
+        </div>
+        
     </div>
 </div>
  

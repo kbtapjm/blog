@@ -12,11 +12,12 @@ function alertModalMsg(msg, buttons) {
         "show" : true
     });
     
-    log(JSON.stringify(buttons.Ok));
-    
     if(buttons) {
         $('#selectYes').bind('click', buttons.Ok);
         $('#selectNo').bind('click', buttons.Cancel);
+        $('#changeButton').show();
+    }  else {
+        $('#defaultButton').show();
     }
 }
 

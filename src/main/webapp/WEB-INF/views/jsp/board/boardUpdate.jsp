@@ -79,7 +79,7 @@
                         if(statusTxt == "RATE_LIMIT_EXCEEDED") {
                             msg = "<spring:message code='blog.label.input.rate.limit.exceeded'/>";
                         }
-                        getErrMsg(msg + statusMsg);
+                        alertModalMsg(msg + statusMsg);
                         break;
                     case 500 : 
                         if(statusTxt == "INVALID_URI") {
@@ -89,20 +89,20 @@
                         } else if(statusTxt == "ALREADY_A_BITLY_LINK"){
                             msg = "<spring:message code='blog.label.input.already.bitly.link'/>";
                         }
-                        alertMsg(msg + statusMsg);
+                        alertModalMsg(msg + statusMsg);
                         break;
                     case 503 :
                         if(statusTxt == "UNKNOWN_ERROR") {
                             msg = "<spring:message code='blog.label.input.unknown.error'/>";
                         }
-                        alertMsg(msg + statusMsg);
+                        alertModalMsg(msg + statusMsg);
                         break;
                     default :
-                        alertMsg("<spring:message code='blog.label.input.unknown.error'/>");
+                        alertModalMsg("<spring:message code='blog.label.input.unknown.error'/>");
                     }
                 },
                 error: function(result) {
-                    alertMsg("<spring:message code='blog.label.input.unknown.error'/>");
+                    alertModalMsg("<spring:message code='blog.label.input.unknown.error'/>");
                 }
             });
         });
