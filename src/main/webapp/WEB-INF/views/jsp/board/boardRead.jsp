@@ -99,7 +99,7 @@
         
         // E-mail 전송
         $('#boardEmailSend').bind('click', function() {
-            setPopup(1200, 800);
+            setPopup(800, 600);
 
             var boardId = $('#boardId').val();
             
@@ -236,7 +236,7 @@
                         <button type="button" class="btn btn-primary" id="boardDelete"><spring:message code="blog.label.delete"/></button>
                         <button type="button" class="btn" id="boardList"><spring:message code="blog.label.list"/></button>
                         <button type="button" class="btn btn-info" id="boardPrint"><spring:message code="blog.label.print"/></button>
-                        <button type="button" class="btn btn-info" id="boardEmailSendt"><spring:message code="blog.label.emailsend"/></button>
+                        <button type="button" class="btn btn-info" id="boardEmailSend"><spring:message code="blog.label.emailsend"/></button>
 
                         <div align="right">
                             <a id="facebook"><img src="${root}/common/images/facebook.png"alt=""></a>

@@ -13,6 +13,7 @@ import javax.validation.Valid;
 
 import kr.co.blog.common.CommonUtil;
 import kr.co.blog.common.FileUtil;
+import kr.co.blog.common.MailSend;
 import kr.co.blog.common.PageUtil;
 import kr.co.blog.domain.Board;
 import kr.co.blog.domain.User;
@@ -419,6 +420,44 @@ public class BoardController {
         model.addAttribute("boardId", boardId);
         
         return "/board/boardEmailSend";
+    }
+    
+    /**
+     * 게시글 메일전송처리 
+     * @param request
+     * @param model
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardEmailSendProc", method = RequestMethod.POST)
+    @ResponseBody
+    public  Map<String, Object> boardEmailSendProc(HttpServletRequest request, Model model, @RequestParam Map<String, Object> params) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardEmailSend method start~!!!");    
+        }
+        
+        // 세션의 유저 정보 가져오기
+        HttpSession session = request.getSession();
+        User user = (User)session.getAttribute("sessionuser");
+        
+        String boardId = params.get("boardId").toString();
+        
+        // 전송할 게시글 조회
+        Board board = boardService.getBoardByBoardId(boardId);
+        
+        // 메일전송 처리
+        params.put("from", user.getEmail());    // 세션정보의 E-mail 세팅
+        params.put("subject", board.getSubject());
+        params.put("content", board.getContent());
+        params.put("board", board);
+        
+        Boolean result = MailSend.mailsend(params);
+        
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("result", result == true ? "success" : "fail");
+        
+        return resultMap;
     }
 
 }
