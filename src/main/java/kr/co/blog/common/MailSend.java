@@ -87,18 +87,21 @@ public class MailSend {
             */
             
             // 한개의 첨부파일 처리
-            FileDataSource fds = new FileDataSource(new File(FileUtil.PATH + "/" + board.getFileName()));
+            if(board.getFileName().length() > 0) {
+                FileDataSource fds = new FileDataSource(new File(FileUtil.PATH + "/" + board.getFileName()));
 
-            MimeBodyPart mbp = new MimeBodyPart();
-            mbp.setDataHandler(new DataHandler(fds));
-            try {
-                mbp.setFileName(MimeUtility.encodeText(fds.getName(), "KSC5601" , "B"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                MimeBodyPart mbp = new MimeBodyPart();
+                mbp.setDataHandler(new DataHandler(fds));
+                try {
+                    mbp.setFileName(MimeUtility.encodeText(fds.getName(), "KSC5601" , "B"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                
+                mpt.addBodyPart(mbp);
+    
             }
-            
-            mpt.addBodyPart(mbp);
-            
+                        
             mpt.addBodyPart(mail_text);
             message.setContent(mpt);
             

@@ -32,7 +32,6 @@
         
     </div>
 </div>
- 
 
 <!--static dialog-->
  <div style="display:none;" id="dialog-message" title="<spring:message code='blog.label.notification'/>">

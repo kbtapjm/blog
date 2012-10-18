@@ -99,7 +99,7 @@
         
         // E-mail 전송
         $('#boardEmailSend').bind('click', function() {
-            setPopup(800, 600);
+            setPopup(800, 700);
 
             var boardId = $('#boardId').val();
             

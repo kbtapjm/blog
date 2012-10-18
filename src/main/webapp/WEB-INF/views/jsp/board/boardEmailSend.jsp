@@ -49,37 +49,42 @@
                     data: params,
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     beforeSend: function(){
-                       
+                        $("#progress").modal({
+                            "backdrop" : "static",
+                            "keyboard" : false,
+                            "show" : true
+                        });
+                        $('#progressbar').css('width', 10 + '%');
                     },
                     dataType: "json",
                     cache : true,
                     success: function(data, status, result) {
                         if(data.result == "success") {
-                            alertModalMsg('<spring:message code="blog.label.emailsend.success"/>');
-                            window.close();
+                            $('#progressbar').css('width', 100 + '%');
+                            setTimeout(function() {
+                                $('#progress').modal('hide');
+                                window.close();    
+                            }, 1000);
                         } else {
+                            $('#progress').modal('hide');
                             alertModalMsg('<spring:message code="blog.label.emailsend.fail"/>');
                         }
                     },
-                    complete:function(data) {
-                        // 처리 안함
-                    },
                     error: function(data) {
+                        $('#progress').modal('hide');
                         alertModalMsg('<spring:message code="blog.label.emailsend.fail"/>\n(' + data.statusText + ')');
                     }
                 });
                 
             },
             rules:{
-                to:{required:true, email: true},
-                message:"required",
+                to:{required:true, email: true}
             },
             messages:{
                 to:{
                     required:"<spring:message code='blog.label.input.email.address'/>",
                     email:"<spring:message code='blog.label.input.vaild.email.address'/>"
-                },
-                message:"<spring:message code='blog.label.input.subject'/>"
+                }
             },
             errorClass: "help-inline",
             errorElement: "span",
@@ -113,9 +118,9 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="message"><spring:message code="blog.label.contents"/></label>
+                    <label class="control-label" for="message"><spring:message code="blog.label.message"/></label>
                     <div class="controls">
-                        <textarea class="input-xxlarge" id="message" rows="3"></textarea>
+                        <textarea class="input-xxlarge" id="message" name="message"  rows="3"></textarea>
                     </div>
                 </div>
                 <div class="control-group">
@@ -129,6 +134,26 @@
         </form>
     </div>
     <!-- /container -->
+    
+    <!-- 전송 프로그레스 -->
+    <div style="display:none;" class="modal hide fade in" id="progress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel"><spring:message code="blog.label.transferof"/></h3>
+    </div>
+    <div class="modal-body">
+        <p>
+            <div class="progress">
+			     <div class="bar" id="progressbar"></div>
+			</div>
+        </p>
+    </div>
+    <div class="modal-footer">
+        <button id="close" class="btn" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">
+            <spring:message code="blog.label.close"/>
+        </button>
+    </div>
+</div>
     
     <!-- common html include -->
     <%@ include file="/WEB-INF/views/jsp/common/commonHtml.jsp" %>
