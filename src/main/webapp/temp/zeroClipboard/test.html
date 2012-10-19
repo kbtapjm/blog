@@ -1,0 +1,85 @@
+<html>
+<head>
+	<title>Zero Clipboard을 이용한 주소 복사</title>
+	<style type="text/css">
+		body { font-family:arial,sans-serif; font-size:9pt; }
+		
+		.my_clip_button { width:30px; text-align:center; border:1px solid black; background-color:#ccc; margin:0px; padding:0px; cursor:default; font-size:9pt; }
+		.my_clip_button.hover { background-color:#eee; }
+		.my_clip_button.active { background-color:#aaa; }
+	</style>
+	<script type="text/javascript" src="ZeroClipboard.js"></script>
+	<script language="JavaScript">
+		var clip = null;
+		
+		function $(id) { return document.getElementById(id); }
+		
+		function init() {
+			clip = new ZeroClipboard.Client();
+			clip.setHandCursor( true );
+			
+			//clip.addEventListener('load', my_load);
+			clip.addEventListener('mouseOver', my_mouse_over);
+			//clip.addEventListener('complete', my_complete);
+			
+			clip.glue( 'd_clip_button' );
+		}
+		
+		//function my_load(client) {
+		//	debugstr("Flash movie loaded and ready.");
+		//}
+		
+		function my_mouse_over(client) {
+			// we can cheat a little here -- update the text on mouse over
+			clip.setText( $('fe_text').innerHTML );
+		}
+		
+		//function my_complete(client, text) {
+		//	debugstr("Copied text to clipboard: " + text );
+		//}
+		
+		//function debugstr(msg) {
+		//	var p = document.createElement('p');
+		//	p.innerHTML = msg;
+		//	$('d_debug').appendChild(p);
+		//}
+
+		function move_link(t){
+			window.open(t,"","");
+		}
+
+	</script>
+</head>
+<body onLoad="init()">
+	<h1>Zero Clipboard을 이용한 주소 복사</h1>
+	<p><script>document.write("Your browser: " + navigator.userAgent);</script></p>
+	<table width="100%">
+		<tr>
+			<td width="50%" valign="top">
+				<!-- Upload Form -->
+				<table>
+					<tr>
+						<td align="left"><p id="fe_text" onclick="move_link(this.innerHTML);">http://blog.naver.com/junho2005</p></td>
+						<td align="right"><div id="d_clip_button" class="my_clip_button"><b>복사</b></div></td>
+					</tr>
+				</table>
+				
+			</td>
+			<!--
+			<td width="50%" valign="top">
+				 Debug Console 
+				<div id="d_debug" style="border:1px solid #aaa; padding: 10px; font-size:9pt;">
+					<h3>Debug Console:</h3>
+				</div>
+			</td>
+			-->
+		</tr>
+	</table>
+	<!--
+	<br/><br/>
+	You can paste text here if you want, to make sure it worked:<br/>
+	<textarea id="testarea" cols=50 rows=10></textarea><br/>
+	<input type=button value="Clear Test Area" onClick="$('testarea').value = '';"/>
+	-->
+</body>
+</html>

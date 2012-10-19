@@ -27,13 +27,24 @@
 <script type="text/javascript"src="${root}/common/plugin/redactor/redactor/redactor.min.js"></script>
 <link rel="stylesheet"href="${root}/common/plugin/redactor/redactor/redactor.css" />
 
+<!-- zeroclipboard set -->
+<script type="text/javascript"src="${root}/common/plugin/clipboard/ZeroClipboard.js"></script>
+
 <script type="text/javascript">
     $(function() { 
        // 댓글 가져오기
     });
     
+    // 스크랩 객체 변수
+    var clip = null;
     $(document).ready(function() {
         $('#content').redactor();
+        
+        // zeroClipboard 초기화
+        clip = new ZeroClipboard.Client();
+        clip.setHandCursor( true );
+        clip.addEventListener('mouseOver', scrapMouseOver);
+        clip.glue('boardScrap');
         
         // 수정
         $('#boardUpdate').bind('click', function() {
@@ -107,6 +118,33 @@
             wr = window.open(url, '','left='+px+',top='+py+',width='+cw+',height='+ch+',location=no, scrollbars=yes, status=1, resizable=yes');
         });
         
+        // 즐겨찾기 추가
+        $('#boardFavorites').bind('click', function() {
+            setPopup(1000, 800);
+            
+            var subject = $('#subject').val();
+            var pageUrl = $('#pageUrl').val();
+            winurl="https://www.google.com/bookmarks/mark?op=edit&bkmk="+pageUrl +"&title="+encodeURIComponent(subject); 
+            
+            wr = window.open(winurl,"viewer",'left='+px+',top='+py+',width='+cw+',height='+ch+' scrollbars=yes, status=1, resizable=yes');
+        });
+        
+        // 스크랩
+        $('#boardScrap').bind('click', function() {
+            
+            
+            /*
+            var pageUrl = $('#pageUrl').val();
+            
+            try {
+                window.clipboardData.setData('Text',pageUrl);
+                alertModalMsg("<spring:message code='blog.label.scrap.paste'/>");
+            } catch(e) {
+                alertModalMsg(pageUrl + "<br><br><spring:message code='blog.label.scrap.copy'/>");
+            }
+            */
+        });
+        
         // SNS 포스팅
         $('#facebook').find('img').css('cursor', 'pointer');
         $('#facebook').bind('click', function() {
@@ -139,6 +177,11 @@
         });
         
     });
+
+    // 클립보드 복사
+    function scrapMouseOver(client) {
+        clip.setText($('#pageUrl').val());
+    }
     
     // 폰트확대 
     function fontPlus() { 
@@ -163,18 +206,6 @@
             obj.style.lineHeight = '140%'; 
         } 
     } 
-    
-    // 스크랩
-    function postScrap() {
-        var content = document.getElementById("content").innerText;
-        
-        try {
-            window.clipboardData.setData('Text',content);
-            alertModalMsg("이 포스트의 내용이 복사 되었습니다.\n복사하고자 하는곳에 Ctrl+V을 눌러보세요.");
-        } catch(e) {
-            alertModalMsg("지원하지 않는 브라우져입니다.\nIE에서만 가능합니다.");
-        }
-    }
    
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -210,7 +241,8 @@
                 <div class="control-group">
                     <label class="control-label" for="url"><spring:message code="blog.label.url"/></label>
                      <div class="controls">
-                        <span class="input-xxlarge uneditable-input"><a href="${board.pageUrl}" target="_blank">${board.pageUrl}</a></span>
+                        <span class="input-xlarge uneditable-input"><a href="${board.pageUrl}" target="_blank">${board.pageUrl}</a></span>
+                        <button type="button" class="btn btn-info" id="boardScrap"><spring:message code="blog.label.scrap"/></button>
                     </div>
                 </div>
                 <div class="control-group">
@@ -237,7 +269,8 @@
                         <button type="button" class="btn" id="boardList"><spring:message code="blog.label.list"/></button>
                         <button type="button" class="btn btn-info" id="boardPrint"><spring:message code="blog.label.print"/></button>
                         <button type="button" class="btn btn-info" id="boardEmailSend"><spring:message code="blog.label.emailsend"/></button>
-
+                        <button type="button" class="btn btn-info" id="boardFavorites"><spring:message code="blog.label.favorites"/></button>
+                        
                         <div align="right">
                             <a id="facebook"><img src="${root}/common/images/facebook.png"alt=""></a>
                             <a id="twitter"><img src="${root}/common/images/twitter.png" alt=""></a> 

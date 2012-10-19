@@ -61,8 +61,8 @@
                     success: function(data, status, result) {
                         if(data.result == "success") {
                             $('#progressbar').css('width', 100 + '%');
+                            $('#progressLabel').html('<spring:message code="blog.label.emailsend.success"/>');
                             setTimeout(function() {
-                                $('#progress').modal('hide');
                                 window.close();    
                             }, 1000);
                         } else {
@@ -136,10 +136,10 @@
     <!-- /container -->
     
     <!-- 전송 프로그레스 -->
-    <div style="display:none;" class="modal hide fade in" id="progress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div style="display:none;" class="modal hide fade in" id="progress" tabindex="-1" role="dialog" aria-labelledby="progressLabel" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel"><spring:message code="blog.label.transferof"/></h3>
+        <h3 id="progressLabel"><spring:message code="blog.label.transferof"/></h3>
     </div>
     <div class="modal-body">
         <p>

@@ -92,14 +92,8 @@ public class MailSend {
 
                 MimeBodyPart mbp = new MimeBodyPart();
                 mbp.setDataHandler(new DataHandler(fds));
-                try {
-                    mbp.setFileName(MimeUtility.encodeText(fds.getName(), "KSC5601" , "B"));
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-                
+                mbp.setFileName(MimeUtility.encodeText(fds.getName(), "KSC5601" , "B"));
                 mpt.addBodyPart(mbp);
-    
             }
                         
             mpt.addBodyPart(mail_text);
@@ -108,6 +102,8 @@ public class MailSend {
             Transport.send(message);
             result = Boolean.TRUE;
         } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         
