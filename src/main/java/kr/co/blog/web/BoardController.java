@@ -89,7 +89,9 @@ public class BoardController {
         User user = (User)session.getAttribute("sessionuser");
         
         // 파일업로드 처리
-        FileUtil.fileUpload(file);
+        if(file.getOriginalFilename().length() > 0) {
+            FileUtil.fileUpload(file);    
+        }
         
         board.setBoardId(UUID.randomUUID().toString());
         board.setNoticeYn("N");
@@ -299,10 +301,14 @@ public class BoardController {
         // 새로운 파일이 존재 할 경우
         if(newFileName.length() > 0) {
             // 기존 파일 삭제
-            FileUtil.fileDelete(oldFileName);
+            if(oldFileName.length() > 0) {
+                FileUtil.fileDelete(oldFileName);    
+            }
             
             // 파일 업로드
-            FileUtil.fileUpload(file);
+            if(file.getOriginalFilename().length() > 0) {
+                FileUtil.fileUpload(file);    
+            }
             
             board.setFileName(file.getOriginalFilename());
             board.setFileSize((int)file.getSize());
@@ -346,7 +352,9 @@ public class BoardController {
         }
         
         // 첨부파일 삭제
-        FileUtil.fileDelete(board.getFileName());
+        if(board.getFileName().length() > 0) {
+            FileUtil.fileDelete(board.getFileName());    
+        }
         
         // 게시글 삭제
         int result = boardService.deleteBoard(board);
@@ -371,6 +379,13 @@ public class BoardController {
     
         List<Board> resultList = boardService.getAllBoardList(params);
         int count = boardService.getAllBoardListCnt(params);
+        
+        // 삭제 후 현재 페이지의 리스트 개수가 0인 경우 전페이지 리스트 호출, 현재페이지 계산
+        if(resultList.size() == 0) {
+            pNo = (pNo != 1) ? pNo -1 : pNo;    
+            params.put("pageNo", pNo);
+            resultList = boardService.getAllBoardList(params);
+        }
         
         int beginOfPage = (pNo -1) * PageUtil.ROW_PER_PAGE;  
         int rowNo = count - beginOfPage;
@@ -458,6 +473,67 @@ public class BoardController {
         resultMap.put("result", result == true ? "success" : "fail");
         
         return resultMap;
+    }
+    
+    /**
+     * 선택파일 삭제
+     * @param model
+     * @param params
+     * @param checkBoardId
+     * @param board
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardMultiDelete", method = RequestMethod.POST)
+    public String boardMultiDelete(Model model,  @RequestParam Map<String, Object> params, @RequestParam("checkBoardId") String[] checkBoardId) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardMultiDelete method start~!!!");    
+        }
+
+        // 삭제처리
+        for(String boardId : checkBoardId) {
+            // 삭제할 파일 조회
+            Board board = boardService.getBoardByBoardId(boardId);
+            
+            // 첨부파일 삭제
+            if(board.getFileName().length() > 0) {
+                FileUtil.fileDelete(board.getFileName());    
+            }
+            
+            // 댓글 삭제
+            
+            // 게시글 삭제
+            boardService.deleteBoard(board);
+        }
+                
+        // 삭제 후 리스트
+        String pageNo = CommonUtil.Nvl((String)params.get("pageNo"), "1" );
+        String pageSize = CommonUtil.Nvl((String)params.get("pageSize"), "10" );
+        int pSize = Integer.parseInt(pageSize);
+        int pNo = Integer.parseInt(pageNo);
+        
+        params.put("pageNo", pageNo);
+        params.put("pageSize", pageSize);
+        
+        List<Board> resultList = boardService.getAllBoardList(params);
+        int count = boardService.getAllBoardListCnt(params);
+        
+        // 삭제 후 현재 페이지의 리스트 개수가 0인 경우 전페이지 리스트 호출, 현재페이지 계산
+        if(resultList.size() == 0) {
+            pNo = (pNo != 1) ? pNo -1 : pNo;    
+            params.put("pageNo", pNo);
+            resultList = boardService.getAllBoardList(params);
+        }
+        
+        int beginOfPage = (pNo -1) * PageUtil.ROW_PER_PAGE;  
+        int rowNo = count - beginOfPage;
+        
+        model.addAttribute("resultList", resultList);
+        model.addAttribute("params", params);
+        model.addAttribute("pageControl", PageUtil.getPageLink(count, pNo, "goPage", pSize, PageUtil.PAGE_LINK, ""));
+        model.addAttribute("rowNo", rowNo);
+        
+        return "/board/boardList";
     }
 
 }

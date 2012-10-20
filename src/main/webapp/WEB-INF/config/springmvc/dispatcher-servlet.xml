@@ -75,6 +75,7 @@
             <mvc:mapping path="/user/userInfo.do" />
             <mvc:mapping path="/user/userEdit.do" />
             <!-- <mvc:mapping path="/user/**" /> -->
+            <mvc:mapping path="/board/**" />
             <bean class="kr.co.blog.web.security.SecurityInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>

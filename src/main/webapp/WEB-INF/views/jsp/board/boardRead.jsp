@@ -260,6 +260,14 @@
 	                    <a href="${downURL}">${board.fileName}</a>
                     </div>
                 </div>
+                <div class="control-group">
+                    <label class="control-label" for="attachFile"></label>
+                    <div class="controls">
+                        ${board.user.userName}(${board.user.memberId})&nbsp;&nbsp;${fn:substring(board.createDt, 0, 16)}
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <spring:message code="blog.label.views"/> : ${board.count}
+                    </div>
+                </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label"></label>

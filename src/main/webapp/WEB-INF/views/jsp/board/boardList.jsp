@@ -62,6 +62,48 @@
             location.href = "../board/boardCreate.do";
         });
         
+        // 전체선택, 전체해제
+        $('#checkAll').bind('click', function() {
+            if ( $("[name=checkAll]").is(":checked") ) {
+                 $("[name=checkBoardId]").attr("checked", true);   
+            } else {
+                 $("[name=checkBoardId]").attr("checked",false);     
+            }
+        });
+        
+        // 선택삭제
+        $('#boardMultiDelete').bind('click', function() {
+            // 체크 유무 확인
+            if($("[name=checkBoardId]:checked").length == 0) {
+                alertModalMsg("<spring:message code='blog.label.select.board'/>");
+                return false;
+            }
+            
+            var buttons = {
+                "Ok": function () {
+                    $('#searchFrm').attr("action", "../board/boardMultiDelete.do");
+                    $('#searchFrm').attr("target", "_self");
+                    $('#searchFrm').attr("method", "POST");
+                    $('#searchFrm').submit();    
+                },
+                "Cancel": function () {
+                     
+                }    
+            };
+             
+            alertModalMsg("<spring:message code='blog.label.delete.confirm'/>", buttons);
+        });
+        
+        // 엑셀저장
+        $('#boardExcelSave').bind('click', function() {
+            
+        });
+        
+        // pdf저장
+        $('#boardPdfSave').bind('click', function() {
+            
+        });
+        
         // 툴팁
         var tooltipSet = function() {
             var trObj = $("table > tbody > tr");
@@ -87,7 +129,6 @@
         $('#pageNo').val(page);
         $('#searchFrm').submit();
     }
-   
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -119,7 +160,6 @@
                     <input type="text" name="searchWord" id="searchWord" value="${params.searchWord }" class="input-medium search-query" style="margin: 0 auto;" data-provide="typeahead">
                     <button type="submit" class="btn btn-primary"><spring:message code="blog.label.search"/></button>
                 </div>
-            </form>
             <!--  검색영역  end-->
 
             <!-- table 영역 start-->
@@ -128,7 +168,7 @@
                     <tr>
                         <th style="width: 5%">
 	                        <label class="checkbox">
-	                           <input type="checkbox" value="">
+	                           <input type="checkbox" name="checkAll" id="checkAll"  value="">
                             </label>
                         </th>
                         <th style="width: 10%"><spring:message code="blog.label.no"/></th>
@@ -149,7 +189,7 @@
                     <tr>
                         <td>
                             <label class="checkbox">
-							  <input type="checkbox" name="boardid" id="boardid" value="${resultList.boardId}">
+							  <input type="checkbox" name="checkBoardId" id="checkBoardId" value="${resultList.boardId}">
 							</label>
                         </td>
                         <td align="center">${rowNo - (stat.count - 1)}</td>
@@ -164,12 +204,13 @@
                 </tbody>
             </table>
             <!-- table 영역 end-->
+            </form>
 
             <div align="right">
                 <button type="button" class="btn btn-primary" id="boardCreate"><spring:message code="blog.label.create"/></button>
-                <button type="button" class="btn btn-primary" id="boardDelete"><spring:message code="blog.label.delete"/></button>
-                <button type="button" class="btn btn-info disabled"><spring:message code="blog.label.saveexcel"/></button>
-                <button type="button" class="btn btn-info disabled"><spring:message code="blog.label.savepdf"/></button>
+                <button type="button" class="btn btn-primary" id="boardMultiDelete"><spring:message code="blog.label.delete"/></button>
+                <button type="button" class="btn btn-info" id="boardExcelSave"><spring:message code="blog.label.saveexcel"/></button>
+                <button type="button" class="btn btn-info" id="boardPdfSave"><spring:message code="blog.label.savepdf"/></button>
             </div>
 
             <!--  페이징 start-->
