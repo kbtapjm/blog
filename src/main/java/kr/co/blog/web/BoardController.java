@@ -1,6 +1,8 @@
 package kr.co.blog.web;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import kr.co.blog.common.CommonUtil;
+import kr.co.blog.common.ExcelUtil;
 import kr.co.blog.common.FileUtil;
 import kr.co.blog.common.MailSend;
 import kr.co.blog.common.PageUtil;
@@ -20,6 +23,12 @@ import kr.co.blog.domain.User;
 import kr.co.blog.service.BoardService;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.Region;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Controller;
@@ -532,6 +541,115 @@ public class BoardController {
         model.addAttribute("params", params);
         model.addAttribute("pageControl", PageUtil.getPageLink(count, pNo, "goPage", pSize, PageUtil.PAGE_LINK, ""));
         model.addAttribute("rowNo", rowNo);
+        
+        return "/board/boardList";
+    }
+    
+    /**
+     * 엑셀저장
+     * @param model
+     * @param params
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardExcelSave", method = RequestMethod.POST)
+    public String boardExcelSave(Model model,  @RequestParam Map<String, Object> params, HttpServletResponse response) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardExcelSave method start~!!!");    
+        }
+
+        ExcelUtil excelUtil = new ExcelUtil();
+        List<Board> resultList = boardService.getAllBoardList(params);
+        
+        // 시트 생성
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("board");
+        HSSFCell cell = null;
+        
+        FileOutputStream fs = null;
+      
+        try {
+            for (int i = 0; i < 4; i++) { 
+                sheet.autoSizeColumn(i);
+                sheet.setColumnWidth(i, (sheet.getColumnWidth(i)) + 1024 ); 
+            }
+           
+            sheet.addMergedRegion(new Region(0, (short)0, 0, (short)4));
+            
+            HSSFCellStyle titlestyle = excelUtil.getTitleStyle(workbook);
+            HSSFCellStyle headerstyle = excelUtil.getHeaderStyle(workbook);
+            HSSFCellStyle valueStyle = excelUtil.getValueStyle(workbook);
+     
+            // title
+            HSSFRow title = sheet.createRow(0);
+            cell = title.createCell((short)0);
+            cell.setCellValue(CommonUtil.getDate() );
+            cell.setCellStyle(titlestyle);
+            
+            // header
+            HSSFRow header = sheet.createRow(2);
+            
+            // hearder create
+            cell = header.createCell((short)0);
+            cell.setCellValue(messageSourceAccessor.getMessage("blog.label.no"));
+            cell.setCellStyle(headerstyle);
+            
+            cell = header.createCell((short)1);
+            cell.setCellValue(messageSourceAccessor.getMessage("blog.label.subject"));
+            cell.setCellStyle(headerstyle);
+            
+            cell = header.createCell((short)2);
+            cell.setCellValue(messageSourceAccessor.getMessage("blog.label.create.user"));
+            cell.setCellStyle(headerstyle);
+            
+            cell = header.createCell((short)3);
+            cell.setCellValue(messageSourceAccessor.getMessage("blog.label.create.date"));
+            cell.setCellStyle(headerstyle);
+            
+            cell = header.createCell((short)4);
+            cell.setCellValue(messageSourceAccessor.getMessage("blog.label.views"));
+            cell.setCellStyle(headerstyle);
+
+            
+            int rowcnt = 3;
+            int length = resultList.size() + 1;
+            for (Board board : resultList) {
+                HSSFRow row = sheet.createRow(rowcnt++);    // row create
+                
+                cell = row.createCell((short)0);
+                cell.setCellStyle(valueStyle);
+                cell.setCellValue(--length);
+                
+                cell = row.createCell((short)1);
+                cell.setCellStyle(valueStyle);
+                cell.setCellValue(board.getSubject());
+                
+                cell = row.createCell((short)2);
+                cell.setCellStyle(valueStyle);
+                cell.setCellValue(board.getUser().getUserName());
+                
+                cell = row.createCell((short)3);
+                cell.setCellStyle(valueStyle);
+                cell.setCellValue(board.getCreateDt());
+                
+                cell = row.createCell((short)4);
+                cell.setCellStyle(valueStyle);
+                cell.setCellValue(board.getCount());
+            }
+            
+            String filename = System.currentTimeMillis() + ".xls";
+            String excelfile = FileUtil.PATH + filename; 
+            
+            fs = new FileOutputStream(excelfile);
+            workbook.write(fs);
+            
+            FileUtil.fileDownload(response, new File(excelfile));
+        } catch (Exception e) {
+            if (fs != null) {
+                try { fs.close(); } catch (IOException e1) { e1.printStackTrace(); }
+            }
+        }
         
         return "/board/boardList";
     }

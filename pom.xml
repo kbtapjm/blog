@@ -310,6 +310,13 @@
             <artifactId>mail</artifactId>
             <version>1.4.5</version>
         </dependency>
+        
+        <!-- apache poi -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.8-beta5</version>
+        </dependency>
     </dependencies>
 
 	<build>

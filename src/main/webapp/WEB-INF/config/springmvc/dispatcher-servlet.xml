@@ -106,6 +106,7 @@
                 <entry key="json" value="application/json" />
                 <entry key="xml"  value="application/xml" />
                 <entry key="do"   value="text/html" />
+                <entry key="excel"   value="text/html" />
             </map>
         </property>
         <property name="viewResolvers">

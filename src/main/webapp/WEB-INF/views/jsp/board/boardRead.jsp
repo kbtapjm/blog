@@ -280,9 +280,9 @@
                         <button type="button" class="btn btn-info" id="boardFavorites"><spring:message code="blog.label.favorites"/></button>
                         
                         <div align="right">
-                            <a id="facebook"><img src="${root}/common/images/facebook.png"alt=""></a>
-                            <a id="twitter"><img src="${root}/common/images/twitter.png" alt=""></a> 
-                            <a id="gplus"><img src="${root}/common/images/gplus.png" alt=""></a>
+                            <a id="facebook"><img src="${root}/common/images/facebook.png"alt="facebook"></a>
+                            <a id="twitter"><img src="${root}/common/images/twitter.png" alt="twitter"></a> 
+                            <a id="gplus"><img src="${root}/common/images/gplus.png" alt="gplus"></a>
                         </div>
                         &nbsp;&nbsp;&nbsp;
                     </div>

@@ -96,7 +96,10 @@
         
         // 엑셀저장
         $('#boardExcelSave').bind('click', function() {
-            
+            $('#searchFrm').attr("action", "../board/boardExcelSave.do");
+            $('#searchFrm').attr("target", "_self");
+            $('#searchFrm').attr("method", "POST");
+            $('#searchFrm').submit();    
         });
         
         // pdf저장
@@ -209,8 +212,10 @@
             <div align="right">
                 <button type="button" class="btn btn-primary" id="boardCreate"><spring:message code="blog.label.create"/></button>
                 <button type="button" class="btn btn-primary" id="boardMultiDelete"><spring:message code="blog.label.delete"/></button>
+                <!-- 
                 <button type="button" class="btn btn-info" id="boardExcelSave"><spring:message code="blog.label.saveexcel"/></button>
                 <button type="button" class="btn btn-info" id="boardPdfSave"><spring:message code="blog.label.savepdf"/></button>
+                 -->
             </div>
 
             <!--  페이징 start-->
