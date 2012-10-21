@@ -272,8 +272,11 @@
                 <div class="control-group">
                     <label class="control-label"></label>
                     <div class="controls">
+                        <c:if test="${sessionScope.sessionuser.memberId eq board.user.memberId}">
                         <button type="button" class="btn btn-primary" id="boardUpdate"><spring:message code="blog.label.update"/></button>
                         <button type="button" class="btn btn-primary" id="boardDelete"><spring:message code="blog.label.delete"/></button>
+                        </c:if>
+                        
                         <button type="button" class="btn" id="boardList"><spring:message code="blog.label.list"/></button>
                         <button type="button" class="btn btn-info" id="boardPrint"><spring:message code="blog.label.print"/></button>
                         <button type="button" class="btn btn-info" id="boardEmailSend"><spring:message code="blog.label.emailsend"/></button>

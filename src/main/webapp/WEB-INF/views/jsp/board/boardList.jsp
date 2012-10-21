@@ -163,6 +163,7 @@
                     <input type="text" name="searchWord" id="searchWord" value="${params.searchWord }" class="input-medium search-query" style="margin: 0 auto;" data-provide="typeahead">
                     <button type="submit" class="btn btn-primary"><spring:message code="blog.label.search"/></button>
                 </div>
+             </form>
             <!--  검색영역  end-->
 
             <!-- table 영역 start-->
@@ -207,12 +208,11 @@
                 </tbody>
             </table>
             <!-- table 영역 end-->
-            </form>
 
             <div align="right">
                 <button type="button" class="btn btn-primary" id="boardCreate"><spring:message code="blog.label.create"/></button>
+                <!--
                 <button type="button" class="btn btn-primary" id="boardMultiDelete"><spring:message code="blog.label.delete"/></button>
-                <!-- 
                 <button type="button" class="btn btn-info" id="boardExcelSave"><spring:message code="blog.label.saveexcel"/></button>
                 <button type="button" class="btn btn-info" id="boardPdfSave"><spring:message code="blog.label.savepdf"/></button>
                  -->
