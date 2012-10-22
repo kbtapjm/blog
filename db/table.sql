@@ -26,7 +26,7 @@ CREATE TABLE `board` (
     `createdt` DATETIME NOT NULL,
     `modifydt` DATETIME NULL DEFAULT NULL,
     `count` INT(10) NULL DEFAULT NULL,
-    `noticeyn` CHAR(1) NULL DEFAULT NULL,
+    `urltype` CHAR(1) NULL DEFAULT NULL,
     `ip` VARCHAR(15) NULL DEFAULT NULL,
     `pageurl` VARCHAR(200) NULL DEFAULT NULL,
     `filename` VARCHAR(200) NULL DEFAULT NULL,

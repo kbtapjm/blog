@@ -12,7 +12,7 @@ public class Board implements Serializable {
     private String createDt;
     private String modifyDt;
     private int count;
-    private String noticeYn;
+    private String urlType;
     private String ip;
     private String pageUrl;
     private String fileName;
@@ -26,7 +26,7 @@ public class Board implements Serializable {
 
     public Board(String boardId, String subject, String content,
             String createUser, String createDt, String modifyDt, int count,
-            String noticeYn, String ip, String pageUrl, String fileName,
+            String urlType, String ip, String pageUrl, String fileName,
             int fileSize, String userId) {
         super();
         this.boardId = boardId;
@@ -36,7 +36,7 @@ public class Board implements Serializable {
         this.createDt = createDt;
         this.modifyDt = modifyDt;
         this.count = count;
-        this.noticeYn = noticeYn;
+        this.urlType = urlType;
         this.ip = ip;
         this.pageUrl = pageUrl;
         this.fileName = fileName;
@@ -100,12 +100,12 @@ public class Board implements Serializable {
         this.count = count;
     }
 
-    public String getNoticeYn() {
-        return noticeYn;
+    public String getUrlType() {
+        return urlType;
     }
 
-    public void setNoticeYn(String noticeYn) {
-        this.noticeYn = noticeYn;
+    public void setUrlType(String urlType) {
+        this.urlType = urlType;
     }
 
     public String getIp() {

@@ -24,7 +24,7 @@ public class FileUtil extends HttpServletRequestWrapper {
         super(request);
     }
     
-    public final static String PATH = "C:\\web_dev\\repasitory\\";
+    public final static String PATH = "C:\\repasitory\\";
 
     /**
      * 파일 업로드

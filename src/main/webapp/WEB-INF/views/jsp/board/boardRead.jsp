@@ -21,6 +21,7 @@
 <script type="text/javascript" src="${root}/common/js/jquery/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="${root}/common/js/jquery/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="${root}/common/js/jquery/jquery.validate.js"></script>
+<script type="text/javascript" src="${root}/common/js/jquery/jquery.youtubepopup.min.js"></script>
 <script type="text/javascript" src="${root}/common/js/common.js"></script>
 
 <!-- redactor set -->
@@ -32,7 +33,8 @@
 
 <script type="text/javascript">
     $(function() { 
-       // 댓글 가져오기
+        // 댓글 가져오기
+        $("a.youtube").YouTubePopup({ youtubeId: 'o_5nD9IPPl4', title: 'My New Title' });
     });
     
     // 스크랩 객체 변수
@@ -243,6 +245,7 @@
                      <div class="controls">
                         <span class="input-xlarge uneditable-input"><a href="${board.pageUrl}" target="_blank">${board.pageUrl}</a></span>
                         <button type="button" class="btn btn-info" id="boardScrap"><spring:message code="blog.label.scrap"/></button>
+                        <a href="#" title="..." class="youtube" youtube="4eYSpIz2FjU" >Click me</a>
                     </div>
                 </div>
                 <div class="control-group">

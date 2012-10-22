@@ -79,7 +79,7 @@
                         alertModalMsg(msg + statusMsg);
                         break;
                     case 500 : 
-                        if(statusTxt == "INVALID_URI") {
+                        if(statusTxt == "INVALID_URI" || statusTxt == "MISSING_ARG_URI") {
                             msg = "<spring:message code='blog.label.input.invaild.uri'/>";
                         } else if(statusTxt == "MISSING_ARG_LOGIN") {
                             msg = "<spring:message code='blog.label.input.missing.arg.login'/>";
