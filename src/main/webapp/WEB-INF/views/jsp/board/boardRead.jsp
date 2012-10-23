@@ -21,7 +21,6 @@
 <script type="text/javascript" src="${root}/common/js/jquery/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="${root}/common/js/jquery/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="${root}/common/js/jquery/jquery.validate.js"></script>
-<script type="text/javascript" src="${root}/common/js/jquery/jquery.youtubepopup.min.js"></script>
 <script type="text/javascript" src="${root}/common/js/common.js"></script>
 
 <!-- redactor set -->
@@ -34,7 +33,7 @@
 <script type="text/javascript">
     $(function() { 
         // 댓글 가져오기
-        $("a.youtube").YouTubePopup({ youtubeId: 'o_5nD9IPPl4', title: 'My New Title' });
+        
     });
     
     // 스크랩 객체 변수
@@ -42,11 +41,13 @@
     $(document).ready(function() {
         $('#content').redactor();
         
+        /*
         // zeroClipboard 초기화
         clip = new ZeroClipboard.Client();
         clip.setHandCursor( true );
         clip.addEventListener('mouseOver', scrapMouseOver);
         clip.glue('boardScrap');
+        */
         
         // 수정
         $('#boardUpdate').bind('click', function() {
@@ -133,9 +134,6 @@
         
         // 스크랩
         $('#boardScrap').bind('click', function() {
-            
-            
-            /*
             var pageUrl = $('#pageUrl').val();
             
             try {
@@ -144,7 +142,6 @@
             } catch(e) {
                 alertModalMsg(pageUrl + "<br><br><spring:message code='blog.label.scrap.copy'/>");
             }
-            */
         });
         
         // SNS 포스팅
@@ -244,8 +241,6 @@
                     <label class="control-label" for="url"><spring:message code="blog.label.url"/></label>
                      <div class="controls">
                         <span class="input-xlarge uneditable-input"><a href="${board.pageUrl}" target="_blank">${board.pageUrl}</a></span>
-                        <button type="button" class="btn btn-info" id="boardScrap"><spring:message code="blog.label.scrap"/></button>
-                        <a href="#" title="..." class="youtube" youtube="4eYSpIz2FjU" >Click me</a>
                     </div>
                 </div>
                 <div class="control-group">
@@ -277,13 +272,14 @@
                     <div class="controls">
                         <c:if test="${sessionScope.sessionuser.memberId eq board.user.memberId}">
                         <button type="button" class="btn btn-primary" id="boardUpdate"><spring:message code="blog.label.update"/></button>
-                        <button type="button" class="btn btn-primary" id="boardDelete"><spring:message code="blog.label.delete"/></button>
+                        <button type="button" class="btn btn-danger" id="boardDelete"><spring:message code="blog.label.delete"/></button>
                         </c:if>
                         
                         <button type="button" class="btn" id="boardList"><spring:message code="blog.label.list"/></button>
                         <button type="button" class="btn btn-info" id="boardPrint"><spring:message code="blog.label.print"/></button>
                         <button type="button" class="btn btn-info" id="boardEmailSend"><spring:message code="blog.label.emailsend"/></button>
                         <button type="button" class="btn btn-info" id="boardFavorites"><spring:message code="blog.label.favorites"/></button>
+                        <button type="button" class="btn btn-info" id="boardScrap"><spring:message code="blog.label.scrap"/></button>
                         
                         <div align="right">
                             <a id="facebook"><img src="${root}/common/images/facebook.png"alt="facebook"></a>
@@ -301,13 +297,18 @@
                         </blockquote>
                         <table class="table">
                             <tr>
-                                <td>reply1</td>
+                                <td>
+                                검은몽스 2012-10-23 02:25
+                                <button type="button" class="btn btn-danger"><spring:message code="blog.label.delete"/></button>
+                                <br>
+                                요즘은 과도기.... 
+                                </td>
                             </tr>
                             <tr>
-                                <td>reply2</td>
+                                <td>검은몽스 2012-10-23 02:24<br>스칼라를 배우자~!! </td>
                             </tr>
                             <tr>
-                                <td>reply3</td>
+                                <td>검은몽스 2012-10-23 02:23<br>node.js도 배우자~!! </td>
                             </tr>
                         </table>
                     </div>

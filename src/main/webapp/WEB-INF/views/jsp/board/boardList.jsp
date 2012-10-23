@@ -198,7 +198,20 @@
                         </td>
                         <td align="center">${rowNo - (stat.count - 1)}</td>
                         <td><a href="#" onClick="javascript:boardRead('${resultList.boardId}');" id="titleTooltip" rel="tooltip" data-placement="bottom" data-bitly-type="bitly_hover_card"
-                            data-original-title="${resultList.subject}">${resultList.subject}</a>
+                            data-original-title="${resultList.subject}">
+                            
+                            <!-- 새로운 글 일 경우 new 표시 -->
+                            <c:choose>
+		                        <c:when test="${fn:substring(resultList.createDt, 0, 10) eq today}">
+		                             
+		                        </c:when>
+		                        <c:otherwise>
+		                                   
+		                        </c:otherwise>
+		                    </c:choose>
+                            
+                            ${resultList.subject}
+                            </a>
                         </td>
                         <td align="center">${resultList.user.userName}</td>
                         <td align="center">${fn:substring(resultList.createDt, 0, 16)}</td>

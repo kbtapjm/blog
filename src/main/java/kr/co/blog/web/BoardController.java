@@ -149,6 +149,7 @@ public class BoardController {
         model.addAttribute("params", params);
         model.addAttribute("pageControl", PageUtil.getPageLink(count, pNo, "goPage", pSize, PageUtil.PAGE_LINK, ""));
         model.addAttribute("rowNo", rowNo);
+        model.addAttribute("today", CommonUtil.getDate()); 
         
         return "/board/boardList";
     }
@@ -183,6 +184,7 @@ public class BoardController {
         model.addAttribute("params", params);
         model.addAttribute("pageControl", PageUtil.getPageLink(count, pNo, "goPage", pSize, PageUtil.PAGE_LINK, ""));
         model.addAttribute("rowNo", rowNo);
+        model.addAttribute("today", CommonUtil.getDate());
         
         return "/board/boardList";
     }

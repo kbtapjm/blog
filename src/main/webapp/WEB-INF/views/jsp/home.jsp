@@ -21,11 +21,14 @@
 <script type="text/javascript" src="${root}/common/js/jquery/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="${root}/common/js/jquery/jquery.validate.js"></script>
 <script type="text/javascript" src="${root}/common/js/jquery/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="${root}/common/js/jquery/jquery.youtubepopup.min.js"></script>
 <script type="text/javascript" src="${root}/common/js/common.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
-
+        
+        // youtube 동영상
+        $("#more").YouTubePopup({youtubeId: 'VuC0i4xTyrI', title: 'Welcome' });
     });
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -43,6 +46,9 @@
             <h1>Wellcome to MyBlog</h1>
             <p>This is a simple hero unit, a simple jumbotron-style component
                 for calling extra attention to featured content or information.</p>
+            <a id="more" class="btn btn-primary">
+            more
+            </a>
         </div>
     </div>
     <!-- /container -->

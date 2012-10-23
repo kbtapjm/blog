@@ -73,7 +73,7 @@ public class BoardServiceTest {
     public void getBoardByBoardIdTest() throws Exception {
         Board board = boardService.getBoardByBoardId("5145a4b4-2e20-4298-a54f-830be06db91a");
   
-        log.debug("getUserByUserIdTest result : " + board);
+        log.debug("getBoardByBoardIdTest result : " + board);
         assertNotNull(board);
     }
     
@@ -93,12 +93,12 @@ public class BoardServiceTest {
     }
     
     @Test
-    public void deleteUserTest() throws Exception {
+    public void deleteBoardTest() throws Exception {
         board.setBoardId("5145a4b4-2e20-4298-a54f-830be06db91a");
         
         int result = boardService.deleteBoard(board);
         
-        log.debug("deleteUserTest result : " + result);
+        log.debug("deleteBoardTest result : " + result);
         assertEquals(1, result);
     }
     
