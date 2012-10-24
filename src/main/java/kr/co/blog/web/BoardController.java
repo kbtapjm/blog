@@ -19,7 +19,9 @@ import kr.co.blog.common.FileUtil;
 import kr.co.blog.common.MailSend;
 import kr.co.blog.common.PageUtil;
 import kr.co.blog.domain.Board;
+import kr.co.blog.domain.BoardReply;
 import kr.co.blog.domain.User;
+import kr.co.blog.service.BoardReplyService;
 import kr.co.blog.service.BoardService;
 
 import org.apache.log4j.Logger;
@@ -35,6 +37,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,6 +56,7 @@ public class BoardController {
     private static Logger log = Logger.getLogger(BoardController.class);
     
     @Autowired BoardService boardService;
+    @Autowired BoardReplyService boardReplyService;
     @Autowired MessageSourceAccessor messageSourceAccessor;
     
     /**
@@ -654,6 +658,42 @@ public class BoardController {
         }
         
         return "/board/boardList";
+    }
+    
+    /**
+     * 댓글 등록
+     * @param request
+     * @param boardReply
+     * @param boardId
+     * @param replyContent
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardReplyCreate/{boardId}", method = RequestMethod.POST)
+    @ResponseBody
+    public int boardReplyCreate(HttpServletRequest request, 
+                                @ModelAttribute BoardReply boardReply,
+                                @PathVariable("boardId") String boardId,
+                                @RequestParam("replyContent") String replyContent) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardReplyCreate method start~!!!");    
+        }
+        
+        // 세션의 유저 정보 가져오기
+        HttpSession session = request.getSession();
+        User user = (User)session.getAttribute("sessionuser");
+ 
+        // 댓글등록
+        boardReply.setReplyId(UUID.randomUUID().toString());
+        boardReply.setCreateUser(user.getUserName());
+        boardReply.setIp(request.getRemoteAddr());
+        boardReply.setReplyContent(replyContent);
+        boardReply.setBoardId(boardId);
+        boardReply.setUserId(user.getUserId());
+        
+        int result = boardReplyService.createBoardReply(boardReply);
+        
+        return result;
     }
 
 }

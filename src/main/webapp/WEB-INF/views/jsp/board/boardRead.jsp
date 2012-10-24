@@ -175,6 +175,32 @@
             wr = window.open(winurl,"viewer",'left='+px+',top='+py+',width='+cw+',height='+ch+' scrollbars=yes, status=1, resizable=yes');
         });
         
+        // 댓글 등록
+        $('#boardReplay').bind('click', function() {
+            var boardId = $('#boardId').val();
+            var replyContent = $('#replyContent').val();
+            
+            if($.trim(replyContent).length == 0) return false; 
+            
+            var restUrl = "../board/boardReplyCreate/" + boardId;
+            var parm = "replyContent=" + encodeURIComponent(replyContent);
+            
+            $.ajax({
+                url: restUrl,
+                type: "POST",
+                dataType: "json",
+                data: parm,
+                success: function(result) {
+                   
+                    // 성공시 처리
+                },
+                error: function(result) {
+                    // 실패시 처리
+                    alertModalMsg("등록이 실패 하였습니다.");
+                }
+            });
+        });
+        
     });
 
     // 클립보드 복사
@@ -295,7 +321,7 @@
                         <blockquote>
                             <p>Reply</p>
                         </blockquote>
-                        <table class="table">
+                        <table class="table" id="replyList">
                             <tr>
                                 <td>
                                 검은몽스 2012-10-23 02:25
@@ -316,7 +342,7 @@
                 <div class="control-group">
                     <label class="control-label"></label>
                     <div class="controls">
-                        <textarea class="input-xxlarge" id="replycontent" rows="3"></textarea>
+                        <textarea class="input-xxlarge" id="replyContent" rows="3"></textarea>
                         <button type="button" class="btn btn-primary" id="boardReplay">Reply Create</button>
                     </div>
                 </div>
