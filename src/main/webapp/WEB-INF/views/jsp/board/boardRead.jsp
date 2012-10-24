@@ -31,10 +31,6 @@
 <script type="text/javascript"src="${root}/common/plugin/clipboard/ZeroClipboard.js"></script>
 
 <script type="text/javascript">
-    $(function() { 
-        // 댓글 가져오기
-        
-    });
     
     // 스크랩 객체 변수
     var clip = null;
@@ -182,7 +178,7 @@
             
             if($.trim(replyContent).length == 0) return false; 
             
-            var restUrl = "../board/boardReplyCreate/" + boardId;
+            var restUrl = "../board/boardReplyCreate/" + boardId; 
             var parm = "replyContent=" + encodeURIComponent(replyContent);
             
             $.ajax({
@@ -191,16 +187,77 @@
                 dataType: "json",
                 data: parm,
                 success: function(result) {
-                   
+                    log(JSON.stringify(result));
                     // 성공시 처리
                 },
                 error: function(result) {
+                    log(JSON.stringify(result));
                     // 실패시 처리
                     alertModalMsg("등록이 실패 하였습니다.");
                 }
             });
         });
         
+        
+        // 댓글 목록
+        var boardReplyList = function() {
+            this.replyRetrieve = function(data) {
+                var replyId, createUser, createDt, replyContent, userId, replyHTML;
+                
+                var len = data.length;
+                for(var i = 0; i < len; i++) {
+                    replyId = data[i].replyId;
+                    createUser = data[i].createUser;
+                    createDt = data[i].createDt.substring(0, 16);
+                    replyContent = data[i].replyContent;
+                    userId = data[i].userId;
+                    
+                    // 댓글 생성
+                    replyHTML = "";
+                    replyHTML += '<tr id="'+replyId+'" >';
+                    replyHTML += '    <td><strong>' + createUser + "&nbsp;" + createDt + "</strong>";
+                    
+                    if(userId == "${sessionScope.sessionuser.userId}") {
+                        replyHTML += '    <button type="button" class="btn btn-danger"><spring:message code="blog.label.delete"/></button><br>';    
+                    } else {
+                        replyHTML += '<br>';
+                    }
+                    
+                    replyHTML += replyContent;
+                    replyHTML += '    </td>';
+                    replyHTML += '</tr>';
+                    
+                    $('#replyList').append(replyHTML);
+         
+                    // 삭제 바인딩
+                    if($('#' + replyId).find('.btn').lenth != 0) {
+                        $('#' + replyId).find('.btn').unbind().bind('click', function() {
+                           log('delete');     
+                        });
+                    }
+                }
+            };
+            
+            var boardId = $('#boardId').val();
+            var restUrl = "../board/boardReplyList/" + boardId; 
+            
+            $.ajax({
+                url: restUrl,
+                type: "GET",
+                dataType: "json",
+                data: "",
+                success: function(result) {
+                    log(JSON.stringify(result));
+                    replyRetrieve(result);
+                },
+                error: function(result) {
+                    log(JSON.stringify(result));
+                    // 실패시 처리
+                }
+            });
+        };
+        
+        boardReplyList();
     });
 
     // 클립보드 복사
@@ -321,22 +378,7 @@
                         <blockquote>
                             <p>Reply</p>
                         </blockquote>
-                        <table class="table" id="replyList">
-                            <tr>
-                                <td>
-                                검은몽스 2012-10-23 02:25
-                                <button type="button" class="btn btn-danger"><spring:message code="blog.label.delete"/></button>
-                                <br>
-                                요즘은 과도기.... 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>검은몽스 2012-10-23 02:24<br>스칼라를 배우자~!! </td>
-                            </tr>
-                            <tr>
-                                <td>검은몽스 2012-10-23 02:23<br>node.js도 배우자~!! </td>
-                            </tr>
-                        </table>
+                        <table class="table" id="replyList"></table>
                     </div>
                 </div>
                 <div class="control-group">

@@ -55,7 +55,7 @@ public interface BoardReplyDao {
      * @return
      * @throws Exception
      */
-    @Select("select * from boardreply where boardid=#{boardId}")
+    @Select("select * from boardreply where boardid=#{boardId} ORDER BY createdt ASC")
     @Options(useCache=true)
     @Results(value = {
             @Result(property="replyId", column="replyid"),

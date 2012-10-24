@@ -695,5 +695,23 @@ public class BoardController {
         
         return result;
     }
+    
+    /**
+     * 댓글 목록
+     * @param boardId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardReplyList/{boardId}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<BoardReply> boardReplyList(@PathVariable("boardId") String boardId) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardReplyCreate method start~!!!");    
+        }
+        
+        List<BoardReply> resultList = boardReplyService.getAllBoardReplyList(boardId);
+    
+        return resultList;
+    }
 
 }
