@@ -36,7 +36,6 @@
     var clip = null;
     $(document).ready(function() {
         $('#content').redactor();
-        
         /*
         // zeroClipboard 초기화
         clip = new ZeroClipboard.Client();
@@ -55,25 +54,6 @@
         
         // 삭제
         $('#boardDelete').bind('click', function() {
-            /*
-            var options = {
-                buttons: {
-                    "Ok": function () {
-                        $(this).dialog("close");
-                        
-                        $('#readFrm').attr("action", "../board/boardDelete.do");
-                        $('#readFrm').attr("target", "_self");
-                        $('#readFrm').attr("method", "POST");
-                        $('#readFrm').submit();
-                    },
-                    "Cancel": function () {
-                        $(this).dialog("close");
-                    }
-                }   
-            };
-            
-            alertMsg("<spring:message code='blog.label.delete.confirm'/>", options) ;
-            */
             var buttons = {
                 "Ok": function () {
                     $('#readFrm').attr("action", "../board/boardDelete.do");
@@ -81,8 +61,7 @@
                     $('#readFrm').attr("method", "POST");
                     $('#readFrm').submit();
                 },
-                "Cancel": function () {
-                    
+                "Cancel": function () {                    
                 }    
             };
             
@@ -187,54 +166,84 @@
                 dataType: "json",
                 data: parm,
                 success: function(result) {
-                    log(JSON.stringify(result));
-                    // 성공시 처리
+                    log("reply create success : " + JSON.stringify(result));
+                    $('#replyContent').val("");
+                    boardReplyAdd(result);
                 },
                 error: function(result) {
-                    log(JSON.stringify(result));
-                    // 실패시 처리
-                    alertModalMsg("등록이 실패 하였습니다.");
+                    log("reply create error : " + JSON.stringify(result));
+                    alertModalMsg("<spring:message code='blog.error.common.fail'/>");
                 }
             });
         });
         
+        // 댓글 게시판에 추가
+        var boardReplyAdd = function(data) {
+            var replyId = data.replyId;
+            var createUser = data.createUser;
+            var createDt = data.createDt.substring(0, 16);
+            var replyContent = data.replyContent;
+            var userId = data.userId;
+            
+            // 댓글 생성
+            replyHTML = "";
+            replyHTML += '<tr id="'+replyId+'" >';
+            replyHTML += '    <td><strong>' + createUser + "&nbsp;" + createDt + "</strong>";
+            
+            if(userId == "${sessionScope.sessionuser.userId}") {
+                replyHTML += '    <button type="button" class="btn btn-danger"><spring:message code="blog.label.delete"/></button><br>';    
+            } else {
+                replyHTML += '<br>';
+            }
+            
+            replyHTML += replyContent;
+            replyHTML += '    </td>';
+            replyHTML += '</tr>';
+            
+            $('#replyList').append(replyHTML);
+ 
+            // 삭제 바인딩
+            if($('#' + replyId).find('.btn').lenth != 0) {
+                $('#' + replyId).find('.btn').unbind().bind('click', function() {
+                    var buttons = {
+                       "Ok": function () {
+                           log("reply delete action : " + replyId);
+                           
+                           var restUrl = "../board/boardReplyDelete/" + replyId; 
+                           
+                           $.ajax({
+                               url: restUrl,
+                               type: "DELETE",
+                               dataType: "json",
+                               data: "",
+                               success: function(result) {
+                                   log("reply delete success : " + JSON.stringify(result));
+                                   
+                                   if(result == 1) {    // success
+                                       $('#' + replyId).remove();
+                                   }
+                               },
+                               error: function(result) {
+                                   log("reply delete error : " + JSON.stringify(result));
+                               }
+                           });
+                       },
+                       "Cancel": function () {
+                           
+                       }    
+                   };
+                   
+                   alertModalMsg("<spring:message code='blog.label.delete.confirm'/>", buttons);    
+                });
+            }
+        };
         
         // 댓글 목록
         var boardReplyList = function() {
             this.replyRetrieve = function(data) {
-                var replyId, createUser, createDt, replyContent, userId, replyHTML;
-                
                 var len = data.length;
                 for(var i = 0; i < len; i++) {
-                    replyId = data[i].replyId;
-                    createUser = data[i].createUser;
-                    createDt = data[i].createDt.substring(0, 16);
-                    replyContent = data[i].replyContent;
-                    userId = data[i].userId;
-                    
-                    // 댓글 생성
-                    replyHTML = "";
-                    replyHTML += '<tr id="'+replyId+'" >';
-                    replyHTML += '    <td><strong>' + createUser + "&nbsp;" + createDt + "</strong>";
-                    
-                    if(userId == "${sessionScope.sessionuser.userId}") {
-                        replyHTML += '    <button type="button" class="btn btn-danger"><spring:message code="blog.label.delete"/></button><br>';    
-                    } else {
-                        replyHTML += '<br>';
-                    }
-                    
-                    replyHTML += replyContent;
-                    replyHTML += '    </td>';
-                    replyHTML += '</tr>';
-                    
-                    $('#replyList').append(replyHTML);
-         
-                    // 삭제 바인딩
-                    if($('#' + replyId).find('.btn').lenth != 0) {
-                        $('#' + replyId).find('.btn').unbind().bind('click', function() {
-                           log('delete');     
-                        });
-                    }
+                    boardReplyAdd(data[i]);
                 }
             };
             
@@ -251,8 +260,7 @@
                     replyRetrieve(result);
                 },
                 error: function(result) {
-                    log(JSON.stringify(result));
-                    // 실패시 처리
+                    log("reply list error: " + JSON.stringify(result));
                 }
             });
         };
@@ -376,7 +384,7 @@
                     <label class="control-label"></label>
                     <div class="controls">
                         <blockquote>
-                            <p>Reply</p>
+                            <p><spring:message code="blog.label.reply"/></p>
                         </blockquote>
                         <table class="table" id="replyList"></table>
                     </div>
@@ -385,7 +393,7 @@
                     <label class="control-label"></label>
                     <div class="controls">
                         <textarea class="input-xxlarge" id="replyContent" rows="3"></textarea>
-                        <button type="button" class="btn btn-primary" id="boardReplay">Reply Create</button>
+                        <button type="button" class="btn btn-primary" id="boardReplay"><spring:message code="blog.label.replycreate"/></button>
                     </div>
                 </div>
             </fieldset>

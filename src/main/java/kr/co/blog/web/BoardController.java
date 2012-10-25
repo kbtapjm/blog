@@ -671,7 +671,7 @@ public class BoardController {
      */
     @RequestMapping(value = "/boardReplyCreate/{boardId}", method = RequestMethod.POST)
     @ResponseBody
-    public int boardReplyCreate(HttpServletRequest request, 
+    public BoardReply boardReplyCreate(HttpServletRequest request, 
                                 @ModelAttribute BoardReply boardReply,
                                 @PathVariable("boardId") String boardId,
                                 @RequestParam("replyContent") String replyContent) throws Exception {
@@ -683,8 +683,10 @@ public class BoardController {
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("sessionuser");
  
+        String replyId = UUID.randomUUID().toString();
+        
         // 댓글등록
-        boardReply.setReplyId(UUID.randomUUID().toString());
+        boardReply.setReplyId(replyId);
         boardReply.setCreateUser(user.getUserName());
         boardReply.setIp(request.getRemoteAddr());
         boardReply.setReplyContent(replyContent);
@@ -693,7 +695,11 @@ public class BoardController {
         
         int result = boardReplyService.createBoardReply(boardReply);
         
-        return result;
+        if(result > 0) {
+            boardReply = boardReplyService.getBoardReplyByReplyId(replyId);
+        }
+        
+        return boardReply;
     }
     
     /**
@@ -712,6 +718,24 @@ public class BoardController {
         List<BoardReply> resultList = boardReplyService.getAllBoardReplyList(boardId);
     
         return resultList;
+    }
+    
+    /**
+     * 댓글 삭제
+     * @param replyId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardReplyDelete/{replyId}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public int boardReplyDelete(@PathVariable("replyId") String replyId) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardReplyDelete method start~!!!");    
+        }
+        
+        int result = boardReplyService.deleteBoardReply(replyId);
+    
+        return result;
     }
 
 }

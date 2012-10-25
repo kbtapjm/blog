@@ -61,6 +61,25 @@ function getModalHtml(msg, options) {
  * options : 설정
  */
 function alertMsg(msg, options) {
+    
+    /* 호출시 버턴 오프젝트
+    var options = {
+        buttons: {
+            "Ok": function () {
+                $(this).dialog("close");
+                
+                $('#readFrm').attr("action", "../board/boardDelete.do");
+                $('#readFrm').attr("target", "_self");
+                $('#readFrm').attr("method", "POST");
+                $('#readFrm').submit();
+            },
+            "Cancel": function () {
+                $(this).dialog("close");
+            }
+        }   
+    };
+    */
+    
     var default_value =  {
         autoOpen : false,
         width : 350,
