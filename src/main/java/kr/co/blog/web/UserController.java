@@ -41,14 +41,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserController {
     private static Logger log = Logger.getLogger(UserController.class);
     
-    @Autowired 
-    private UserService userService;
-    
-    @Autowired
-    LocaleResolver localeResolver;
-    
-    @Autowired 
-    MessageSourceAccessor messageSourceAccessor; 
+    @Autowired private UserService userService;
+    @Autowired LocaleResolver localeResolver;
+    @Autowired MessageSourceAccessor messageSourceAccessor; 
     
     /**
      *  최초 처음 model 최초 바인딩 하기위함
@@ -105,16 +100,11 @@ public class UserController {
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
     public String createUser(HttpServletRequest request, 
                             Model model, 
-                            @Valid @ModelAttribute User user, 
-                            BindingResult bindingResult, 
+                            @ModelAttribute User user, 
                             SessionStatus sessionStatus,
                             RedirectAttributes redirectAttr) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("userController createUser method start~!!!");    
-        }
-        
-        if(bindingResult.hasErrors()) {
-            return "/user/signUp";
         }
         
         String userId = UUID.randomUUID().toString(); 
@@ -191,7 +181,6 @@ public class UserController {
         String encryptPassword = DES.encrypt(password);
         
         User user = userService.getUserLoginInfo(memberId, encryptPassword); 
-        
         if(user != null) {
             // 패스워드는 암호화 되어있기 때문에 입력값으로 세션에 저장
             user.setPassword(password);
@@ -274,16 +263,11 @@ public class UserController {
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
     public String updateUser(HttpServletRequest request, 
                             Model model, 
-                            @Valid @ModelAttribute User user, 
-                            BindingResult bindingResult, 
+                            @ModelAttribute User user, 
                             SessionStatus sessionStatus,
                             RedirectAttributes redirectAttr) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("userController updateUser method start~!!!");    
-        }
-        
-        if(bindingResult.hasErrors()) {
-            return "redirect:/user/userEdit.do";
         }
         
         String password = user.getPassword();
@@ -443,7 +427,7 @@ public class UserController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/setLocale", method = RequestMethod.GET)
+    @RequestMapping(value = "/setLocale", method = RequestMethod.GET, produces="application/json")
     @ResponseBody
     public Map<String, Object> setLocale(Model model, HttpServletRequest request, HttpServletResponse response, @RequestParam String locale) throws Exception {
         if(log.isDebugEnabled()) {

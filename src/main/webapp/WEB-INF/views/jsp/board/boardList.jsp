@@ -38,14 +38,13 @@
                 data: "",
                 success: function(data) {
                     $('#searchWord').typeahead({
-                        source: data.list,
+                        source: data,
                         property: 'name',
                         items:10,
                         onselect: function (obj) {
                             log("obj : " + obj);
                         }
                     });
-                    
                 },
                 error: function(data) {
                     log(JSON.stringify(data));

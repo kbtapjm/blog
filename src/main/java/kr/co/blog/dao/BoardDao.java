@@ -3,6 +3,7 @@ package kr.co.blog.dao;
 import java.util.List;
 import java.util.Map;
 
+import kr.co.blog.dao.mapper.BoardQuery;
 import kr.co.blog.domain.Board;
 import kr.co.blog.domain.User;
 
@@ -75,7 +76,6 @@ public interface BoardDao {
      * @return
      * @throws Exception
      */
-    //@Select("select * from board")
     @Options(useCache=true)
     @Results(value = {
             @Result(property="boardId", column="boardid"),

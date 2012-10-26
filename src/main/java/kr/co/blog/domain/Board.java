@@ -1,5 +1,8 @@
 package kr.co.blog.domain;
 
+/**
+ * board Domain
+ */
 import java.io.Serializable;
 
 public class Board implements Serializable {

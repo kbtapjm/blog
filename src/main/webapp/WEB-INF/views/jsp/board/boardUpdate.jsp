@@ -125,6 +125,11 @@
                 $(element).parents('.control-group').addClass('success');
             }
         });
+        
+        // 수정 실패시
+        if("${updateResult}" == "N") {
+            alertModalMsg("<spring:message code='blog.error.update.error'/>");
+        }
     });
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->

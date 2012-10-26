@@ -1,3 +1,8 @@
+
+
+var cw = "";    // 가로 넓이
+var ch = "";    // 세로 높이
+
 /*
  * 모달 메세지 출력
  * msg : 메세지
@@ -13,10 +18,15 @@ function alertModalMsg(msg, buttons) {
     });
     
     if(buttons) {
-        $('#selectYes').bind('click', buttons.Ok);
-        $('#selectNo').bind('click', buttons.Cancel);
+        // 함수 bind
+        $('#selectYes').unbind().bind('click', buttons.Ok);
+        $('#selectNo').unbind().bind('click', buttons.Cancel);
+        
+        // 버튼 변경
+        $('#defaultButton').hide();
         $('#changeButton').show();
     }  else {
+        $('#changeButton').hide();
         $('#defaultButton').show();
     }
 }
@@ -126,7 +136,6 @@ function log(str) {
 function setLocale(locale) {
     
     // 1) localeChangeInterceptor를 사용해서 파라미터 세팅
-    //location.href = location.pathname + "?locale=" + locale;
     location.href =  "../user/home.do?locale=" + locale;
     return false;
     
@@ -141,7 +150,7 @@ function setLocale(locale) {
             location.reload();
         },
         error: function(data) {
-            log(data);
+            log("setLocale error : " + data);
         }
     });
 }

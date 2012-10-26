@@ -65,5 +65,4 @@ public class BoardReplyServiceImpl implements BoardReplyService {
         
         return boardReplyDao.deleteBoardReply(replyId);
     }
-    
 }

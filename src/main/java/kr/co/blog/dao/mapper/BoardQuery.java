@@ -1,4 +1,4 @@
-package kr.co.blog.dao;
+package kr.co.blog.dao.mapper;
 
 import java.util.Map;
 

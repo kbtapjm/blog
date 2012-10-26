@@ -55,8 +55,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class BoardController {
     private static Logger log = Logger.getLogger(BoardController.class);
     
-    @Autowired BoardService boardService;
-    @Autowired BoardReplyService boardReplyService;
+    @Autowired private BoardService boardService;
+    @Autowired private BoardReplyService boardReplyService;
     @Autowired MessageSourceAccessor messageSourceAccessor;
     
     /**
@@ -89,9 +89,8 @@ public class BoardController {
     @RequestMapping(value = "/boardCreateProc", method = RequestMethod.POST)
     public String boardCreateProc(HttpServletRequest request, 
                             Model model, 
-                            @Valid @ModelAttribute Board board, 
+                            @ModelAttribute Board board, 
                             @RequestParam("attachFile") MultipartFile file,
-                            BindingResult bindingResult,
                             RedirectAttributes redirectAttr) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("BoardController boardCreateProc method start~!!!");    
@@ -132,7 +131,7 @@ public class BoardController {
     @RequestMapping(value = "/boardList", method = RequestMethod.GET)
     public String boardList(Model model, @RequestParam Map<String, Object> params) throws Exception {
         if(log.isDebugEnabled()) {
-            log.debug("BoardController getAllBoard method start~!!!");    
+            log.debug("BoardController boardList method start~!!!");    
         }
         
         String pageNo = CommonUtil.Nvl((String)params.get("pageNo"), "1" );
@@ -167,7 +166,7 @@ public class BoardController {
     @RequestMapping(value = "/boardSearchList", method = RequestMethod.POST)
     public String boardSearchList(Model model, @RequestParam Map<String, Object> params) throws Exception {
         if(log.isDebugEnabled()) {
-            log.debug("BoardController getAllBoard method start~!!!");    
+            log.debug("BoardController boardSearchList method start~!!!");    
         }
         
         String pageNo = CommonUtil.Nvl((String)params.get("pageNo"), "1" );
@@ -201,17 +200,14 @@ public class BoardController {
      */
     @RequestMapping(value = "/getBoardTypeheadSubject", method = RequestMethod.GET, produces="application/json")
     @ResponseBody
-    public Map<String, Object> getBoardTypeheadSubject(Model model) throws Exception {
+    public List<String> getBoardTypeheadSubject(Model model) throws Exception {
         if(log.isDebugEnabled()) {
-            log.debug("BoardController boardTypeheadSubject method start~!!!");    
+            log.debug("BoardController getBoardTypeheadSubject method start~!!!");    
         }
         
         List<String> list = boardService.getBoardTypeheadSubject();
         
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("list", list);
-        
-        return resultMap;
+        return list;
     }
     
     /**
@@ -224,7 +220,7 @@ public class BoardController {
     @RequestMapping(value = "/boardRead", method = RequestMethod.POST)
     public String boardRead(Model model, @RequestParam Map<String, Object> params) throws Exception {
         if(log.isDebugEnabled()) {
-            log.debug("BoardController getAllBoard method start~!!!");    
+            log.debug("BoardController boardRead method start~!!!");    
         }
         
         String boardId = params.get("boardId").toString();
@@ -258,7 +254,7 @@ public class BoardController {
         try {
             FileUtil.fileDownload(response, new File(downFileName));    
         } catch (Exception e) {
-            log.debug("download error : " + e.toString());
+            log.debug("fileDownload error : " + e.toString());
         }
     }
     
@@ -277,7 +273,7 @@ public class BoardController {
         
         String boardId = params.get("boardId").toString();
         
-        // 게시글 상세정보
+        // 수정 할 게시글 정보 얻기
         Board board = boardService.getBoardByBoardId(boardId);
         
         model.addAttribute("board", board);
@@ -300,7 +296,7 @@ public class BoardController {
     @RequestMapping(value = "/boardUpdateProc", method = RequestMethod.POST)
     public String boardUpdateProc(HttpServletRequest request, 
                             Model model, 
-                            @Valid @ModelAttribute Board board, 
+                            @ModelAttribute Board board, 
                             @RequestParam("attachFile") MultipartFile file,
                             RedirectAttributes redirectAttr,
                             @RequestParam Map<String, Object> params) throws Exception {
@@ -339,7 +335,7 @@ public class BoardController {
             model.addAttribute("board", board);
             model.addAttribute("params", params);
             
-            redirectAttr.addAttribute("result", "N");
+            redirectAttr.addAttribute("updateResult", "N");
             return "/board/boardUpdate";
         }
         
@@ -361,7 +357,7 @@ public class BoardController {
      * @throws Exception
      */
     @RequestMapping(value = "/boardDelete", method = RequestMethod.POST)
-    public String boardDelete(Model model, @RequestParam Map<String, Object> params, @Valid @ModelAttribute Board board) throws Exception {
+    public String boardDelete(Model model, @RequestParam Map<String, Object> params, @ModelAttribute Board board, RedirectAttributes redirectAttr) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("BoardController boardDelete method start~!!!");    
         }
@@ -382,6 +378,7 @@ public class BoardController {
             
             model.addAttribute("board", board);
             model.addAttribute("params", params);
+            redirectAttr.addAttribute("deleteResult", "N");
             
             return "/board/boardRead";
         }
@@ -464,7 +461,7 @@ public class BoardController {
     @ResponseBody
     public  Map<String, Object> boardEmailSendProc(HttpServletRequest request, Model model, @RequestParam Map<String, Object> params) throws Exception {
         if(log.isDebugEnabled()) {
-            log.debug("BoardController boardEmailSend method start~!!!");    
+            log.debug("BoardController boardEmailSendProc method start~!!!");    
         }
         
         // 세션의 유저 정보 가져오기
@@ -669,9 +666,9 @@ public class BoardController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/boardReplyCreate/{boardId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/boardReplyCreate/{boardId}", method = RequestMethod.POST, produces="application/json")
     @ResponseBody
-    public BoardReply boardReplyCreate(HttpServletRequest request, 
+    public Map<String, Object> boardReplyCreate(HttpServletRequest request, 
                                 @ModelAttribute BoardReply boardReply,
                                 @PathVariable("boardId") String boardId,
                                 @RequestParam("replyContent") String replyContent) throws Exception {
@@ -699,7 +696,11 @@ public class BoardController {
             boardReply = boardReplyService.getBoardReplyByReplyId(replyId);
         }
         
-        return boardReply;
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("createResult", (result > 0) ? "Y" : "N");
+        resultMap.put("boardReply", boardReply);
+        
+        return resultMap;
     }
     
     /**
@@ -708,7 +709,7 @@ public class BoardController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/boardReplyList/{boardId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/boardReplyList/{boardId}", method = RequestMethod.GET, produces="application/json")
     @ResponseBody
     public List<BoardReply> boardReplyList(@PathVariable("boardId") String boardId) throws Exception {
         if(log.isDebugEnabled()) {
@@ -726,7 +727,7 @@ public class BoardController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/boardReplyDelete/{replyId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/boardReplyDelete/{replyId}", method = RequestMethod.DELETE, produces="application/json")
     @ResponseBody
     public int boardReplyDelete(@PathVariable("replyId") String replyId) throws Exception {
         if(log.isDebugEnabled()) {

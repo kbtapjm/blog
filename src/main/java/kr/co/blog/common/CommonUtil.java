@@ -5,6 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * 공통유틸
+ * @author jmpark
+ *
+ */
 public class CommonUtil {
     
     /**

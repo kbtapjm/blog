@@ -31,6 +31,9 @@
 <script type="text/javascript"src="${root}/common/plugin/clipboard/ZeroClipboard.js"></script>
 
 <script type="text/javascript">
+
+    // 댓글 갯수
+    var replyListCnt = 0;
     
     // 스크랩 객체 변수
     var clip = null;
@@ -54,6 +57,11 @@
         
         // 삭제
         $('#boardDelete').bind('click', function() {
+            if(replyListCnt > 0) {
+                alertModalMsg("<spring:message code='blog.error.replycount.delete'/>");
+                return false;
+            } 
+            
             var buttons = {
                 "Ok": function () {
                     $('#readFrm').attr("action", "../board/boardDelete.do");
@@ -130,6 +138,7 @@
             
             wr = window.open(winurl,"viewer",'left='+px+',top='+py+',width='+cw+',height='+ch+' scrollbars=yes, status=1, resizable=yes');
         });
+        
         $('#twitter').find('img').css('cursor', 'pointer');
         $('#twitter').bind('click', function() {
             setPopup(1000, 800);
@@ -140,6 +149,7 @@
             
             wr = window.open(winurl,"viewer",'left='+px+',top='+py+',width='+cw+',height='+ch+' scrollbars=yes, status=1, resizable=yes');
         });
+        
         $('#gplus').find('img').css('cursor', 'pointer');
         $('#gplus').bind('click', function() {
             setPopup(1000, 800);
@@ -167,8 +177,15 @@
                 data: parm,
                 success: function(result) {
                     log("reply create success : " + JSON.stringify(result));
-                    $('#replyContent').val("");
-                    boardReplyAdd(result);
+                    
+                    var createResult = result.createResult;
+                    if(createResult == "Y") {
+                        boardReplyAdd(result.boardReply);
+                        $('#replyContent').val("");
+                        boardReplyCnt();
+                    } else {
+                        alertModalMsg("<spring:message code='blog.error.create.error'/>");
+                    }
                 },
                 error: function(result) {
                     log("reply create error : " + JSON.stringify(result));
@@ -191,7 +208,7 @@
             replyHTML += '    <td><strong>' + createUser + "&nbsp;" + createDt + "</strong>";
             
             if(userId == "${sessionScope.sessionuser.userId}") {
-                replyHTML += '    <button type="button" class="btn btn-danger"><spring:message code="blog.label.delete"/></button><br>';    
+                replyHTML += '    &nbsp;<button type="button" class="btn btn-danger"><spring:message code="blog.label.delete"/></button><br>';    
             } else {
                 replyHTML += '<br>';
             }
@@ -203,12 +220,11 @@
             $('#replyList').append(replyHTML);
  
             // 삭제 바인딩
-            if($('#' + replyId).find('.btn').lenth != 0) {
-                $('#' + replyId).find('.btn').unbind().bind('click', function() {
+            var replyBtn = $('#' + replyId).find('.btn');
+            if(replyBtn.lenth != 0) {
+                replyBtn.unbind().bind('click', function() {
                     var buttons = {
                        "Ok": function () {
-                           log("reply delete action : " + replyId);
-                           
                            var restUrl = "../board/boardReplyDelete/" + replyId; 
                            
                            $.ajax({
@@ -218,23 +234,34 @@
                                data: "",
                                success: function(result) {
                                    log("reply delete success : " + JSON.stringify(result));
-                                   
-                                   if(result == 1) {    // success
+                                   // success
+                                   if(result == 1) {
                                        $('#' + replyId).remove();
+                                       boardReplyCnt();
+                                   } else {
+                                       alertModalMsg("<spring:message code='blog.error.delete.error'/>");
                                    }
                                },
                                error: function(result) {
                                    log("reply delete error : " + JSON.stringify(result));
+                                   alertModalMsg("<spring:message code='blog.error.common.fail'/>");
                                }
                            });
                        },
                        "Cancel": function () {
-                           
                        }    
                    };
                    
                    alertModalMsg("<spring:message code='blog.label.delete.confirm'/>", buttons);    
                 });
+            }
+        };
+        
+        // 댓글 카운트 얻기
+        var boardReplyCnt = function() {
+            replyListCnt = $('#replyList tr').length;
+            if(replyListCnt > 0) {
+                $('#replyCnt').html("(" + replyListCnt + ")");    
             }
         };
         
@@ -256,16 +283,23 @@
                 dataType: "json",
                 data: "",
                 success: function(result) {
-                    log(JSON.stringify(result));
+                    log("reply list success : " + JSON.stringify(result));
                     replyRetrieve(result);
+                    boardReplyCnt();
                 },
                 error: function(result) {
-                    log("reply list error: " + JSON.stringify(result));
+                    log("reply list error : " + JSON.stringify(result));
                 }
             });
         };
         
         boardReplyList();
+        
+        // 삭제 실패시
+        if("${deleteResult}" == "N") {
+            alertModalMsg("<spring:message code='blog.error.delete.error'/>");
+        }
+        
     });
 
     // 클립보드 복사
@@ -384,7 +418,7 @@
                     <label class="control-label"></label>
                     <div class="controls">
                         <blockquote>
-                            <p><spring:message code="blog.label.reply"/></p>
+                            <p><spring:message code="blog.label.reply"/><span id="replyCnt"></span></p>
                         </blockquote>
                         <table class="table" id="replyList"></table>
                     </div>

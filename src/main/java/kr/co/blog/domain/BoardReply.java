@@ -2,6 +2,11 @@ package kr.co.blog.domain;
 
 import java.io.Serializable;
 
+/**
+ * boardReply Domain
+ * @author jmpark
+ *
+ */
 public class BoardReply implements Serializable {
     private static final long serialVersionUID = 4999179514811531517L;
     

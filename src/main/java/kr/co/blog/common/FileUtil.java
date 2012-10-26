@@ -14,7 +14,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 
+ * 파일 처리
  * @author kbtapjm
  *
  */
@@ -36,6 +36,12 @@ public class FileUtil extends HttpServletRequestWrapper {
         boolean uploadResult = false;
         
         try {
+            // 파일 디렉토리 없을시 생성
+            File checkPath = new File(PATH);
+            if(!checkPath.exists()) {
+                checkPath.mkdir();
+            } 
+            
             fileName = file.getOriginalFilename();
             
             File uploadedFile = new File(PATH, fileName);
