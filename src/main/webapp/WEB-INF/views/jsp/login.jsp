@@ -27,18 +27,22 @@
     $(document).ready(function() {
         getLogin();
         
+        // 회원가입
         $('#signup').bind('click', function() {
             location.href = "../user/signUp.do";
         });
         
+        // 아이디 저장
         $('#idSave').bind('click', function() {
             saveMemberId();
         });
         
         // Popover 
+        /*
         $('#login input').hover(function() {
             $(this).popover('show');
         });
+        */
 
         // Validation
         $("#login").validate({
@@ -71,6 +75,7 @@
             }
         });
         
+        // 로그인 실패시
         if("${result}" == "N") {
             $('#loginFail').show();
         }
@@ -135,34 +140,34 @@
         <div class="content">
             <form class="form-horizontal" id="login" method="post" action="../user/loginProc.do" novalidate="novalidate">
                 <fieldset>
-                    <legend><spring:message code="blog.label.login"/></legend>
+                    <legend><strong><spring:message code="blog.label.login"/></strong></legend>
                     <div class="alert alert-error" style="display:none;" id="loginFail">
-					   <button type="button" class="close" data-dismiss="alert">×</button>
+					   <button type="button" class="close" data-dismiss="alert" title="<spring:message code="blog.label.close"/>">×</button>
 					   <strong>Error!</strong> <spring:message code="blog.error.login.fail"/>
 					</div>
                     <div class="control-group">
                         <label class="control-label"><spring:message code="blog.label.memberid"/></label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="memberId"
-                                name="memberId" rel="popover"
-                                data-content="Enter your ID"
-                                data-original-title="ID" placeholder="Enter your ID">
+                            <input type="text" class="input-xlarge" id="memberId" name="memberId" rel="popover"
+                                data-content="<spring:message code='blog.label.input.id'/>"
+                                data-original-title="<spring:message code="blog.label.memberid"/>" placeholder="<spring:message code='blog.label.input.id'/>">
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label"><spring:message code="blog.label.password"/></label>
                         <div class="controls">
                             <input type="password" class="input-xlarge" id="password" name="password"
-                                rel="popover" data-content="6 characters or more! Be tricky"
-                                data-original-title="Password"
-                                placeholder="6 characters or more! Be tricky">
+                                rel="popover" data-content="<spring:message code='blog.label.input.password'/>"
+                                data-original-title="<spring:message code="blog.label.password"/>"
+                                placeholder="<spring:message code='blog.label.input.password'/>">
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label"></label>
                         <div class="controls">
-                            <label class="checkbox"> <input type="checkbox" id="idSave" name="idSave"><spring:message code="blog.label.remember.id"/>&nbsp;&nbsp; <a href="../user/userSearch.do" ><spring:message code="blog.label.find.membership"/></a></label>
-                            <button id="signin" class="btn btn-success" rel="tooltip" title="first tooltip"><spring:message code="blog.label.login"/></button>
+                            <label class="checkbox"> <input type="checkbox" id="idSave" name="idSave"><spring:message code="blog.label.remember.id"/>
+                            &nbsp;&nbsp; <a href="../user/userSearch.do" ><spring:message code="blog.label.find.membership"/></a></label>
+                            <button id="signin" class="btn btn-success"><spring:message code="blog.label.login"/></button>
                             <a href="#" id="signup" class="btn btn-primary" data-bitly-type="bitly_hover_card"><spring:message code="blog.label.signup"/></a>
                         </div>
                     </div>

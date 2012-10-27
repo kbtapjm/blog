@@ -110,7 +110,7 @@
         <input type="hidden" name="boardId" id="boardId" value="${boardId}">
         
             <fieldset>
-                <legend><spring:message code="blog.label.emailsend"/></legend>
+                <legend><strong><spring:message code="blog.label.emailsend"/></strong></legend>
                 <div class="control-group">
                     <label class="control-label" for="to"><spring:message code="blog.label.to"/></label>
                     <div class="controls">

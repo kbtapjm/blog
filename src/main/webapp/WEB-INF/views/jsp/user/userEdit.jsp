@@ -25,10 +25,12 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+        // 취소
         $('#cancel').bind('click', function() {
             location.href = "../user/userInfo.do";
         });
         
+        // 성별
         $('#gender').val("${user.gender}");
         
         // Validation(http://docs.jquery.com/Plugins/Validation/validate#options)   
@@ -104,7 +106,7 @@
         <form class="form-horizontal" id="registerHere" method='post' action='../user/updateUser.do'>
             <input type="hidden" name="userId" value="${user.userId}">
             <fieldset>
-                <legend><spring:message code="blog.label.user.edit"/></legend>
+                <legend><strong><spring:message code="blog.label.user.edit"/></strong></legend>
                 <div class="control-group">
                     <label class="control-label"><spring:message code="blog.label.memberid"/></label>
                     <div class="controls">
@@ -115,44 +117,40 @@
                     <label class="control-label" for=""><spring:message code="blog.label.password"/></label>
                     <div class="controls">
                         <input type="password" class="input-medium" id="password" name="password"
-                            rel="popover" data-content="6 characters or more! Be tricky"
-                            data-original-title="Password" value="${user.password}" maxlength="12">
+                            rel="popover" data-content="<spring:message code='blog.label.input.password'/>"
+                            data-original-title="<spring:message code='blog.label.password'/>" value="${user.password}"  maxlength="12">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label"><spring:message code="blog.label.confirm.password"/></label>
                     <div class="controls">
                         <input type="password" class="input-medium" id="cpassword" name="cpassword"
-                            rel="popover"
-                            data-content="Re-enter your password for confirmation."
-                            data-original-title="Re-Password" value="" maxlength="12">
+                            rel="popover" data-content="<spring:message code='blog.label.input.confirm.password'/>"
+                            data-original-title="<spring:message code='blog.label.confirm.password'/>" value="" maxlength="12">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label"><spring:message code="blog.label.name"/></label>
                     <div class="controls">
                         <input type="text" class="input-xlarge" id="userName"
-                            name="userName" rel="popover"
-                            data-content="Enter your first and last name."
-                            data-original-title="Full Name" value="${user.userName}" maxlength="50">
+                            name="userName" rel="popover" data-content="<spring:message code='blog.label.input.name'/>"
+                            data-original-title="<spring:message code='blog.label.name'/>" value="${user.userName}" maxlength="50">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label"><spring:message code="blog.label.email"/></label>
                     <div class="controls">
-                        <input type="text" class="input-xlarge" id="email"
-                            name="email" rel="popover"
-                            data-content="What’s your email address?"
-                            data-original-title="Email" value="${user.email}" maxlength="30">
+                        <input type="text" class="input-xlarge" id="email" name="email" 
+                            rel="popover" data-content="<spring:message code='blog.label.input.email.address'/>"
+                            data-original-title=<spring:message code='blog.label.email'/> maxlength="30" value="${user.email}">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label"><spring:message code="blog.label.birthday"/></label>
                     <div class="controls">
-                        <input type="text" class="input-small" id="birthday"
-                            name="birthday" rel="popover"
-                            data-content="Enter your birthday(19820101)"
-                            data-original-title="Birthday" value="${user.birthday}" maxlength="8">
+                        <input type="text" class="input-small" id="birthday" name="birthday" 
+                            rel="popover" data-content="<spring:message code='blog.label.input.birthdy'/>(19820000)"
+                            data-original-title="<spring:message code='blog.label.birthday'/>" value="${user.birthday}" maxlength="8">
                     </div>
                 </div>
                 <div class="control-group">

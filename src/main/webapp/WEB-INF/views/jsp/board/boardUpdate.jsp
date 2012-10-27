@@ -153,11 +153,11 @@
             <input type="hidden" name="oldFileSize" id="oldFileSize" value="${board.fileSize}">
             
             <fieldset>
-                <legend><spring:message code="blog.label.update"/></legend>
+                <legend><strong><spring:message code="blog.label.update"/></strong></legend>
                 <div class="control-group">
                     <label class="control-label" for="title"><spring:message code="blog.label.subject"/></label>
                     <div class="controls">
-                        <input type="text" class="input-xlarge" id="subject" name="subject" value="${board.subject}">
+                        <input type="text" class="input-xxxlarge" id="subject" name="subject" value="${board.subject}">
                     </div>
                 </div>
                 <div class="control-group">

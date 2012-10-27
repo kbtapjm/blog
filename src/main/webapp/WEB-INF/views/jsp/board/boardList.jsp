@@ -25,6 +25,7 @@
 
 <script type="text/javascript">
 	$(function() { 
+	    // 검색타입
 	    $('#searchType').val('${params.searchType}');
 	    
 	    // typehead
@@ -56,7 +57,7 @@
 	});
 	
     $(document).ready(function() {
-        // 게시글 등록폼
+        // 게시글 등록 화면
         $('#boardCreate').bind('click', function() {
             location.href = "../board/boardCreate.do";
         });
@@ -80,10 +81,10 @@
             
             var buttons = {
                 "Ok": function () {
-                    $('#searchFrm').attr("action", "../board/boardMultiDelete.do");
-                    $('#searchFrm').attr("target", "_self");
-                    $('#searchFrm').attr("method", "POST");
-                    $('#searchFrm').submit();    
+                    $('#listFrm').attr("action", "../board/boardMultiDelete.do");
+                    $('#listFrm').attr("target", "_self");
+                    $('#listFrm').attr("method", "POST");
+                    $('#listFrm').submit();    
                 },
                 "Cancel": function () {
                      
@@ -95,10 +96,10 @@
         
         // 엑셀저장
         $('#boardExcelSave').bind('click', function() {
-            $('#searchFrm').attr("action", "../board/boardExcelSave.do");
-            $('#searchFrm').attr("target", "_self");
-            $('#searchFrm').attr("method", "POST");
-            $('#searchFrm').submit();    
+            $('#listFrm').attr("action", "../board/boardExcelSave.do");
+            $('#listFrm').attr("target", "_self");
+            $('#listFrm').attr("method", "POST");
+            $('#listFrm').submit();    
         });
         
         // pdf저장
@@ -121,15 +122,15 @@
     // 게시글 상세조회
     function boardRead(boardId) {
         $('#boardId').val(boardId);
-        $('#searchFrm').attr("action", "../board/boardRead.do");
-        $('#searchFrm').attr("target", "_self");
-        $('#searchFrm').submit();
+        $('#listFrm').attr("action", "../board/boardRead.do");
+        $('#listFrm').attr("target", "_self");
+        $('#listFrm').submit();
     }
     
     // 페이지 이동
     function goPage(page) {
         $('#pageNo').val(page);
-        $('#searchFrm').submit();
+        $('#listFrm').submit();
     }
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -144,10 +145,10 @@
     <!-- contents 영역 -->
     <div class="container">
         <fieldset>
-            <legend><spring:message code="blog.label.list"/></legend>
+            <legend><strong><spring:message code="blog.label.list"/></strong></legend>
 
             <!--  검색영역  start-->
-            <form class="well well-small  form-search" id="searchFrm" method="POST" action="../board/boardSearchList.do">
+            <form class="well well-small  form-search" id="listFrm" method="POST" action="../board/boardSearchList.do">
                 <input type="hidden" name="pageNo" id="pageNo" value="${params.pageNo }">
                 <input type="hidden" name="pageSize" id="pageSize" value="${params.pageSize }">
                 <input type="hidden" name="boardId" id="boardId" value="">
@@ -208,7 +209,6 @@
 		                                   
 		                        </c:otherwise>
 		                    </c:choose>
-                            
                             ${resultList.subject}
                             </a>
                         </td>

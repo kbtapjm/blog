@@ -33,10 +33,10 @@
                     </c:if>
                     <li class="divider-vertical"></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-bitly-type="bitly_hover_card">Language <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-bitly-type="bitly_hover_card"><spring:message code="blog.label.language"/><b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#" onclick="setLocale('ko_KR')" data-bitly-type="bitly_hover_card">Korean</a></li>
-                            <li><a href="#" onclick="setLocale('en_US')" data-bitly-type="bitly_hover_card">Enghish</a></li>
+                            <li><a href="#" onclick="setLocale('ko_KR')" data-bitly-type="bitly_hover_card"><spring:message code="blog.label.language.korean"/></a></li>
+                            <li><a href="#" onclick="setLocale('en_US')" data-bitly-type="bitly_hover_card"><spring:message code="blog.label.language.english"/></a></li>
                         </ul>
                     </li>
                 </ul>

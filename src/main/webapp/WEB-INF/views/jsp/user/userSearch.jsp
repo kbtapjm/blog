@@ -25,6 +25,8 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+        
+        // 로그인 화면
         $('#login').bind('click', function() {
             location.href = "../user/login.do";
         });
@@ -153,17 +155,17 @@
         <div class="content">
             <form class="form-horizontal" id="idSearchFrm" method="post" action="" novalidate="novalidate">
                 <fieldset>
-                    <legend><spring:message code="blog.label.find.id"/></legend>
+                    <legend><strong><spring:message code="blog.label.find.id"/></strong></legend>
                     <div class="control-group">
                         <label class="control-label"><spring:message code="blog.label.email"/></label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="email" name="email"  placeholder="Enter your email">
+                            <input type="text" class="input-xlarge" id="email" name="email"  placeholder="<spring:message code='blog.label.input.email.address'/>">
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label"><spring:message code="blog.label.name"/></label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="userNameId" name="userNameId"  placeholder="Enter your name">
+                            <input type="text" class="input-xlarge" id="userNameId" name="userNameId"  placeholder="<spring:message code='blog.label.input.name'/>">
                             <span class="help-inline" id="emailResult"></span>
                         </div>
                     </div>
@@ -177,17 +179,17 @@
             </form>
             <form class="form-horizontal" id="pwdSearchFrm" method="post" action="" novalidate="novalidate">
                 <fieldset>
-                    <legend><spring:message code="blog.label.find.password"/></legend>
+                    <legend><strong><spring:message code="blog.label.find.password"/></strong></legend>
                     <div class="control-group">
                         <label class="control-label"><spring:message code="blog.label.memberid"/></label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="memberId" name="memberId"  placeholder="Enter your id">
+                            <input type="text" class="input-xlarge" id="memberId" name="memberId"  placeholder="<spring:message code='blog.label.input.id'/>">
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label"><spring:message code="blog.label.name"/></label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="userName" name="userName"  placeholder="Enter your name">
+                            <input type="text" class="input-xlarge" id="userName" name="userName"  placeholder="<spring:message code='blog.label.input.name'/>">
                             <span class="help-inline" id="passwrodlResult"></span>
                         </div>
                     </div>
@@ -195,7 +197,7 @@
                         <label class="control-label"></label>
                         <div class="controls">
                             <button type="submit" class="btn btn-primary"><spring:message code="blog.label.search"/></button>
-                            <button type="button" class="btn" id="login"><spring:message code="blog.label.login"/></button>
+                            <button type="button" class="btn" id="login"><spring:message code="blog.label.login.page"/></button>
                         </div>
                     </div>
                 </fieldset>

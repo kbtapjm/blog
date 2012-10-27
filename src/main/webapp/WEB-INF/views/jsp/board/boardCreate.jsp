@@ -142,11 +142,11 @@
     <div class="container">
         <form class="form-horizontal" id="inputFrm" method="POST" action="../board/boardCreateProc.do" enctype="multipart/form-data">
             <fieldset>
-                <legend><spring:message code="blog.label.create"/></legend>
+                <legend><strong><spring:message code="blog.label.create"/></strong></legend>
                 <div class="control-group">
                     <label class="control-label" for="title"><spring:message code="blog.label.subject"/></label>
                     <div class="controls">
-                        <input type="text" class="input-xlarge" id="subject" name="subject">
+                        <input type="text" class="input-xxxlarge" id="subject" name="subject">
                     </div>
                 </div>
                 <div class="control-group">

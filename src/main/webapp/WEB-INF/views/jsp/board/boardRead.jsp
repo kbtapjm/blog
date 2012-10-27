@@ -262,6 +262,8 @@
             replyListCnt = $('#replyList tr').length;
             if(replyListCnt > 0) {
                 $('#replyCnt').html("(" + replyListCnt + ")");    
+            } else {
+                $('#replyCnt').html("");
             }
         };
         
@@ -299,7 +301,6 @@
         if("${deleteResult}" == "N") {
             alertModalMsg("<spring:message code='blog.error.delete.error'/>");
         }
-        
     });
 
     // 클립보드 복사
@@ -354,12 +355,12 @@
             <input type="hidden" name="pageUrl" id="pageUrl" value="${board.pageUrl}">
         
             <fieldset>
-                <legend><spring:message code="blog.label.read"/></legend>
+                <legend><strong><spring:message code="blog.label.read"/></strong></legend>
                 <div id="print_div">
                 <div class="control-group">
                     <label class="control-label" for="title"><spring:message code="blog.label.subject"/></label>
                     <div class="controls">
-                        <span class="input-xxlarge uneditable-input">${board.subject}</span>
+                        <span class="input-xxxlarge uneditable-input">${board.subject}</span>
                     </div>
                 </div>
                 <div class="control-group">
@@ -407,9 +408,9 @@
                         <button type="button" class="btn btn-info" id="boardScrap"><spring:message code="blog.label.scrap"/></button>
                         
                         <div align="right">
-                            <a id="facebook"><img src="${root}/common/images/facebook.png"alt="facebook"></a>
-                            <a id="twitter"><img src="${root}/common/images/twitter.png" alt="twitter"></a> 
-                            <a id="gplus"><img src="${root}/common/images/gplus.png" alt="gplus"></a>
+                            <a id="facebook"><img src="${root}/common/images/facebook.png" title="facebook"></a>
+                            <a id="twitter"><img src="${root}/common/images/twitter.png" title="twitter"></a> 
+                            <a id="gplus"><img src="${root}/common/images/gplus.png" title="gplus"></a>
                         </div>
                         &nbsp;&nbsp;&nbsp;
                     </div>

@@ -389,7 +389,7 @@ public class UserController {
     }
     
     /**
-     * 유저정보조회(비밀번호찾기)
+     * 유저정보조회(비밀번호찾기) -> 이메일 전송 처리로 변경 필요
      * @param model
      * @param memberId
      * @param userName

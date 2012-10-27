@@ -61,7 +61,7 @@
     <div class="container">
         <form class="form-horizontal" method='get' action='../user/userEdit.do'>
             <fieldset>
-                <legend><spring:message code="blog.label.userInfo"/></legend>
+                <legend><strong><spring:message code="blog.label.userInfo"/></strong></legend>
                 <div class="control-group">
                     <label class="control-label" for="title"><spring:message code="blog.label.memberid"/></label>
                     <label class="control-label" for="title">${user.memberId}</label>

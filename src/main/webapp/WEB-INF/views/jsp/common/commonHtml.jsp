@@ -7,7 +7,7 @@
 <!-- Modal popup -->
 <div style="display:none;" class="modal hide fade in" id="errModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="<spring:message code="blog.label.close"/>">×</button>
         <h3 id="myModalLabel"><spring:message code="blog.label.notification"/></h3>
     </div>
     <div class="modal-body">
@@ -17,11 +17,11 @@
     </div>
     <div class="modal-footer">
         <div id="changeButton" style="display:none;">
+	        <button id="selectYes" class="btn btn-primary" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">
+                <spring:message code="blog.label.select.yes"/>
+            </button>
 	        <button id="selectNo" class="btn" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">
 	            <spring:message code="blog.label.select.no"/>
-	        </button>
-	        <button id="selectYes" class="btn btn-primary" data-dismiss="modal" data-bitly-type="bitly_hover_card" aria-hidden="true">
-	            <spring:message code="blog.label.select.yes"/>
 	        </button>
         </div>
         <div id="defaultButton" style="display:none;">
@@ -29,7 +29,6 @@
                 <spring:message code="blog.label.close"/>
             </button>
         </div>
-        
     </div>
 </div>
 
