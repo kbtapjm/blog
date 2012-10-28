@@ -52,7 +52,7 @@
             var pageUrl = $('#pageUrl').val();
             if(pageUrl.length == 0) return false; 
             
-            var qrApi = "http://chart.apis.google.com/chart?cht=qr&chs=300x300&chl="+encodeURIComponent(pageUrl);
+            var qrApi = "http://chart.apis.google.com/chart?cht=qr&chs=250x250&chl="+encodeURIComponent(pageUrl);
             
             $('#qrcodeImg').attr("src", qrApi);
         };
@@ -393,16 +393,19 @@
 	                       <c:param name="fileName" value="${board.fileName}"></c:param>
 	                    </c:url>  
 	                    <a href="${downURL}">${board.fileName}</a>
+	                    <c:if test="${fn:length(board.fileName) != 0}"> 
+					        &nbsp;(${attachFileSize})
+					    </c:if>
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="attachFile"><spring:message code="blog.label.qrcode"/></label>
-                    <div class="controls">
-                        <img id="qrcodeImg" alt="" src="">
+                   <label class="control-label" for="qrcode"><spring:message code="blog.label.qrcode"/></label>
+                   <div class="controls">
+                       <img id="qrcodeImg" alt="" src="">
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="attachFile"></label>
+                    <label class="control-label" for="views"></label>
                     <div class="controls">
                         ${board.user.userName}(${board.user.memberId})&nbsp;&nbsp;${fn:substring(board.createDt, 0, 16)}
                         &nbsp;&nbsp;&nbsp;&nbsp;

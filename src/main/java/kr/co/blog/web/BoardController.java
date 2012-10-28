@@ -232,6 +232,7 @@ public class BoardController {
         
         model.addAttribute("board", board);
         model.addAttribute("params", params);
+        model.addAttribute("attachFileSize", FileUtil.getFileSize(board.getFileSize()));
         
         return "/board/boardRead";
     }

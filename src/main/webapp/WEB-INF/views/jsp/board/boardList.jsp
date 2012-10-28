@@ -207,7 +207,10 @@
                     </select>
                     <input type="text" name="searchWord" id="searchWord" value="${params.searchWord }" class="input-medium search-query" style="margin: 0 auto;" data-provide="typeahead">
                     <button type="submit" class="btn btn-primary"><spring:message code="blog.label.search"/></button>
+                    
+                    <!--  상세검색
                     <button type="button" class="btn btn-info" id="searchDetail"><spring:message code="blog.label.search.detail"/></button>
+                     -->
                 </div>
              </form>
             <!--  검색영역  end-->
