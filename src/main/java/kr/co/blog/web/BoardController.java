@@ -106,7 +106,6 @@ public class BoardController {
         }
         
         board.setBoardId(UUID.randomUUID().toString());
-        board.setUrlType("1");
         board.setIp(request.getRemoteAddr());
         board.setFileName(file.getOriginalFilename());
         board.setFileSize((int)file.getSize());

@@ -28,7 +28,7 @@
     $(document).ready(function() {
         
         // youtube 동영상
-        $("#more").YouTubePopup({youtubeId: 'VuC0i4xTyrI', title: 'Welcome' });
+        $("#more").YouTubePopup({youtubeId: 'bLzGlRWBW38', title: 'Welcome' });
     });
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -43,7 +43,7 @@
     <!-- contents 영역 -->
     <div class="container">
        <div class="hero-unit">
-            <h1>Wellcome to MyBlog</h1>
+            <h1>Wellcome to Blog</h1>
             <p>This is a simple hero unit, a simple jumbotron-style component
                 for calling extra attention to featured content or information.</p>
             <a id="more" class="btn btn-primary">

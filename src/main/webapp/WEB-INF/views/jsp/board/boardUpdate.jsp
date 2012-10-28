@@ -189,6 +189,9 @@
                 </div>
             </fieldset>
         </form>
+        
+        <!-- 하단 footer 영역 -->   
+        <%@ include file="/WEB-INF/views/jsp/layout/footer.jsp" %>
     </div>
     <!-- /container -->
     

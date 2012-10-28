@@ -32,8 +32,8 @@ public interface BoardDao {
      * @return
      * @throws Exception
      */
-    @Insert("insert into board (boardid, subject, content, createuser, createdt, modifydt, count, urltype, ip, pageurl, filename, filesize, userid) " +
-    		"values (#{boardId},#{subject},#{content},#{createUser},now(),now(),0,#{urlType},#{ip},#{pageUrl},#{fileName},#{fileSize},#{userId})")
+    @Insert("insert into board (boardid, subject, content, createuser, createdt, modifydt, count, ip, pageurl, filename, filesize, userid) " +
+    		"values (#{boardId},#{subject},#{content},#{createUser},now(),now(),0,#{ip},#{pageUrl},#{fileName},#{fileSize},#{userId})")
     public int createBoard(Board board) throws Exception;
     
     /**
@@ -52,7 +52,6 @@ public interface BoardDao {
             @Result(property="createDt", column="createdt"),
             @Result(property="modifyDt", column="modifydt"),
             @Result(property="count", column="count"),
-            @Result(property="urlType", column="urltype"),
             @Result(property="ip", column="ip"),
             @Result(property="pageUrl", column="pageurl"),
             @Result(property="fileName", column="filename"),
@@ -85,7 +84,6 @@ public interface BoardDao {
             @Result(property="createDt", column="createdt"),
             @Result(property="modifyDt", column="modifydt"),
             @Result(property="count", column="count"),
-            @Result(property="urlType", column="urltype"),
             @Result(property="ip", column="ip"),
             @Result(property="pageUrl", column="pageurl"),
             @Result(property="fileName", column="filename"),

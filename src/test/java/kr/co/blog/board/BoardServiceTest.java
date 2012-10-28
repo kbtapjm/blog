@@ -47,7 +47,6 @@ public class BoardServiceTest {
         board.setSubject("옵티머스 뷰");
         board.setContent("옵티머스뷰 별로");
         board.setCreateUser("검은몽스");
-        board.setUrlType("1");
         board.setIp("127.0.0.1");
         board.setFileName("test.jpg");
         board.setFileSize(1234);

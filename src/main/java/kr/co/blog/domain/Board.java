@@ -15,7 +15,6 @@ public class Board implements Serializable {
     private String createDt;
     private String modifyDt;
     private int count;
-    private String urlType;
     private String ip;
     private String pageUrl;
     private String fileName;
@@ -29,7 +28,7 @@ public class Board implements Serializable {
 
     public Board(String boardId, String subject, String content,
             String createUser, String createDt, String modifyDt, int count,
-            String urlType, String ip, String pageUrl, String fileName,
+            String ip, String pageUrl, String fileName,
             int fileSize, String userId) {
         super();
         this.boardId = boardId;
@@ -39,7 +38,6 @@ public class Board implements Serializable {
         this.createDt = createDt;
         this.modifyDt = modifyDt;
         this.count = count;
-        this.urlType = urlType;
         this.ip = ip;
         this.pageUrl = pageUrl;
         this.fileName = fileName;
@@ -101,14 +99,6 @@ public class Board implements Serializable {
 
     public void setCount(int count) {
         this.count = count;
-    }
-
-    public String getUrlType() {
-        return urlType;
-    }
-
-    public void setUrlType(String urlType) {
-        this.urlType = urlType;
     }
 
     public String getIp() {

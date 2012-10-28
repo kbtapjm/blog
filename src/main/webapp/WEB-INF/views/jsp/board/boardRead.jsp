@@ -47,6 +47,17 @@
         clip.glue('boardScrap');
         */
         
+        // qrcode
+        var qrcodeCreate = function() {
+            var pageUrl = $('#pageUrl').val();
+            if(pageUrl.length == 0) return false; 
+            
+            var qrApi = "http://chart.apis.google.com/chart?cht=qr&chs=300x300&chl="+encodeURIComponent(pageUrl);
+            
+            $('#qrcodeImg').attr("src", qrApi);
+        };
+        qrcodeCreate();
+        
         // 수정
         $('#boardUpdate').bind('click', function() {
             $('#readFrm').attr("action", "../board/boardUpdate.do");
@@ -385,6 +396,12 @@
                     </div>
                 </div>
                 <div class="control-group">
+                    <label class="control-label" for="attachFile"><spring:message code="blog.label.qrcode"/></label>
+                    <div class="controls">
+                        <img id="qrcodeImg" alt="" src="">
+                    </div>
+                </div>
+                <div class="control-group">
                     <label class="control-label" for="attachFile"></label>
                     <div class="controls">
                         ${board.user.userName}(${board.user.memberId})&nbsp;&nbsp;${fn:substring(board.createDt, 0, 16)}
@@ -433,6 +450,9 @@
                 </div>
             </fieldset>
         </form>
+        
+        <!-- 하단 footer 영역 -->   
+        <%@ include file="/WEB-INF/views/jsp/layout/footer.jsp" %>
     </div>
     <!-- /container -->
     
