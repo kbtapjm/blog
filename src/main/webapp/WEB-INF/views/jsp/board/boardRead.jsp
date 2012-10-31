@@ -272,7 +272,7 @@
         var boardReplyCnt = function() {
             replyListCnt = $('#replyList tr').length;
             if(replyListCnt > 0) {
-                $('#replyCnt').html("(" + replyListCnt + ")");    
+                $('#replyCnt').html(" (" + replyListCnt + ")");    
             } else {
                 $('#replyCnt').html("");
             }
