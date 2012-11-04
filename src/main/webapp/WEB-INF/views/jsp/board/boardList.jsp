@@ -42,6 +42,8 @@
                 dataType: "json",
                 data: "",
                 success: function(data) {
+                    log(JSON.stringify(data));
+                    
                     $('#searchWord').typeahead({
                         source: data,
                         property: 'name',
@@ -198,7 +200,6 @@
                         <i class="icon-calendar icon-large"></i>
                         <span>September 29, 2012 - October 28, 2012</span> <b class="caret" style="margin-top: 8px"></b>
                     </div>
-                
                     <select class="span2" name="searchType" id="searchType">
                         <option value="subject_content"><spring:message code="blog.label.subject"/>+<spring:message code="blog.label.contents"/></option>
                         <option value="subject"><spring:message code="blog.label.subject"/></option>
@@ -260,6 +261,11 @@
                             data-original-title="${resultList.subject}">
                             ${resultList.subject}
                             </a>
+                            
+                            <!-- 댓글 카운트 -->
+                            <c:if test="${resultList.replyCount != 0}">
+                                &nbsp;<span class="badge badge-info">${resultList.replyCount}</span>
+                            </c:if>
                         </td>
                         <td align="center">${resultList.user.userName}</td>
                         <td align="center">${fn:substring(resultList.createDt, 0, 16)}</td>

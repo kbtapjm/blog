@@ -69,6 +69,16 @@ public interface BoardReplyDao {
     public List<BoardReply> getAllBoardReplyList(@Param("boardId") String boardId) throws Exception;
     
     /**
+     * 게시글 댓글 카운트
+     * @param boardId
+     * @return
+     * @throws Exception
+     */
+    @Select("select count(*) as count  from boardreply where boardid=#{boardId}")
+    @Options(useCache=true)
+    public int getAllBoardReplyListCnt(@Param("boardId") String boardId) throws Exception;
+    
+    /**
      * 게시글 댓글 수정
      * @param board
      * @return

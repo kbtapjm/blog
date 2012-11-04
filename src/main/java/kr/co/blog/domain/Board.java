@@ -20,6 +20,7 @@ public class Board implements Serializable {
     private String fileName;
     private int fileSize;
     private String userId;
+    private int replyCount;
     private User user;
     
     public Board() {
@@ -28,8 +29,8 @@ public class Board implements Serializable {
 
     public Board(String boardId, String subject, String content,
             String createUser, String createDt, String modifyDt, int count,
-            String ip, String pageUrl, String fileName,
-            int fileSize, String userId) {
+            String ip, String pageUrl, String fileName, int fileSize,
+            String userId, int replyCount, User user) {
         super();
         this.boardId = boardId;
         this.subject = subject;
@@ -43,6 +44,8 @@ public class Board implements Serializable {
         this.fileName = fileName;
         this.fileSize = fileSize;
         this.userId = userId;
+        this.replyCount = replyCount;
+        this.user = user;
     }
 
     public String getBoardId() {
@@ -139,6 +142,14 @@ public class Board implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public int getReplyCount() {
+        return replyCount;
+    }
+
+    public void setReplyCount(int replyCount) {
+        this.replyCount = replyCount;
     }
 
     public User getUser() {

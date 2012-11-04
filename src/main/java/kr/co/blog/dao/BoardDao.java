@@ -88,6 +88,7 @@ public interface BoardDao {
             @Result(property="pageUrl", column="pageurl"),
             @Result(property="fileName", column="filename"),
             @Result(property="fileSize", column="filesize"),
+            @Result(property="replyCount",  column="boardid", one=@One(select="kr.co.blog.dao.BoardReplyDao.getAllBoardReplyListCnt")),
             @Result(property="user",  column="userid",  javaType=User.class, one=@One(select="kr.co.blog.dao.UserDao.getUserByUserId"))
     }) 
     @SelectProvider(type = BoardQuery.class, method = "getBoardListQuery")
