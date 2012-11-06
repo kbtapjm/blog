@@ -159,6 +159,9 @@
         };
         
         tooltipSet(); 
+        
+        $('.active').removeClass();
+        $('#boardMenu').addClass('active');
     });
     
     // 게시글 상세조회
