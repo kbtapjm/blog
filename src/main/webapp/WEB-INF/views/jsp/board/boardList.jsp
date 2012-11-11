@@ -35,7 +35,7 @@
 	    // typehead
 	    var typehead = function() {
 	        $.ajax({
-                url: "../board/getBoardTypeheadSubject.do",
+                url: "../board/getBoardTypeheadSubject.json",
                 type: "GET",
                 cache: false,
                 async: false,

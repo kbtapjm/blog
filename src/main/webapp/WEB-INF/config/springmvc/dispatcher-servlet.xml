@@ -103,9 +103,9 @@
     <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
         <property name="mediaTypes">
             <map>
-                <entry key="json" value="application/json" />
+                <entry key="html" value="text/html" />
                 <entry key="xml"  value="application/xml" />
-                <entry key="do"   value="text/html" />
+                <entry key="json" value="application/json" />
             </map>
         </property>
         <property name="viewResolvers">
