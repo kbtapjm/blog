@@ -160,7 +160,7 @@
         
         tooltipSet(); 
         
-        $('.active').removeClass();
+        $('.nav .active').removeClass();
         $('#boardMenu').addClass('active');
     });
     
