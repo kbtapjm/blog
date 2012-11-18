@@ -27,7 +27,7 @@
 
 <!-- grid js -->
 <script type="text/javascript" src="${root}/common/js/jquery/grid/grid.locale-en.js"></script>
-<script type="text/javascript" src="${root}/common/js/jquery/grid/jquery.jqGrid.min.js"></script>
+<script type="text/javascript" src="${root}/common/js/jquery/grid/jquery.jqGrid.src.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -236,13 +236,25 @@
             // 로드 완료
             loadComplete: function(data) {
                 log("loadComplete : " + data.rows.length);
+                
+                var lowLen = $("#gridList").jqGrid('getDataIDs').length;
+         
+                 // 번호체크를 선택하였을때만 선택이 되게.
+                for(var i = 1; i <= lowLen; i++) { 
+                    var obj = $('#jqg_gridList_' + i).data('i', i); 
+                
+                    obj.unbind('click').bind('click', function() { 
+                        var x = $(this).data('i'); // 안되면 obj.data('i'); 
+                        log("check click : " + x); 
+                        //$("#gridList").jqGrid('setSelection', 'jqg' + x);
+                        $("#gridList").setSelection(x);   // 5번째 선택
+                    }); 
+                }
+                
             },
             //그리드 선택전
             beforeSelectRow: function(rowid, e) {   
                 log("beforeSelectRow : " + rowid, + " >>>>>> " + e);
-                
-                // 번호체크를 선택하였을때만 선택이 되게.
-                
                 return false;
             },
             // 전체 선택시

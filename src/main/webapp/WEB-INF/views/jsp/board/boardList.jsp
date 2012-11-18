@@ -42,8 +42,6 @@
                 dataType: "json",
                 data: "",
                 success: function(data) {
-                    log(JSON.stringify(data));
-                    
                     $('#searchWord').typeahead({
                         source: data,
                         property: 'name',
