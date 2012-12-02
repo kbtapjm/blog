@@ -43,7 +43,7 @@
     <!-- contents 영역 -->
     <div class="container">
         <div class="hero-unit">
-            <h1>Wellcome to Blog</h1>
+            <h1>Welcome to the blog.</h1>
             <p>This is a simple hero unit, a simple jumbotron-style component
                 for calling extra attention to featured content or information.</p>
             <a id="more" class="btn btn-primary">

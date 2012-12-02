@@ -92,13 +92,36 @@
                 return false;
             }
             
+            var params = [];
+            
             var ret;
             for(var i = 0; i < selarrrow.length; i++) {
-                ret = $("#gridList").delRowData(selarrrow[i]);
+                var ret = $("#gridList").jqGrid('getRowData', selarrrow[i]);
+                var deleteData = {};
+                deleteData.id = ret.id;
+                deleteData.name = ret.name;
+                params.push(deleteData);
+                
+                //ret = $("#gridList").delRowData(selarrrow[i]);
                 $("#gridList").resetSelection();
                 
                 log("삭제 유무 : " + ret);
             }
+            
+            $.ajax({
+                url: "../board/deleteGrid.json",
+                type: "POST",
+                cache: false,
+                async: true,
+                dataType: "json",
+                data: JSON.stringify(params),
+                success: function(data) {
+                    log(JSON.stringify(data));
+                },
+                error: function(data) {
+                    log(JSON.stringify(data));
+                }
+            });
         });
         
          // 특정 로우 수정

@@ -4,9 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -39,6 +38,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -866,6 +866,20 @@ public class BoardController {
         result.put("rows", rowsList);
         
         return result;
+    }
+    
+    @RequestMapping(value = "/deleteGrid", method = RequestMethod.POST)
+    @ResponseBody
+    public List<String> deleteGrid(Model model, @RequestBody List<LinkedHashMap> params) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController deleteGrid method start~!!!");    
+        }
+        
+        log.debug("params : " + params.toString());
+        
+        List<String> list = boardService.getBoardTypeheadSubject();
+        
+        return list;
     }
 
 }

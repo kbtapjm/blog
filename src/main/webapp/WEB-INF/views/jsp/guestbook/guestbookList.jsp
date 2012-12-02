@@ -27,6 +27,7 @@
 <script type="text/javascript" src="${root}/common/js/lib/json2.js"></script>
 <script type="text/javascript" src="${root}/common/js/lib/underscore.js"></script>
 <script type="text/javascript" src="${root}/common/js/lib/backbone.js"></script>
+<script type="text/javascript" src="${root}/common/js/lib/math.uuid.js"></script>
 
 <!-- 
 <script src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
