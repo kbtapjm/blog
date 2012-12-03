@@ -21,6 +21,7 @@
 <script type="text/javascript" src="${root}/common/js/jquery/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="${root}/common/js/jquery/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="${root}/common/js/jquery/jquery.validate.js"></script>
+<script type="text/javascript" src="${root}/common/js/lib/math.uuid.js"></script>
 <script type="text/javascript" src="${root}/common/js/common.js"></script>
 
 <!-- redactor set -->
@@ -178,8 +179,9 @@
             
             if($.trim(replyContent).length == 0) return false; 
             
-            var restUrl = "../board/boardReplyCreate/" + boardId; 
-            var parm = "replyContent=" + encodeURIComponent(replyContent);
+            var restUrl = "../board/boardReplyCreate/" + boardId;
+            var replyId = Math.uuid();
+            var parm = "replyContent=" + encodeURIComponent(replyContent) + "&replyId=" + replyId;
             
             $.ajax({
                 url: restUrl,

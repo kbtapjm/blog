@@ -21,6 +21,7 @@
 <script type="text/javascript" src="${root}/common/js/jquery/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="${root}/common/js/jquery/jquery.validate.js"></script>
 <script type="text/javascript" src="${root}/common/js/jquery/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="${root}/common/js/lib/spin.js"></script>
 <script type="text/javascript" src="${root}/common/js/common.js"></script>
 
 <!-- redactor set -->
@@ -31,6 +32,29 @@
     $(document).ready(function() {
         // 컨텐츠 HTML 에디트 설정
         $('#content').redactor();
+        
+        /*
+        spin 설정
+        var opts = {
+                lines: 10, // The number of lines to draw
+                length: 8, // The length of each line
+                width: 5, // The line thickness
+                radius: 10, // The radius of the inner circle
+                color: '#000', // #rgb or #rrggbb
+                speed: 1.4, // Rounds per second
+                trail: 50, // Afterglow percentage
+                shadow: false // Whether to render a shadow
+               };
+        
+        var target =document.body;
+        var spinner = new Spinner(opts).spin(target);
+        
+        // show
+        target.appendChild(spinner.el);
+        
+        // hide
+        //spinner.stop();
+        */
         
         // 취소
         $('#cancel').bind('click', function() {
