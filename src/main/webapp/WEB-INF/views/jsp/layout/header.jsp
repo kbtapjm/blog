@@ -16,8 +16,9 @@
                 <ul class="nav">
                     <c:if test="${sessionScope.sessionuser != null}">
                     <li id="boardMenu"><a href="../board/boardList.do"><spring:message code="blog.label.board"/></a></li>
-                    <!-- <li id="boardMenu"><a href="../board/boardGridList.do"><spring:message code="blog.label.board"/>2</a></li> -->
+                    <!-- <li id="boardMenu"><a href="../board/boardGridList.do"><spring:message code="blog.label.board"/>2</a></li>
                     <li id="photoGalleryMenu"><a href="../photoGallery/photoGalleryList.do"><spring:message code="blog.label.photos"/></a></li>
+                     -->
                     <li id="guestbookMenu"><a href="../guestbook/guestbookList.do"><spring:message code="blog.label.guestbook"/></a></li>
                     </c:if>
                 </ul>

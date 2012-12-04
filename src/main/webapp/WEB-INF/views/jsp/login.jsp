@@ -21,6 +21,7 @@
 <script type="text/javascript" src="${root}/common/js/jquery/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="${root}/common/js/jquery/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="${root}/common/js/jquery/jquery.validate.js"></script>
+<script type="text/javascript" src="${root}/common/js/jquery/jquery.cookie.js"></script>
 <script type="text/javascript" src="${root}/common/js/common.js"></script>
 
 <script type="text/javascript">
@@ -83,6 +84,7 @@
 
     // 쿠키값 가져오기
     function getCookie(key){
+        /*
         var cook = document.cookie + ";";
         var idx =  cook.indexOf(key, 0);
         var val = "";
@@ -92,14 +94,21 @@
             end = cook.indexOf(";", begin);
             val = unescape( cook.substring(begin, end) );
         }
+        */
+        
+        var val = $.cookie(key);
         return val;
     }
     
     // 쿠키값 설정
-    function setCookie(name, value, expiredays){
+    function setCookie(name, value, expiredays) {
+        $.cookie(name, value, { expires: expiredays, path: '/' });
+        
+        /*
         var today = new Date();
         today.setDate( today.getDate() + expiredays );
         document.cookie = name + "=" + escape( value ) + "; path=/; expires=" + today.toGMTString() + ";";
+        */
     }
     
     // 쿠키에서 로그인 정보 가져오기
@@ -122,7 +131,8 @@
             setCookie("memberId", memberId, 7);
         } else {
             // userid 쿠키 삭제
-            setCookie("memberId", memberId, -1);
+            //setCookie("memberId", memberId, -1);
+            $.removeCookie('memberId');
         }
     }
 </script>
