@@ -32,7 +32,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         createGrid();
-        
+
         // 검색
         $("#btnSearch").click(function(){
             $("#gridList").setGridParam({
@@ -92,6 +92,7 @@
                 return false;
             }
             
+            /*
             var params = [];
             
             var ret;
@@ -107,6 +108,41 @@
                 
                 log("삭제 유무 : " + ret);
             }
+            */
+            
+            var params = {};
+            params.replyId = "111";
+            params.replyContent = "222";
+            params.createUser = "333";
+            params.createDt = "444";
+            params.ip = "555";
+            params.boardId = "666";
+            params.userId = "777";
+            params.data = {};
+            params.data.str = "222222";
+            
+            var str = "replyId=1";
+            str += "&replyContent=2";
+            str += "&createUser=3";
+            str += "&createDt=4";
+            str += "&ip=5";
+            str += "&boardId=6";
+            str += "&userId=7";
+            
+            var obj = {
+                    "name" : "foo",
+                    "age" : "45",
+                    "children" : [ 
+                      {
+                         "name" : "bar",
+                         "age" : "15"
+                      },
+                      {
+                         "name" : "baz",
+                         "age" : "10"     
+                      }
+                    ]
+                } ;
             
             $.ajax({
                 url: "../board/deleteGrid.json",
@@ -114,7 +150,8 @@
                 cache: false,
                 async: true,
                 dataType: "json",
-                data: JSON.stringify(params),
+                contentType: 'application/json',
+                data: JSON.stringify(obj),
                 success: function(data) {
                     log(JSON.stringify(data));
                 },

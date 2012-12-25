@@ -1,0 +1,175 @@
+/* BASE TAGS */
+* {
+	font-family: 돋움;
+	font-size:9pt;
+}
+
+/* HTML */
+html { padding: 0px; margin: 0px; height: 100%; }
+
+/* BODY */
+body {
+    padding: 0;
+    margin:0;
+    background-color: #f2f3f6;
+}
+
+/* FORM */
+form  {
+    padding: 0;
+    margin: 0;
+}
+
+.wrap {
+	width:500px;
+	text-align:left;
+	margin:0;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+fieldset {
+	margin-bottom:5px;
+	border: 1px solid #D4D4D4;
+}
+
+input[type=text], input[type=password], select {
+	margin-top:1px;
+	border:1px solid #c5c5c5;
+	background-color: white;
+	height:15px;
+}
+
+input[type="radio"], input[type="checkbox"]
+{
+	border:0px;
+}
+
+select {
+	height:19px;
+}
+
+.sc-sub-container {
+	border-left: 0px solid #C9C9C9;
+	border-right: 0px solid #C9C9C9;
+	border-bottom: 0px solid #C9C9C9;
+	padding-left: 10px;
+	padding-right: 5px;
+	padding-top: 5px;
+}
+
+.sc-tab-title {
+	float: left;
+	width: 80px;
+	height: 17px;
+	border-left: 1px solid #C9C9C9;
+	border-top: 1px solid #C9C9C9;
+	border-right: 1px solid #C9C9C9;
+	padding-top:3px;
+	margin-left: 2px;
+	overflow: visible;
+}
+
+.sc-tab-title-group {
+	height: 20px;
+}
+
+.sc-tab-title-selected {
+	float: left;
+	width: 80px;
+	height: 27px;
+	border: 0px solid #C9C9C9;
+	background-image: url(../img/tab.png);
+	background-repeat: no-repeat;
+	padding-top: 3px;
+	margin-left: 2px;
+	overflow: visible;
+}
+
+.sc-group-title {
+	border: 0px;
+	padding-left: 10px;
+	height:18px;
+}
+
+.sc-group-container {
+	border: 1px solid #C9C9C9;
+	padding:0;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	margin-bottom: 5px;
+	min-height: 180px;
+}
+
+.sc-field-table
+{
+	margin-bottom:5px;
+}
+
+.sc-field-label {
+	width: 70px;
+	float: left;
+	display: block;
+	margin-top:4px;
+}
+
+
+.sc-field-input {
+	width: 110px;
+}
+
+.sc-field-input-select {
+	font-size:9pt;
+	background-color: #FFF;
+	width: 110px;
+	border: 1px solid #a1a1a1;
+	margin:0px;
+	padding:0px;
+	margin-top:2px;
+}
+
+.sc-field-input-checkbox {
+	background-color: #FFF;
+	border: 1px none #a1a1a1;
+	margin-top:4px;
+}
+
+.sc-field-input-h {
+	width: 100px;
+	margin-right:10px;
+	float: left;
+}
+
+.width-30 {	width: 30px;}
+.width-40 {	width: 40px;}
+.width-50 {	width: 50px;}
+
+.width-80 {	width: 80px;}
+.width-100 {width: 100px;}
+
+/* buttons */
+.buttons {
+	margin-top:10px;
+	margin-bottom:10px;
+	text-align: center;
+	vertical-align: bottom;
+}
+
+.sc-button-group
+{
+	margin-top:10px;
+	margin-bottom:10px;
+	text-align: center;
+	vertical-align: bottom;
+}
+
+.sc-button{
+	height:22px;
+	background-image: url(../img/buttonBackground.jpg);
+	border:1px solid #a1a1a1;
+	cursor: pointer;
+	padding-top:1px;
+	padding-left:10px;
+	padding-right:10px;
+}
