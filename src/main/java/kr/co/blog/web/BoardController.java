@@ -20,7 +20,7 @@ import kr.co.blog.common.MailSend;
 import kr.co.blog.common.PageUtil;
 import kr.co.blog.domain.Board;
 import kr.co.blog.domain.BoardReply;
-import kr.co.blog.domain.Parent;
+import kr.co.blog.domain.Fruit;
 import kr.co.blog.domain.User;
 import kr.co.blog.service.BoardReplyService;
 import kr.co.blog.service.BoardService;
@@ -32,7 +32,6 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.Region;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Controller;
@@ -869,27 +868,38 @@ public class BoardController {
         return result;
     }
     
-    @RequestMapping(value = "/deleteGrid", method = RequestMethod.POST, consumes="application/json")
+    /**
+     * json 테스트
+     * @param model
+     * @param parent
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/jsonTest", method = RequestMethod.POST, consumes="application/json")
     @ResponseBody
-    public List<String> deleteGrid(Model model, @RequestBody Parent parent) throws Exception {
+    public Fruit jsonTest(Model model, @RequestBody Fruit fruit) throws Exception {
         if(log.isDebugEnabled()) {
-            log.debug("BoardController deleteGrid method start~!!!");    
+            log.debug("BoardController jsonTest method start~!!!");    
         }
-        log.debug("getAge : " + parent.getAge());
-        log.debug("getName : " + parent.getName());
-        log.debug("getChildren : " + parent.getChildren().size());
         
+        log.debug("fruit name: " +  fruit.getName()); 
+        log.debug("fruit getType: " +  fruit.getType());
+        
+        String id = String.format("redirect:/questions/%d",  11111);
+        
+        log.debug("id ::  " + id);
+        
+        log.debug("fruit.getGrape().getCountry : " +  fruit.getGrape().getCountry());
+        log.debug("banana length : " + fruit.getBanana().size());
+        
+        /* 처리 방법 2 :  String -> Object */
         /*
         ObjectMapper mapper = new ObjectMapper();
-        Parent parent = mapper.readValue(body, Parent.class);
-        log.debug("aaaaaaaaaaaaaaaaaaaaaaa  :: " + mapper.writeValueAsString(parent));
+        Fruit fruit = mapper.readValue(body, Fruit.class);
+        log.debug(" json Object ::  " + mapper.writeValueAsString(fruit));
         */
         
-       // log.debug("size  :: " + parent.getChildren().size());
-        
-        List<String> list = boardService.getBoardTypeheadSubject();
-        
-        return list;
+        return fruit;
     }
 
 }

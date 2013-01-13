@@ -45,7 +45,7 @@
                 <property name="supportedMediaTypes" value="application/atom+xml" />
             </bean>
             <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-                <property name="supportedMediaTypes" value="application/json" />
+                <property name="supportedMediaTypes" value="application/json;charset=UTF-8"  />
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>

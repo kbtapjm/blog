@@ -214,6 +214,49 @@
             var lowLen = $("#gridList").jqGrid('getDataIDs').length;
             alertModalMsg("데이터 카운트 : " + lowLen);
         });
+        
+        // json 테스트
+        $("#jsonTest").click(function(){
+            var requestBody = {
+                    name : "과@#$%^&*(?|~일",
+                    type : "사과, 포토",
+                    grape : {
+                        name : "포   도",
+                        amount : 10000,
+                        country : "브라질"
+                    },
+                    banana : [
+                          {
+                              name : "브라질 바나나",
+                              amount : 1000,
+                              country : "브라질",
+                              tax : 200
+                          },
+                          {
+                              name : "멕시코 바나나",
+                              amount : 3000,
+                              country : "메시코",
+                              tax : 500
+                          }
+                    ]
+            };
+            
+            $.ajax({
+                url: "../board/jsonTest.json",
+                type: "POST",
+                cache: false,
+                async: true,
+                dataType: "json",
+                contentType: 'application/json',
+                data: JSON.stringify(requestBody),
+                success: function(data) {
+                    log(JSON.stringify(data));
+                },
+                error: function(data) {
+                    log(JSON.stringify(data));
+                }
+            });
+        });
     });
     
     function createGrid() {
@@ -430,6 +473,8 @@
 	            <button type="button" class="btn btn-primary" id="columnSelect">컬럼 설정</button>
 	            <button type="button" class="btn btn-primary" id="changeRowWidth">그리드 넓이 변경</button>
 	            <button type="button" class="btn btn-primary" id="logLength">데이터 카운트</button>    
+	            
+	            <button type="button" class="btn btn-primary" id="jsonTest">json 테스트</button>
             </div>
             
             <br><br>
