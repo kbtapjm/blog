@@ -121,20 +121,41 @@
     </bean>
     
     <!-- ============================================================================================ -->
+    <!--Thymeleaf  view 설정 -->
+    <!-- ============================================================================================ -->
+    <bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+	    <property name="prefix" value="/WEB-INF/views/jsp/photoGallery/" />
+	    <property name="suffix" value=".html" />
+	    <property name="templateMode" value="HTML5" />
+	</bean>
+
+	<bean id="templateEngine" class="org.thymeleaf.spring3.SpringTemplateEngine">
+	    <property name="templateResolver" ref="templateResolver" />
+	</bean>
+	
+	<bean class="org.thymeleaf.spring3.view.ThymeleafViewResolver">
+	    <property name="templateEngine" ref="templateEngine" />
+	    <property name="contentType" value="text/html; charset=UTF-8" />
+        <property name="order" value="1" />
+		<property name="viewNames" value="*.html,*.xhtml" />
+	</bean>
+    
+    <!-- ============================================================================================ -->
     <!-- file upload -->
     <!-- ============================================================================================ -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSize">
-            <value>10000000</value>
-        </property>
-        <!-- <property name="uploadTempDir" ref="uploadDirResource" /> -->
+        <property name="maxUploadSize" value="10000000" />
+        <property name="defaultEncoding" value="utf-8" />
+        <property name="uploadTempDir" ref="uploadDirResource" />
     </bean>
     
-    <!-- 
+    <!-- ============================================================================================ -->
+    <!-- upload path-->
+    <!-- ============================================================================================ -->
     <bean id="uploadDirResource" class="org.springframework.core.io.FileSystemResource">
         <constructor-arg>
-            <value>/contents/temp/</value>
+            <value>C:/temp</value>
         </constructor-arg>
     </bean>
-     -->
+   
 </beans>

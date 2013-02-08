@@ -60,6 +60,8 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         // session검사
         HttpSession session = request.getSession();
         Object sessionuser = session.getAttribute("sessionuser");
+        
+        
         if (sessionuser == null) {
             if (log.isDebugEnabled()) {
                 log.debug(" 인증값이 없습니다. ");

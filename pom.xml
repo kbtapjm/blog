@@ -238,6 +238,7 @@
             <version>1.0</version>
         </dependency>
      
+        <!-- mapper -->
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
@@ -249,6 +250,7 @@
             <version>${org.codehaus.jackson.version}</version>
         </dependency>
      
+        <!-- orm -->
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
@@ -265,6 +267,7 @@
             <version>1.0.2</version>
         </dependency>
      
+        <!-- db -->
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
@@ -275,6 +278,8 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.18</version>
         </dependency>
+        
+        <!-- mybatis -->
         <dependency>
 	        <groupId>org.mybatis</groupId>
 	        <artifactId>mybatis</artifactId>
@@ -286,6 +291,7 @@
 	        <version>${org.mybatis.spring.version}</version>
 	    </dependency>
      
+        <!-- joda -->
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
@@ -317,6 +323,18 @@
             <artifactId>poi</artifactId>
             <version>3.8-beta5</version>
         </dependency>
+        
+        <!-- Thymeleaf -->
+		<dependency>
+		    <groupId>org.thymeleaf</groupId>
+		    <artifactId>thymeleaf</artifactId>
+		    <version>1.1.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.thymeleaf</groupId>
+		    <artifactId>thymeleaf-spring3</artifactId>
+		    <version>1.1.2</version>
+		</dependency>
     </dependencies>
 
 	<build>
