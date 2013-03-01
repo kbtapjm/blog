@@ -5,6 +5,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %> 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-        <footer>
-            <p>Copyright@ 2012 jmpark</p>
-        </footer>
+<footer>
+    <p>Copyright@ 2012 jmpark</p>
+</footer>

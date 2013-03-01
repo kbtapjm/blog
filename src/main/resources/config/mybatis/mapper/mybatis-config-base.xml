@@ -5,14 +5,24 @@
  
 <!-- http://www.mybatis.org/core/configuration.html 참조 -->
 <configuration>
-    <settings>  
+    <settings>
+        <!-- 설정된 캐쉬 사용 유무 -->
         <setting name="cacheEnabled"              value="true"/>  
+        <!-- 늦은 로딩 사용유뮤 -->
         <setting name="lazyLoadingEnabled"        value="false"/>  
+        <!-- 한개의 구문에서 여러개의 ResultSet 을 허용할지의 여부(드라이버가 해당 기능을 지원해야 함) -->
         <setting name="multipleResultSetsEnabled" value="true"/>  
+        <!-- 컬럼레벨 사용유무 -->
         <setting name="useColumnLabel"            value="true"/>  
+        <!-- 생성키에 대한 jdbc 지원을 허용 여부 -->
         <setting name="useGeneratedKeys"          value="false"/>  
-        <setting name="defaultExecutorType"       value="SIMPLE"/>  
+        <!-- 디폴트 실행자(executor) 설정. SIMPLE 실행자는 특별히 하는 것이 없다. 
+        REUSE 실행자는 PreparedStatement 를 재사용한다. BATCH 실행자는 구문을 재사용하고 수정을 배치처리한다.  
+         -->
+        <setting name="defaultExecutorType"       value="SIMPLE"/>
+        <!-- db 타임아웃 세팅 -->
         <setting name="defaultStatementTimeout"   value="25000"/>
+        <!-- jdbc 타입처리 -->
         <setting name="jdbcTypeForNull"           value="VARCHAR"/>
     </settings>
  

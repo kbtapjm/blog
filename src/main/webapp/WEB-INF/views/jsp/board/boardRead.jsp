@@ -40,6 +40,7 @@
     var clip = null;
     $(document).ready(function() {
         $('#content').redactor();
+        $('.redactor_toolbar').hide();
         /*
         // zeroClipboard 초기화
         clip = new ZeroClipboard.Client();
@@ -189,7 +190,6 @@
                 dataType: "json",
                 data: parm,
                 success: function(result) {
-                    log("reply create success : " + JSON.stringify(result));
                     
                     var createResult = result.createResult;
                     if(createResult == "Y") {
@@ -201,7 +201,6 @@
                     }
                 },
                 error: function(result) {
-                    log("reply create error : " + JSON.stringify(result));
                     alertModalMsg("<spring:message code='blog.error.common.fail'/>");
                 }
             });
@@ -246,7 +245,6 @@
                                dataType: "json",
                                data: "",
                                success: function(result) {
-                                   log("reply delete success : " + JSON.stringify(result));
                                    // success
                                    if(result == 1) {
                                        $('#' + replyId).remove();
@@ -256,7 +254,6 @@
                                    }
                                },
                                error: function(result) {
-                                   log("reply delete error : " + JSON.stringify(result));
                                    alertModalMsg("<spring:message code='blog.error.common.fail'/>");
                                }
                            });
@@ -298,7 +295,6 @@
                 dataType: "json",
                 data: "",
                 success: function(result) {
-                    log("reply list success : " + JSON.stringify(result));
                     replyRetrieve(result);
                     boardReplyCnt();
                 },

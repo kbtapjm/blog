@@ -56,15 +56,6 @@ COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 ROW_FORMAT=DEFAULT
 
-/*foreign key*/
-alter table board foreign key(userid) references user(userid) on delete cascade;
-
-alter table boardreply foreign key(userid) references user(userid) on delete cascade;
-
-alter table boardreply foreign key(boardid, userid) references user(board, userid) on delete cascade;
-
-ALTER TABLE board ADD CONSTRAINT FOREIGN KEY(userid) REFERENCES user(userid) ON DELETE CASCADE ON UPDATE CASCADE;
-
 ALTER TABLE board DROP FOREIGN KEY userid;
 ALTER TABLE boardreply DROP FOREIGN KEY userid;
 ALTER TABLE board DROP FOREIGN KEY userid;

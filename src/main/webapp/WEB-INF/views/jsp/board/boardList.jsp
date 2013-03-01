@@ -279,11 +279,9 @@
 
             <div align="right">
                 <button type="button" class="btn btn-primary" id="boardCreate"><spring:message code="blog.label.create"/></button>
-                <!--
                 <button type="button" class="btn btn-primary" id="boardMultiDelete"><spring:message code="blog.label.delete"/></button>
                 <button type="button" class="btn btn-info" id="boardExcelSave"><spring:message code="blog.label.saveexcel"/></button>
                 <button type="button" class="btn btn-info" id="boardPdfSave"><spring:message code="blog.label.savepdf"/></button>
-                 -->
             </div>
 
             <!--  페이징 start-->
