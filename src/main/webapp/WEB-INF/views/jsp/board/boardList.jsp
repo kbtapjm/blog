@@ -83,6 +83,17 @@
                 return false;
             }
             
+            var checkBoardId = $("[name=checkBoardId]:checked");
+            
+            $.each(checkBoardId, function() {
+            	
+            	$('<input>').attr({
+            	    type: 'hidden',
+            	    name: 'checkBoardId',
+            	    value : this.value
+            	}).appendTo('form');
+            });
+            
             var buttons = {
                 "Ok": function () {
                     $('#listFrm').attr("action", "../board/boardMultiDelete.do");
@@ -109,6 +120,15 @@
         $('#boardPdfSave').bind('click', function() {
             // pdf save
         });
+        
+        // 엑셀로드 팝업
+        $('#boardExcelLoad').bind('click', function() {
+        	setPopup(1000, 800);
+            
+            url="../board/boardExcelLoad";
+            wr = window.open(url, '','left='+px+',top='+py+',width='+cw+',height='+ch+',location=no, scrollbars=yes, status=1, resizable=yes');
+        });
+        
         
         // 상세검색
         $('#searchDetail').bind('click', function() {
@@ -160,6 +180,11 @@
         
         $('.nav .active').removeClass();
         $('#boardMenu').addClass('active');
+        
+        // 삭제 실패시
+        if("${deleteResult}" == "N") {
+            alertModalMsg("<spring:message code='blog.error.delete.error'/>");
+        }
     });
     
     // 게시글 상세조회
@@ -282,6 +307,7 @@
                 <button type="button" class="btn btn-primary" id="boardMultiDelete"><spring:message code="blog.label.delete"/></button>
                 <button type="button" class="btn btn-info" id="boardExcelSave"><spring:message code="blog.label.saveexcel"/></button>
                 <button type="button" class="btn btn-info" id="boardPdfSave"><spring:message code="blog.label.savepdf"/></button>
+                <button type="button" class="btn btn-info" id="boardExcelLoad">Excel Load</button>
             </div>
 
             <!--  페이징 start-->

@@ -19,4 +19,5 @@ public interface BoardService {
     public int updateBoardCount(String boardId) throws Exception;
     public int updateBoard(Board board) throws Exception;
     public int deleteBoard(Board board) throws Exception;
+    public int multiDeleteBoard(String[] boardIds) throws Exception;  
 }

@@ -41,6 +41,7 @@
     $(document).ready(function() {
         $('#content').redactor();
         $('.redactor_toolbar').hide();
+        $('.redactor_editor').attr('contentEditable', false);
         /*
         // zeroClipboard 초기화
         clip = new ZeroClipboard.Client();
@@ -70,10 +71,12 @@
         
         // 삭제
         $('#boardDelete').bind('click', function() {
-            if(replyListCnt > 0) {
+                    	/*
+        	if(replyListCnt > 0) {
                 alertModalMsg("<spring:message code='blog.error.replycount.delete'/>");
                 return false;
-            } 
+            }
+        	*/
             
             var buttons = {
                 "Ok": function () {

@@ -1,6 +1,7 @@
 package kr.co.blog.web;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +21,6 @@ import kr.co.blog.common.MailSend;
 import kr.co.blog.common.PageUtil;
 import kr.co.blog.domain.Board;
 import kr.co.blog.domain.BoardReply;
-import kr.co.blog.domain.Fruit;
 import kr.co.blog.domain.User;
 import kr.co.blog.service.BoardReplyService;
 import kr.co.blog.service.BoardService;
@@ -32,13 +32,16 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.Region;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -363,13 +366,8 @@ public class BoardController {
             log.debug("BoardController boardDelete method start~!!!");    
         }
         
-        // 첨부파일 삭제
-        if(board.getFileName().length() > 0) {
-            FileUtil.fileDelete(board.getFileName());    
-        }
-        
-        // 게시글 삭제
-        int result = boardService.deleteBoard(board);
+        String[] boardIds = {board.getBoardId()};
+        int result = boardService.multiDeleteBoard(boardIds);
         
         // 삭제 실패시
         if(result < 0) {
@@ -498,25 +496,18 @@ public class BoardController {
      * @throws Exception
      */
     @RequestMapping(value = "/boardMultiDelete", method = RequestMethod.POST)
-    public String boardMultiDelete(Model model,  @RequestParam Map<String, Object> params, @RequestParam("checkBoardId") String[] checkBoardId) throws Exception {
+    public String boardMultiDelete(Model model, 
+                                    @RequestParam Map<String, Object> params, 
+                                    @RequestParam("checkBoardId") String[] checkBoardId) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("BoardController boardMultiDelete method start~!!!");    
         }
 
-        // 삭제처리
-        for(String boardId : checkBoardId) {
-            // 삭제할 파일 조회
-            Board board = boardService.getBoardByBoardId(boardId);
-            
-            // 첨부파일 삭제
-            if(board.getFileName().length() > 0) {
-                FileUtil.fileDelete(board.getFileName());    
-            }
-            
-            // 댓글 삭제
-            
-            // 게시글 삭제
-            boardService.deleteBoard(board);
+        // 삭제 처리
+        int result = boardService.multiDeleteBoard(checkBoardId);
+        // 삭제 실패시
+        if(result < 0) {
+            model.addAttribute("deleteResult", "N");
         }
                 
         // 삭제 후 리스트
@@ -656,6 +647,179 @@ public class BoardController {
         }
         
         return "/board/boardList";
+    }
+    
+    /**
+     * 엑셀문서 로드 폼
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardExcelLoad", method = RequestMethod.GET)
+    public String boardExcelLoad(Model model) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardEmailSend method start~!!!");    
+        }
+        
+        return "/board/boardExcelLoad";
+    }
+    
+    /**
+     * 엑셀문서 읽기
+     * @param model
+     * @param excelFile
+     * @return
+     */
+    @RequestMapping(value="/boardExcelLoadProc", method=RequestMethod.POST)
+    public String boardExcelLoadProc(Model model, @RequestParam("excelFile") MultipartFile excelFile) {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardExcelLoadProc method start~!!!");    
+        }
+        
+        File uploadedFile = null;
+        List<Board> list = new ArrayList<Board>();
+        Board board = null;
+        
+        try {
+            String fileName = excelFile.getOriginalFilename();
+            
+            String extensionFile = "";
+            if (fileName.lastIndexOf(".") > -1 ) {
+                extensionFile = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+            } else {
+                throw new Exception("확장자가 존재 하지 않는 파일입니다. ");
+            }
+            
+            // 확장자 체크
+            if (extensionFile.lastIndexOf("xls") == -1 && extensionFile.lastIndexOf("xlsx") == -1) {
+                //throw new Exception("엑셀파일만 등록하세요.");
+            }
+            
+            // 파일 업로드
+            uploadedFile = new File(FileUtil.PATH, fileName);
+            if (uploadedFile.exists()) {
+                for (int k = 0;  true; k++) {
+                    uploadedFile = new File(FileUtil.PATH, "(" + k + ")" + fileName);
+                            
+                    if (!uploadedFile.exists()) { 
+                        fileName = "("+k+")"+fileName;
+                        break;
+                    }
+                }
+            }
+            excelFile.transferTo(uploadedFile);
+            
+            // 엑셀파일 버젼 체크(2007버젼 이상 읽기)
+            if(fileName.lastIndexOf(".xlsx") > 0) {
+                XSSFWorkbook workbook = null;
+                XSSFSheet   sheet = null;
+                XSSFRow row = null;
+                XSSFCell cell = null;
+                
+                // 엑셀파일 로드
+                workbook = new XSSFWorkbook(new FileInputStream(uploadedFile));
+                // 엑셀 시트 확인
+                sheet = workbook.getSheetAt(0);
+                
+                // 실제 데이터가 시작되는 Row지정
+                int startRow = 1;
+                // 실제 데이터가 끝 Row지정
+                int endRow = sheet.getLastRowNum();
+                
+                for (int i = startRow; i <= endRow ; i++) {
+                    board = new Board();
+                    
+                    row  = sheet.getRow(i);
+                         
+                    cell = row.getCell(0);
+                    board.setBoardId(cell.getStringCellValue());
+                    
+                    cell = row.getCell(1);
+                    board.setSubject(cell.getStringCellValue());
+                    
+                    cell = row.getCell(2);
+                    board.setCreateUser(cell.getStringCellValue());
+                    
+                    cell = row.getCell(3);
+                    board.setCreateDt(cell.getStringCellValue());
+                    
+                    cell = row.getCell(4);
+                    board.setCount((int)cell.getNumericCellValue());
+                    
+                    list.add(board);
+                }
+            } else {
+                HSSFWorkbook workbook = null;
+                HSSFSheet sheet = null;
+                HSSFRow row = null;
+                HSSFCell cell = null;
+                
+                // 엑셀파일 로드
+                workbook = new HSSFWorkbook(new FileInputStream(uploadedFile));
+                log.debug("workbook : " + workbook);
+                
+                // 엑셀 시트 확인
+                sheet = workbook.getSheetAt(0);
+                log.debug("sheet : " + sheet);
+                
+                // 실제 데이터가 시작되는 Row지정
+                int startRow = 1;
+                // 실제 데이터가 끝 Row지정
+                int endRow   = sheet.getLastRowNum();
+                
+                log.debug(" endRow :  " + endRow);  
+                
+                for (int i = startRow; i <= endRow ; i++) {
+                    board = new Board();
+                    row  = sheet.getRow(i);
+                    
+                    // row load
+                    log.debug("getHeight : " + row.getHeight());
+                    log.debug("getFirstCellNum : " + row.getFirstCellNum());
+                    log.debug("getRowStyle : " + row.getRowStyle());
+                     
+                    cell = row.getCell(0);
+                    board.setBoardId(String.valueOf((int)cell.getNumericCellValue()));
+                    
+                    log.debug("getCellType0 : " + cell.getCellType());
+                    log.debug("getRowIndex0 : " + cell.getRowIndex());
+                    log.debug("getColumnIndex0 : " + cell.getColumnIndex());
+                    log.debug("getCellStyle 0: " + cell.getCellStyle());
+         
+                    
+                    cell = row.getCell(1);
+                    board.setSubject(cell.getStringCellValue());
+                    
+                    log.debug("getCellType1 : " + cell.getCellType());
+                    log.debug("getRowIndex1 : " + cell.getRowIndex());
+                    log.debug("getColumnIndex1 : " + cell.getColumnIndex());
+                    log.debug("getCellStyle 1: " + cell.getCellStyle());
+                    
+                    cell = row.getCell(2);
+                    board.setCreateUser(cell.getStringCellValue());
+                    
+                    cell = row.getCell(3);
+                    board.setCreateDt(cell.getStringCellValue());
+                    
+                    cell = row.getCell(4);
+                    board.setCount((int)cell.getNumericCellValue());
+                    
+                    list.add(board);
+                }
+            }
+            
+            model.addAttribute("resultList", list);
+            
+        } catch (Exception e){
+            log.debug("ExcelLoad Exception~!!!! : " + e.getMessage());
+            if(uploadedFile != null) uploadedFile.delete(); 
+            e.printStackTrace();
+        } finally {
+            log.debug("temp excelFile Deleted~!!!!");
+            if(uploadedFile != null) uploadedFile.delete();
+        }
+        
+        return "/board/boardExcelLoad";
     }
     
     /**

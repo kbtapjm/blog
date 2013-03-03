@@ -97,5 +97,15 @@ public interface BoardReplyDao {
     @Delete("delete from boardreply where replyid=#{replyId}")
     @Options(flushCache=true)
     public int deleteBoardReply(@Param("replyId") String replyId) throws Exception;
+    
+    /**
+     * 게시글에 해당하는 댓글 전부 삭제
+     * @param boardId
+     * @return
+     * @throws Exception
+     */
+    @Delete("delete from boardreply where boardId=#{boardId}")
+    @Options(flushCache=true)
+    public int deleteReplyByBoardId(@Param("boardId") String boardId) throws Exception;
 
 }

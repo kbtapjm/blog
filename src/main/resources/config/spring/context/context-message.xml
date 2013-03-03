@@ -15,7 +15,7 @@
                 <value>classpath:/message/message</value>
             </list>
         </property>
-        <property name="cacheSeconds" value="0"/>
+        <property name="cacheSeconds" value="60"/>
     </bean>
     
     <bean id="messageSourceAccessor" class="org.springframework.context.support.MessageSourceAccessor">
