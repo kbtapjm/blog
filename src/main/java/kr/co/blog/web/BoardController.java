@@ -570,70 +570,71 @@ public class BoardController {
                 sheet.setColumnWidth(i, (sheet.getColumnWidth(i)) + 1024 ); 
             }
            
-            sheet.addMergedRegion(new Region(0, (short)0, 0, (short)4));
+            //sheet.addMergedRegion(new Region(0, (short)0, 0, (short)4));
             
-            HSSFCellStyle titlestyle = excelUtil.getTitleStyle(workbook);
+            //HSSFCellStyle titlestyle = excelUtil.getTitleStyle(workbook);
             HSSFCellStyle headerstyle = excelUtil.getHeaderStyle(workbook);
             HSSFCellStyle valueStyle = excelUtil.getValueStyle(workbook);
      
+            /*
             // title
             HSSFRow title = sheet.createRow(0);
             cell = title.createCell((short)0);
             cell.setCellValue(CommonUtil.getDate() );
             cell.setCellStyle(titlestyle);
+            */
             
             // header
-            HSSFRow header = sheet.createRow(2);
+            HSSFRow header = sheet.createRow(0);
             
             // hearder create
-            cell = header.createCell((short)0);
+            cell = header.createCell(0);
             cell.setCellValue(messageSourceAccessor.getMessage("blog.label.no"));
             cell.setCellStyle(headerstyle);
             
-            cell = header.createCell((short)1);
+            cell = header.createCell(1);
             cell.setCellValue(messageSourceAccessor.getMessage("blog.label.subject"));
             cell.setCellStyle(headerstyle);
             
-            cell = header.createCell((short)2);
+            cell = header.createCell(2);
             cell.setCellValue(messageSourceAccessor.getMessage("blog.label.create.user"));
             cell.setCellStyle(headerstyle);
             
-            cell = header.createCell((short)3);
+            cell = header.createCell(3);
             cell.setCellValue(messageSourceAccessor.getMessage("blog.label.create.date"));
             cell.setCellStyle(headerstyle);
             
-            cell = header.createCell((short)4);
+            cell = header.createCell(4);
             cell.setCellValue(messageSourceAccessor.getMessage("blog.label.views"));
             cell.setCellStyle(headerstyle);
-
             
-            int rowcnt = 3;
+            int rowcnt = 1;
             int length = resultList.size() + 1;
             for (Board board : resultList) {
                 HSSFRow row = sheet.createRow(rowcnt++);    // row create
                 
-                cell = row.createCell((short)0);
+                cell = row.createCell(0);
                 cell.setCellStyle(valueStyle);
                 cell.setCellValue(--length);
                 
-                cell = row.createCell((short)1);
+                cell = row.createCell(1);
                 cell.setCellStyle(valueStyle);
                 cell.setCellValue(board.getSubject());
                 
-                cell = row.createCell((short)2);
+                cell = row.createCell(2);
                 cell.setCellStyle(valueStyle);
                 cell.setCellValue(board.getUser().getUserName());
                 
-                cell = row.createCell((short)3);
+                cell = row.createCell(3);
                 cell.setCellStyle(valueStyle);
                 cell.setCellValue(board.getCreateDt());
                 
-                cell = row.createCell((short)4);
+                cell = row.createCell(4);
                 cell.setCellStyle(valueStyle);
                 cell.setCellValue(board.getCount());
             }
             
-            String filename = System.currentTimeMillis() + ".xls";
+            String filename = "List_" + System.currentTimeMillis() + ".xls";
             String excelfile = FileUtil.PATH + filename; 
             
             fs = new FileOutputStream(excelfile);
@@ -672,30 +673,34 @@ public class BoardController {
      */
     @RequestMapping(value="/boardExcelLoadProc", method=RequestMethod.POST)
     public String boardExcelLoadProc(Model model, @RequestParam("excelFile") MultipartFile excelFile) {
-        if(log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             log.debug("BoardController boardExcelLoadProc method start~!!!");    
         }
         
         File uploadedFile = null;
         List<Board> list = new ArrayList<Board>();
-        Board board = null;
         
         try {
+            // 파일 존재 유무 체크
             String fileName = excelFile.getOriginalFilename();
+            if(fileName.length() == 0) {
+                throw new Exception(messageSourceAccessor.getMessage("blog.label.input.excefile"));
+            }
             
+            // 파일 유효성 체크
             String extensionFile = "";
             if (fileName.lastIndexOf(".") > -1 ) {
                 extensionFile = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
             } else {
-                throw new Exception("확장자가 존재 하지 않는 파일입니다. ");
+                throw new Exception(messageSourceAccessor.getMessage("blog.label.input.vaild.excelfile"));
             }
             
             // 확장자 체크
             if (extensionFile.lastIndexOf("xls") == -1 && extensionFile.lastIndexOf("xlsx") == -1) {
-                //throw new Exception("엑셀파일만 등록하세요.");
+                throw new Exception(messageSourceAccessor.getMessage("blog.label.input.excefile.only"));
             }
             
-            // 파일 업로드
+            // 동일한 엑셀파일이 있는지 체크, 동일한 파일이 있는 경우 인덱스를 붙여서 생성
             uploadedFile = new File(FileUtil.PATH, fileName);
             if (uploadedFile.exists()) {
                 for (int k = 0;  true; k++) {
@@ -707,111 +712,23 @@ public class BoardController {
                     }
                 }
             }
+            
+            // 파일 업로드
+            uploadedFile = new File(FileUtil.PATH, fileName);
             excelFile.transferTo(uploadedFile);
             
             // 엑셀파일 버젼 체크(2007버젼 이상 읽기)
             if(fileName.lastIndexOf(".xlsx") > 0) {
-                XSSFWorkbook workbook = null;
-                XSSFSheet   sheet = null;
-                XSSFRow row = null;
-                XSSFCell cell = null;
-                
-                // 엑셀파일 로드
-                workbook = new XSSFWorkbook(new FileInputStream(uploadedFile));
-                // 엑셀 시트 확인
-                sheet = workbook.getSheetAt(0);
-                
-                // 실제 데이터가 시작되는 Row지정
-                int startRow = 1;
-                // 실제 데이터가 끝 Row지정
-                int endRow = sheet.getLastRowNum();
-                
-                for (int i = startRow; i <= endRow ; i++) {
-                    board = new Board();
-                    
-                    row  = sheet.getRow(i);
-                         
-                    cell = row.getCell(0);
-                    board.setBoardId(cell.getStringCellValue());
-                    
-                    cell = row.getCell(1);
-                    board.setSubject(cell.getStringCellValue());
-                    
-                    cell = row.getCell(2);
-                    board.setCreateUser(cell.getStringCellValue());
-                    
-                    cell = row.getCell(3);
-                    board.setCreateDt(cell.getStringCellValue());
-                    
-                    cell = row.getCell(4);
-                    board.setCount((int)cell.getNumericCellValue());
-                    
-                    list.add(board);
-                }
+                list = ExcelUtil.boardExcelData2007Read(uploadedFile);
             } else {
-                HSSFWorkbook workbook = null;
-                HSSFSheet sheet = null;
-                HSSFRow row = null;
-                HSSFCell cell = null;
-                
-                // 엑셀파일 로드
-                workbook = new HSSFWorkbook(new FileInputStream(uploadedFile));
-                log.debug("workbook : " + workbook);
-                
-                // 엑셀 시트 확인
-                sheet = workbook.getSheetAt(0);
-                log.debug("sheet : " + sheet);
-                
-                // 실제 데이터가 시작되는 Row지정
-                int startRow = 1;
-                // 실제 데이터가 끝 Row지정
-                int endRow   = sheet.getLastRowNum();
-                
-                log.debug(" endRow :  " + endRow);  
-                
-                for (int i = startRow; i <= endRow ; i++) {
-                    board = new Board();
-                    row  = sheet.getRow(i);
-                    
-                    // row load
-                    log.debug("getHeight : " + row.getHeight());
-                    log.debug("getFirstCellNum : " + row.getFirstCellNum());
-                    log.debug("getRowStyle : " + row.getRowStyle());
-                     
-                    cell = row.getCell(0);
-                    board.setBoardId(String.valueOf((int)cell.getNumericCellValue()));
-                    
-                    log.debug("getCellType0 : " + cell.getCellType());
-                    log.debug("getRowIndex0 : " + cell.getRowIndex());
-                    log.debug("getColumnIndex0 : " + cell.getColumnIndex());
-                    log.debug("getCellStyle 0: " + cell.getCellStyle());
-         
-                    
-                    cell = row.getCell(1);
-                    board.setSubject(cell.getStringCellValue());
-                    
-                    log.debug("getCellType1 : " + cell.getCellType());
-                    log.debug("getRowIndex1 : " + cell.getRowIndex());
-                    log.debug("getColumnIndex1 : " + cell.getColumnIndex());
-                    log.debug("getCellStyle 1: " + cell.getCellStyle());
-                    
-                    cell = row.getCell(2);
-                    board.setCreateUser(cell.getStringCellValue());
-                    
-                    cell = row.getCell(3);
-                    board.setCreateDt(cell.getStringCellValue());
-                    
-                    cell = row.getCell(4);
-                    board.setCount((int)cell.getNumericCellValue());
-                    
-                    list.add(board);
-                }
+                list = ExcelUtil.boardExcelDataRead(uploadedFile);
             }
             
             model.addAttribute("resultList", list);
             
         } catch (Exception e){
             log.debug("ExcelLoad Exception~!!!! : " + e.getMessage());
+            model.addAttribute("message", e.getMessage());
             if(uploadedFile != null) uploadedFile.delete(); 
             e.printStackTrace();
         } finally {

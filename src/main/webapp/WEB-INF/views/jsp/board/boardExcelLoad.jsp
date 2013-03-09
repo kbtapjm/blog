@@ -32,17 +32,20 @@
         });
         
         // validation check
-        /*
         $('#listFrm').validate({
             submitHandler: function(form) {
             	form.submit();
             },
             rules:{
-            	excelFile:{required:true}
+            	excelFile:{
+            		required:true,
+            		vaildExcelFile:true
+            	}
             },
             messages:{
             	excelFile:{
-                    required:"엑셀파일을 등록하세요."
+                    required:"<spring:message code='blog.label.input.excefile'/>",
+                    vaildExcelFile : "<spring:message code='blog.label.input.excefile.only'/>"
                 }
             },
             errorClass: "help-inline",
@@ -55,7 +58,21 @@
                 $(element).parents('.control-group').addClass('success');
             }
         });
-        */
+        
+        // 유효한 엑셀파일인지 체크 추가
+        jQuery.validator.addMethod('vaildExcelFile', function(id) {
+        	var excelFile = $.trim($('#excelFile').val());
+           
+            if(excelFile.lastIndexOf(".xls") == -1 && excelFile.lastIndexOf(".xlsx") == -1) {
+                return false;
+            }
+            return true;
+        }, '');
+        
+        // 서버처리 결과
+        if("${message}".length != 0) {
+        	alert("${message}");
+        }
     });
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -67,7 +84,7 @@
     <!-- contents 영역 -->
     <div class="container">
         <fieldset>
-            <legend><strong>엑셀 로드</strong></legend>
+            <legend><strong><spring:message code="blog.label.loadexcel"/></strong></legend>
 
             <form class="form-horizontal" id="listFrm" method="POST" action="../board/boardExcelLoadProc.do" enctype="multipart/form-data">
                 <fieldset>
@@ -110,7 +127,7 @@
                     <tr>
                         <td align="center">${resultList.boardId}</td>
                         <td>${resultList.subject}</td>
-                        <td align="center">${resultList.user.userName}</td>
+                        <td align="center">${resultList.createUser}</td>
                         <td align="center">${fn:substring(resultList.createDt, 0, 16)}</td>
                         <td align="center">${resultList.count}</td>
                     </tr>
@@ -122,9 +139,6 @@
         </fieldset>
     </div>
     <!-- /container -->
-    
-    
-</div>
     
     <!-- common html include -->
     <%@ include file="/WEB-INF/views/jsp/common/commonHtml.jsp" %>

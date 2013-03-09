@@ -23,8 +23,6 @@
 <script type="text/javascript" src="${root}/common/js/jquery/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="${root}/common/js/jquery/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="${root}/common/js/jquery/jquery.validate.js"></script>
-<script type="text/javascript" src="${root}/common/js/bootstrap/daterangepicker.js"></script>
-<script type="text/javascript" src="${root}/common/js/bootstrap/date.js"></script>
 <script type="text/javascript" src="${root}/common/js/common.js"></script>
 
 <script type="text/javascript">
@@ -123,49 +121,16 @@
         
         // 엑셀로드 팝업
         $('#boardExcelLoad').bind('click', function() {
-        	setPopup(1000, 800);
+        	setPopup(800, 800);
             
             url="../board/boardExcelLoad";
             wr = window.open(url, '','left='+px+',top='+py+',width='+cw+',height='+ch+',location=no, scrollbars=yes, status=1, resizable=yes');
         });
         
-        
         // 상세검색
         $('#searchDetail').bind('click', function() {
             $('#reportrange').show();
         }); 
-        
-        $('#reportrange').daterangepicker({
-            ranges: {
-                'Today': ['today', 'today'],
-                'Yesterday': ['yesterday', 'yesterday'],
-                'Last 7 Days': [Date.today().add({ days: -6 }), 'today'],
-                'Last 30 Days': [Date.today().add({ days: -29 }), 'today'],
-                'This Month': [Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()],
-                'Last Month': [Date.today().moveToFirstDayOfMonth().add({ months: -1 }), Date.today().moveToFirstDayOfMonth().add({ days: -1 })]
-            },
-            opens: 'left',
-            format: 'yyyy/MM/dd',
-            startDate: Date.today().add({ days: -29 }),
-            endDate: Date.today(),
-            minDate: '2012/01/01',
-            maxDate: '2012/12/31',
-            locale: {
-                    applyLabel: 'apply',
-                    fromLabel: 'From',
-                    toLabel: 'To',
-                    customRangeLabel: 'Custom Range',
-                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
-                    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                    firstDay: 1
-                    }
-            }, 
-            function(start, end) {
-               $('#reportrange span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
-            }
-        );
-        
-        // $('#reportrange span').html(Date.today().add({ days: -29 }).toString('MMMM d, yyyy') + ' - ' + Date.today().toString('MMMM d, yyyy'));
         
         // 툴팁
         var tooltipSet = function() {
@@ -222,10 +187,7 @@
                 <input type="hidden" name="boardId" id="boardId" value="">
                 
                 <div align="right">
-                    <div id="reportrange" class="pull-left" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; display: none">
-                        <i class="icon-calendar icon-large"></i>
-                        <span>September 29, 2012 - October 28, 2012</span> <b class="caret" style="margin-top: 8px"></b>
-                    </div>
+               
                     <select class="span2" name="searchType" id="searchType">
                         <option value="subject_content"><spring:message code="blog.label.subject"/>+<spring:message code="blog.label.contents"/></option>
                         <option value="subject"><spring:message code="blog.label.subject"/></option>
@@ -307,7 +269,7 @@
                 <button type="button" class="btn btn-primary" id="boardMultiDelete"><spring:message code="blog.label.delete"/></button>
                 <button type="button" class="btn btn-info" id="boardExcelSave"><spring:message code="blog.label.saveexcel"/></button>
                 <button type="button" class="btn btn-info" id="boardPdfSave"><spring:message code="blog.label.savepdf"/></button>
-                <button type="button" class="btn btn-info" id="boardExcelLoad">Excel Load</button>
+                <button type="button" class="btn btn-info" id="boardExcelLoad"><spring:message code="blog.label.loadexcel"/></button>
             </div>
 
             <!--  페이징 start-->
