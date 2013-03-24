@@ -137,5 +137,8 @@
             <value>C:/repasitory</value>
         </constructor-arg>
     </bean>
-   
+    
+    <bean id="localValidator"
+    class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+
 </beans>

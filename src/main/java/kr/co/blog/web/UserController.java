@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,7 +44,7 @@ public class UserController {
     
     @Autowired private UserService userService;
     @Autowired LocaleResolver localeResolver;
-    @Autowired MessageSourceAccessor messageSourceAccessor; 
+    @Autowired MessageSourceAccessor messageSourceAccessor;
     
     /**
      *  최초 처음 model 최초 바인딩 하기위함
@@ -66,7 +67,7 @@ public class UserController {
         // isDebugEnabled : 성능과 리소스의 효율성을 높이기 위해 사용, 즉 Log 레벨이 DEBUG일때만 표시
         // model : interface, ModelMap : 구현체 => 사용성의 차이
         if(log.isDebugEnabled()) {
-            log.debug("userController login method start~!!!");    
+            log.debug("userController login method start~!!!");  
         }
         
         model.addAttribute("user", user());
@@ -100,9 +101,10 @@ public class UserController {
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
     public String createUser(HttpServletRequest request, 
                             Model model, 
-                            @ModelAttribute User user, 
+                            @ModelAttribute @Valid User user, 
                             SessionStatus sessionStatus,
-                            RedirectAttributes redirectAttr) throws Exception {
+                            RedirectAttributes redirectAttr,
+                            BindingResult bindResult) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("userController createUser method start~!!!");    
         }
@@ -147,7 +149,7 @@ public class UserController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/membercheck", method = RequestMethod.GET, produces="application/json")
+    @RequestMapping(value = "/membercheck", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public Map<String, Object> memberCheck(Model model, @RequestParam String memberId) throws Exception {
         if(log.isDebugEnabled()) {
@@ -194,7 +196,7 @@ public class UserController {
             // home으로 이동
             return "redirect:home.do";
         } else {
-            model.addAttribute("result", (user != null) ? "Y" : "N");
+            model.addAttribute("result", "N");
             model.addAttribute("user", new User());
         }
         
@@ -297,7 +299,7 @@ public class UserController {
         }
         
         // 실패시 회원정보 수정화면
-        redirectAttr.addAttribute("result", "N");
+        redirectAttr.addFlashAttribute("result", "N");
         
         return "redirect:/user/userEdit.do";
     }
@@ -389,7 +391,10 @@ public class UserController {
     }
     
     /**
-     * 유저정보조회(비밀번호찾기) -> 이메일 전송 처리로 변경 필요
+     * 유저정보조회(비밀번호찾기)
+     * 비번은 복호화가 되지 않아야함
+     * 비번을 찾을시에는 임시비번을 생성 후 사용자 이메일로 알려주는게  좋은 방법
+     * 
      * @param model
      * @param memberId
      * @param userName
@@ -429,16 +434,12 @@ public class UserController {
      */
     @RequestMapping(value = "/setLocale", method = RequestMethod.GET, produces="application/json")
     @ResponseBody
-    public Map<String, Object> setLocale(Model model, HttpServletRequest request, HttpServletResponse response, @RequestParam String locale) throws Exception {
+    public void setLocale(Model model, HttpServletRequest request, HttpServletResponse response, @RequestParam String locale) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("userController setLocale method start~!!!");    
         }
         
         localeResolver.setLocale(request, response, new Locale(locale));
-        
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        
-        return resultMap;
     }
 }
 

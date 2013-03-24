@@ -18,13 +18,13 @@ public class PageUtil {
 
         int iPages = (iTotalRows / iRowPerPage);
 
-        if( (iTotalRows % iRowPerPage)  > 0 ) iPages ++;
+        if((iTotalRows % iRowPerPage) > 0) iPages ++;
 
         int iStartPage = ((iCurPage - 1) / iPageLink) * iPageLink + 1;  // ((10-1) / 10) * 10 + 1 = 1
         int iEndPage = iStartPage + iPageLink - 1;  // 1 + 10 - 1       // (1 + 10 - 1) = 10
-        if( iEndPage > iPages ) iEndPage = iPages;
+        if(iEndPage > iPages) iEndPage = iPages;
 
-        if( iPages == 0 ) iCurPage = 0;
+        if(iPages == 0) iCurPage = 0;
         
         if(iTotalRows > 0) {
             sbPageLink.append("<div class='pagination pagination-centered'>");

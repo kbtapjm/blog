@@ -1,7 +1,6 @@
 package kr.co.blog.web;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,23 +30,22 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.Region;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.FlashMap;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 /**
  * Board 웹 요청처리
@@ -92,10 +90,10 @@ public class BoardController {
      */
     @RequestMapping(value = "/boardCreateProc", method = RequestMethod.POST)
     public String boardCreateProc(HttpServletRequest request, 
-                            Model model, 
-                            @ModelAttribute Board board, 
-                            @RequestParam("attachFile") MultipartFile file,
-                            RedirectAttributes redirectAttr) throws Exception {
+                                    Model model, 
+                                    @ModelAttribute Board board, 
+                                    @RequestParam("attachFile") MultipartFile file,
+                                    RedirectAttributes redirectAttr) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("BoardController boardCreateProc method start~!!!");    
         }
@@ -121,6 +119,9 @@ public class BoardController {
             redirectAttr.addAttribute("result", "N");
             return "/board/boardCreate";
         }
+        
+        FlashMap fm = RequestContextUtils.getOutputFlashMap(request);
+        fm.put("board", board);
         
         return "redirect:/board/boardList.do";
     }

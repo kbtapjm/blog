@@ -41,6 +41,7 @@ public class MailSend {
      */
     public static boolean mailsend(Map<String, Object> params) {
         String sendContent = null;
+        boolean result = false;
         
         String from = params.get("from").toString();
         String to = params.get("to").toString();
@@ -52,7 +53,6 @@ public class MailSend {
         // ----------------------------------------------------------------------------------------
         // 메일 내용 설정
         // ----------------------------------------------------------------------------------------
-        boolean result = false;
         try {
             Message message = new MimeMessage(mailServerInitialize());
             message.setFrom(new InternetAddress(from));

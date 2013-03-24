@@ -2,6 +2,9 @@ package kr.co.blog.domain;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * User Domain
  * @author jmpark
@@ -10,12 +13,26 @@ import java.io.Serializable;
 public class User implements Serializable {
     private static final long serialVersionUID = 6152672980439790751L;
     
+    @NotNull(message = "blog.label.input.id")
+    @Size(min=1) 
     private String userId;
+    
+    @NotNull @Size(min=1) 
     private String memberId;
+    
+    @NotNull @Size(min=1) 
     private String userName;
+    
+    @NotNull @Size(min=1) 
     private String password;
+   
+    @NotNull @Size(min=1) 
     private String email;
+    
+    @NotNull @Size(min=1) 
     private String birthday;
+    
+    @NotNull @Size(min=1) 
     private String gender;
     
     public User() {
