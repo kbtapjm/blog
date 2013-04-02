@@ -1,5 +1,6 @@
 package kr.co.blog.web;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,12 +33,10 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,6 +45,18 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.FlashMap;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
+
+import com.lowagie.text.Document;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.html.WebColors;
+import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * Board 웹 요청처리
@@ -650,6 +661,153 @@ public class BoardController {
         
         return "/board/boardList";
     }
+    
+    /*
+     * PDF 저장
+     */
+    @RequestMapping(value = "/boardPdfSave", method = RequestMethod.POST)
+    public String boardPdfSave(Model model,  @RequestParam Map<String, Object> params, HttpServletResponse response) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardPdfSave method start~!!!");    
+        }
+        
+        // 목록
+        List<Board> resultList = boardService.getAllBoardList(params);
+        
+        String pdfFile = "List_" + System.currentTimeMillis() + ".pdf";  //pdf file
+        
+        // basic font
+        BaseFont bf = BaseFont.createFont("C:\\windows\\fonts\\batang.ttc,0", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        Font font = new Font(bf, 10);
+        
+        // step 1
+        Document document = new Document(PageSize.A4, 10, 10, 10, 10);
+        
+        // step 2
+        PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
+        
+        // step 3
+        document.open();
+        
+        // title
+        /*
+        String text = "<Image Board>";
+        Chunk space = new Chunk(' ');
+        Phrase phrase1 = new Phrase(text);
+        Paragraph paragraph = new Paragraph();
+        paragraph.add(phrase1);
+        paragraph.add(space);
+        paragraph.setAlignment(Element.ALIGN_CENTER);
+        document.add(paragraph);
+        */
+        
+        // table set
+        PdfPTable table = new PdfPTable(5);
+        table.getDefaultCell().setVerticalAlignment(Element.ALIGN_BOTTOM);
+        
+        // header color
+        Color myColor = WebColors.getRGBColor("#afeeee");
+        
+        // header create
+        PdfPCell cell;
+        cell = new PdfPCell(new Paragraph(messageSourceAccessor.getMessage("blog.label.no"), font));
+        cell.setFixedHeight(18f);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setBackgroundColor(myColor);
+        table.addCell(cell);
+        
+        cell = new PdfPCell(new Paragraph(messageSourceAccessor.getMessage("blog.label.subject"), font));
+        cell.setFixedHeight(18f);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setBackgroundColor(myColor);
+        table.addCell(cell);
+        
+        cell = new PdfPCell(new Paragraph(messageSourceAccessor.getMessage("blog.label.create.user"), font));
+        cell.setFixedHeight(18f);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setBackgroundColor(myColor);
+        table.addCell(cell);
+        
+        cell = new PdfPCell(new Paragraph(messageSourceAccessor.getMessage("blog.label.create.date"), font));
+        cell.setFixedHeight(18f);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setBackgroundColor(myColor);
+        table.addCell(cell);
+        
+        cell = new PdfPCell(new Paragraph(messageSourceAccessor.getMessage("blog.label.views"), font));
+        cell.setFixedHeight(18f);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setBackgroundColor(myColor);
+        table.addCell(cell);
+        
+        // table width
+        float[] widths = { 0.5f, 4.3f, 1.5f, 2f, 1f };
+        table.setWidths(widths);
+        
+        int length = resultList.size() + 1;
+        for (Board board : resultList) {
+            if(board == null) continue;
+            
+            String boardNo = String.valueOf(--length);
+            cell = new PdfPCell(new Paragraph(boardNo, font));
+            cell.setFixedHeight(72f);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+            
+            /* 썸네일 이미지 추가시
+            Image img = Image.getInstance(FileUtil.PATH + board.getFileName());
+            img.scaleAbsoluteHeight(71f);
+            img.scaleAbsoluteWidth(51f);
+            
+            cell = new PdfPCell(img, false);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+            */
+            
+            cell = new PdfPCell(new Paragraph(board.getSubject(), font));
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table.addCell(cell);
+            
+            cell = new PdfPCell(new Paragraph(board.getUser().getUserName(), font));
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            
+            cell = new PdfPCell(new Paragraph(board.getCreateDt().substring(0, 10), font));
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            
+            String count  = String.valueOf(board.getCount());
+            cell = new PdfPCell(new Paragraph(count, font));
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+        }
+        
+        // step 4
+        document.add(table);
+        
+        // step 5
+        document.close();
+
+        // download
+        FileUtil.fileDownload(response, new File(pdfFile));
+        
+        // file delete
+        File file = new File(pdfFile);
+        file.delete();
+        
+        return "/board/boardList";
+    }
+    
     
     /**
      * 엑셀문서 로드 폼

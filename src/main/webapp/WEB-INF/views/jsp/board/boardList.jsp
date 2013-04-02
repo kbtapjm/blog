@@ -116,7 +116,10 @@
         
         // pdf저장
         $('#boardPdfSave').bind('click', function() {
-            // pdf save
+        	$('#listFrm').attr("action", "../board/boardPdfSave.do");
+            $('#listFrm').attr("target", "_self");
+            $('#listFrm').attr("method", "POST");
+            $('#listFrm').submit();   
         });
         
         // 엑셀로드 팝업
