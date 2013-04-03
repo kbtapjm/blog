@@ -17,22 +17,28 @@ public class User implements Serializable {
     @Size(min=1) 
     private String userId;
     
-    @NotNull @Size(min=1) 
+    @NotNull 
+    @Size(min=1) 
     private String memberId;
     
-    @NotNull @Size(min=1) 
+    @NotNull 
+    @Size(min=1) 
     private String userName;
     
-    @NotNull @Size(min=1) 
+    @NotNull 
+    @Size(min=1) 
     private String password;
    
-    @NotNull @Size(min=1) 
+    @NotNull 
+    @Size(min=1) 
     private String email;
     
-    @NotNull @Size(min=1) 
+    @NotNull 
+    @Size(min=1) 
     private String birthday;
     
-    @NotNull @Size(min=1) 
+    @NotNull 
+    @Size(min=1) 
     private String gender;
     
     public User() {

@@ -963,6 +963,39 @@ public class BoardController {
     }
     
     /**
+     * 댓글수정
+     * @param request
+     * @param boardReply
+     * @param replyId
+     * @param replyContent
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardReplyUpdate/{replyId}", method = RequestMethod.POST, produces="application/json")
+    @ResponseBody
+    public Map<String, Object> boardReplyUpdate(HttpServletRequest request, 
+                                @ModelAttribute BoardReply boardReply,
+                                @PathVariable("replyId") String replyId,
+                                @RequestParam("replyContent") String replyContent) throws Exception {
+        
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardReplyCreate method start~!!!");    
+        }
+        
+        // 댓글 수정
+        int result = boardReplyService.updateBoardReply(replyContent, replyId);
+        if(result > 0) {
+            boardReply = boardReplyService.getBoardReplyByReplyId(replyId);
+        }
+        
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("updateResult", (result > 0) ? "Y" : "N");
+        resultMap.put("boardReply", boardReply);
+        
+        return resultMap;
+    }
+    
+    /**
      * 댓글 삭제
      * @param replyId
      * @return

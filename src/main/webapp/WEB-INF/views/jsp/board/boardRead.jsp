@@ -220,22 +220,39 @@
             // 댓글 생성
             replyHTML = "";
             replyHTML += '<tr id="'+replyId+'" >';
-            replyHTML += '    <td><strong>' + createUser + "&nbsp;" + createDt + "</strong>";
+            replyHTML += '    <td><strong>' + createUser + '&nbsp;<span id="replyCreateDt_'+replyId+'">' + createDt + '</span></strong>';
             
             if(userId == "${sessionScope.sessionuser.userId}") {
-                replyHTML += '    &nbsp;<button type="button" class="btn btn-danger"><spring:message code="blog.label.delete"/></button><br>';    
+            	replyHTML += '    &nbsp;<button type="button" class="btn btn-primary" id="updateBtn_'+replyId+'"><spring:message code="blog.label.update"/></button>'; 
+                replyHTML += '    &nbsp;<button type="button" class="btn btn-danger" id="deleteBtn_'+replyId+'"><spring:message code="blog.label.delete"/></button><br>';    
             } else {
                 replyHTML += '<br>';
             }
             
-            replyHTML += replyContent;
+            //replyHTML += replyContent;
+            replyHTML += '<span id="replyContent_'+replyId+'">' + replyContent + '</span>';
+            
+            
+            replyHTML += '    </td>';
+            replyHTML += '</tr>';
+            
+            // update dispay
+            replyHTML += '<tr id="updateView_'+replyId+'" style="display:none;">';
+            replyHTML += '    <td>';
+            replyHTML += '        <div class="control-group">';
+            replyHTML += '        <label class="control-label"></label>';
+            replyHTML += '        <div class="controls">';
+            replyHTML += '            <textarea class="input-xxlarge" id="updateContent_'+replyId+'" rows="3"></textarea>';
+            replyHTML += '            <button type="button" class="btn btn-primary" id="updateOkBTn_'+replyId+'"><spring:message code="blog.label.ok"/></button>';
+            replyHTML += '            <button type="button" class="btn" id="updateCancelBTn_'+replyId+'"><spring:message code="blog.label.cancel"/></button>';
+            replyHTML += '        </div>';
             replyHTML += '    </td>';
             replyHTML += '</tr>';
             
             $('#replyList').append(replyHTML);
  
             // 삭제 바인딩
-            var replyBtn = $('#' + replyId).find('.btn');
+            var replyBtn = $('#' + replyId).find('#deleteBtn_' + replyId);
             if(replyBtn.lenth != 0) {
                 replyBtn.unbind().bind('click', function() {
                     var buttons = {
@@ -251,6 +268,7 @@
                                    // success
                                    if(result == 1) {
                                        $('#' + replyId).remove();
+                                       $('#updateView_' + replyId).remove();
                                        boardReplyCnt();
                                    } else {
                                        alertModalMsg("<spring:message code='blog.error.delete.error'/>");
@@ -268,11 +286,77 @@
                    alertModalMsg("<spring:message code='blog.label.delete.confirm'/>", buttons);    
                 });
             }
+            
+            // 댓글 수정
+            var updateBtn = $('#' + replyId).find('#updateBtn_' + replyId);
+            if(updateBtn.lenth != 0) {
+            	
+            	var updateViewChange = function() {
+            	    if($('#updateView_' + replyId).css('display') == "none") {
+                        
+                        var content = $('#replyContent_' + replyId).text();
+                        
+                        $('#updateContent_' + replyId).val(content);
+                        $('#updateView_' + replyId).show();
+                    } else {
+                        $('#updateView_' + replyId).hide();
+                    }
+            	};
+            	
+            	// 수정버튼 처리
+            	updateBtn.unbind().bind('click', function() {
+            		updateViewChange();
+            	});
+            	
+            	// 수정창 확인처리
+            	$('#updateOkBTn_' + replyId).unbind().bind('click', function() {
+                    
+                    var restUrl = "../board/boardReplyUpdate/" + replyId;
+                    var replyContent = $('#updateContent_' + replyId).val();
+                    var parm = "replyContent=" + encodeURIComponent(replyContent);
+                    
+                    $.ajax({
+                        url: restUrl,
+                        type: "POST",
+                        dataType: "json",
+                        data: parm,
+                        success: function(result) {
+                        	
+                        	var updateResult = result.updateResult;
+                            
+                        	// success
+                            if(updateResult == "Y") {
+                            	
+                            	var boardReply = result.boardReply;
+                            	
+                            	// dom update
+                            	$('#replyContent_' + replyId).text(boardReply.replyContent);
+                            	$('#replyCreateDt_' + replyId).text(boardReply.createDt.substring(0, 16));
+                            	updateViewChange();
+                            } else {
+                            	alertModalMsg("<spring:message code='blog.error.update.error'/>");
+                            }
+                        },
+                        error: function(result) {
+                            alertModalMsg("<spring:message code='blog.error.common.fail'/>");
+                        }
+                    });
+                });
+            	
+            	// 수정창 취소처리
+            	$('#updateCancelBTn_' + replyId).unbind().bind('click', function() {
+            		updateViewChange();
+            	});
+            	
+            }
         };
         
         // 댓글 카운트 얻기
         var boardReplyCnt = function() {
             replyListCnt = $('#replyList tr').length;
+            
+            replyListCnt = Number(replyListCnt)/2;
+            
             if(replyListCnt > 0) {
                 $('#replyCnt').html(" (" + replyListCnt + ")");    
             } else {

@@ -84,7 +84,7 @@ public interface BoardReplyDao {
      * @return
      * @throws Exception
      */
-    @Update("update boardreply set replycontent=#{replyContent} where replyid=#{replyId}")
+    @Update("update boardreply set replycontent=#{replyContent}, createDt=now() where replyid=#{replyId}")
     @Options(flushCache=true)
     public int updateBoardReply(@Param("replyContent") String replyContent, @Param("replyId") String replyId) throws Exception; 
     

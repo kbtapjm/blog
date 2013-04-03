@@ -1,5 +1,6 @@
 package kr.co.blog.web.security;
 
+import java.net.URL;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +41,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
             log.debug(" ==================================================");
             log.debug(" ==== >  uri: " +  uri);
             log.debug(" ==== >  host: " +  host);
+            log.debug(" ==== >  URL: " +  new URL(request.getRequestURL().toString()).getHost());
             log.debug(" ==== >  port: " +  port);
             log.debug(" ==== >  address: " +  address);
             log.debug(" ==== >  user: " +  user);

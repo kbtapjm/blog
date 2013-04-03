@@ -138,7 +138,9 @@
         </constructor-arg>
     </bean>
     
-    <bean id="localValidator"
-    class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+    <!-- ============================================================================================ -->
+    <!-- JSR303 validation -->
+    <!-- ============================================================================================ -->
+    <bean id="localValidator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 
 </beans>
