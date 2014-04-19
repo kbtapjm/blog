@@ -108,7 +108,16 @@
         
         // 엑셀저장
         $('#boardExcelSave').bind('click', function() {
+            //$('#listFrm').attr("action", "../board/boardExcelSaveTest.do");
             $('#listFrm').attr("action", "../board/boardExcelSave.do");
+            $('#listFrm').attr("target", "_self");
+            $('#listFrm').attr("method", "POST");
+            $('#listFrm').submit();    
+        });
+        
+        // CSV저장
+        $('#boardCsvSaveTest').bind('click', function() {
+            $('#listFrm').attr("action", "../board/boardCsvSaveTest.do");
             $('#listFrm').attr("target", "_self");
             $('#listFrm').attr("method", "POST");
             $('#listFrm').submit();    
@@ -271,6 +280,7 @@
                 <button type="button" class="btn btn-primary" id="boardCreate"><spring:message code="blog.label.create"/></button>
                 <button type="button" class="btn btn-primary" id="boardMultiDelete"><spring:message code="blog.label.delete"/></button>
                 <button type="button" class="btn btn-info" id="boardExcelSave"><spring:message code="blog.label.saveexcel"/></button>
+                <button type="button" class="btn btn-info" id="boardCsvSaveTest">CSV저장</button>
                 <button type="button" class="btn btn-info" id="boardPdfSave"><spring:message code="blog.label.savepdf"/></button>
                 <button type="button" class="btn btn-info" id="boardExcelLoad"><spring:message code="blog.label.loadexcel"/></button>
             </div>

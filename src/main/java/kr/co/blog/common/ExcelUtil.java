@@ -80,7 +80,7 @@ public class ExcelUtil {
      */
     public HSSFCellStyle getValueStyle(HSSFWorkbook workbook) {
         HSSFCellStyle valueStyle = workbook.createCellStyle();
-        valueStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);      
+        valueStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER_SELECTION);      
         valueStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);    
         valueStyle.setBottomBorderColor(HSSFColor.BLACK.index);   
         valueStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);

@@ -187,6 +187,10 @@
             alertModalMsg("<spring:message code='blog.error.create.error'/>");
         }
     });
+    
+    function limitChk() {
+    	console.log("11111 222");
+    }
 </script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -208,7 +212,7 @@
                 <div class="control-group">
                     <label class="control-label" for="title"><spring:message code="blog.label.subject"/></label>
                     <div class="controls">
-                        <input type="text" class="input-xxxlarge" id="subject" name="subject">
+                        <input type="text" class="input-xxxlarge" id="subject" name="subject" onkeyup="limitChk()" onChange="limitChk" >
                     </div>
                 </div>
                 <div class="control-group">

@@ -19,6 +19,8 @@ import kr.co.blog.common.ExcelUtil;
 import kr.co.blog.common.FileUtil;
 import kr.co.blog.common.MailSend;
 import kr.co.blog.common.PageUtil;
+import kr.co.blog.common.extract.CsvUtil;
+import kr.co.blog.common.extract.XlsUtil;
 import kr.co.blog.domain.Board;
 import kr.co.blog.domain.BoardReply;
 import kr.co.blog.domain.User;
@@ -31,6 +33,7 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Controller;
@@ -43,13 +46,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.FlashMap;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
-import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.html.WebColors;
@@ -553,6 +556,53 @@ public class BoardController {
     }
     
     /**
+     * 엑셀저장 테스트
+     * @param model
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardExcelSaveTest", method = RequestMethod.POST)
+    public ModelAndView boardExcelSaveTest(Model model,  @RequestParam Map<String, Object> params, HttpServletResponse response) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardExcelSaveTest method start~!!!");    
+        }
+        
+        List<Board> resultList = boardService.getAllBoardList(params);
+        
+        XlsUtil xlsUtil = new XlsUtil();
+        
+        xlsUtil.setFileName("전국교통량");
+        xlsUtil.setSheetName("traffic");
+        
+        return xlsUtil.download(resultList); 
+    }
+    
+    /**
+     * CSV저장 test
+     * @param model
+     * @param params
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardCsvSaveTest", method = RequestMethod.POST)
+    public ModelAndView boardCsvSaveTest(Model model,  @RequestParam Map<String, Object> params, HttpServletResponse response) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardCsvSaveTest method start~!!!");    
+        }
+        
+        List<Board> resultList = boardService.getAllBoardList(params);
+        
+        CsvUtil xlsUtil = new CsvUtil();
+        
+        xlsUtil.setFileName("전국교통량");
+        xlsUtil.setSheetName("traffic");
+        
+        return xlsUtil.download(resultList); 
+    }
+    
+    /**
      * 엑셀저장
      * @param model
      * @param params
@@ -560,6 +610,7 @@ public class BoardController {
      * @return
      * @throws Exception
      */
+    @SuppressWarnings("deprecation")
     @RequestMapping(value = "/boardExcelSave", method = RequestMethod.POST)
     public String boardExcelSave(Model model,  @RequestParam Map<String, Object> params, HttpServletResponse response) throws Exception {
         if(log.isDebugEnabled()) {
@@ -583,6 +634,8 @@ public class BoardController {
             }
            
             //sheet.addMergedRegion(new Region(0, (short)0, 0, (short)4));
+            
+            sheet.addMergedRegion(new CellRangeAddress(1, (short)7, 0, (short)0));
             
             //HSSFCellStyle titlestyle = excelUtil.getTitleStyle(workbook);
             HSSFCellStyle headerstyle = excelUtil.getHeaderStyle(workbook);
@@ -1012,4 +1065,134 @@ public class BoardController {
     
         return result;
     }
+    
+    /**
+     * Grid 테스트
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/boardGridList", method = RequestMethod.GET)
+    public String boardGridList(Model model) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController boardGridList method start~!!!");    
+        }
+        
+        return "/board/boardGridList";
+    }
+    
+    /**
+     * 
+     * @param model
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/getBoardGridList", method = RequestMethod.POST, produces="application/json")
+    @ResponseBody
+    public Map<String, Object> getBoardGridList(Model model, @RequestParam Map<String, Object> params) throws Exception {
+        if(log.isDebugEnabled()) {
+            log.debug("BoardController getBoardGridList method start~!!!");    
+        }
+     
+        // parameter
+        System.out.println("======================================");
+        System.out.println("parammeter : " + params.toString());
+        System.out.println("======================================");
+        
+        // {sord=asc, page=1, nd=1352247946981, sidx=id, _search=false, rows=100}
+        String sord = params.get("sord").toString();    // 내림차순 or 오름차순
+        String page = params.get("page").toString();    // 몇번째의 페이지를 요청했는지.
+        String nd = params.get("nd").toString();        // 현재시간 
+        String sidx = params.get("sidx").toString();    // 소팅하는 기준이 되는 인덱스
+        String search = params.get("_search").toString();   // 검색유무
+        String rows = params.get("rows").toString();        //  페이지 당 몇개의 행이 보여질건지. 
+        
+        /*
+        {
+            "total":10, // 총페이지
+            "page":10,  // 현재 페이지
+            "records":10, // 레코드 갯수
+            "rows": [
+                {"id":1, "cell":["1", "히히히"]},
+                {"id":2, "cell":["2", "호호호"]},
+            ]
+        }
+        
+        {id:"15",invdate:"2007-09-01",name:"test3",note:"note3",amount:"400.00",tax:"30.00",total:"430.00"},
+        {id:"16",invdate:"2007-09-01",name:"test3",note:"note3",amount:"400.00",tax:"30.00",total:"430.00"}
+        */
+        
+        // 가상데이터 세잍ㅇ
+        List rowsList = new ArrayList();
+        Map<String, Object> row = null; 
+        if(page.equals("1")) {
+            for(int i =1; i <= 100; i++) {
+                row = new HashMap<String, Object>();
+                
+                row.put("id", i);
+                row.put("invdate", "2012-11-" + i);
+                row.put("name", "test" + i);
+                row.put("note", "note" + i);
+                row.put("amount", "400." + 1);
+                row.put("tax", "30.00");
+                row.put("total", "430.00");
+                
+                rowsList.add(row);    
+            }
+        } else if(page.equals("2")) {
+            for(int i = 101; i <= 200; i++) {
+                row = new HashMap<String, Object>();
+                
+                row.put("id", i);
+                row.put("invdate", "2012-11-" + i);
+                row.put("name", "test" + i);
+                row.put("note", "note" + i);
+                row.put("amount", "400." + 1);
+                row.put("tax", "30.00");
+                row.put("total", "430.00");
+                
+                rowsList.add(row);    
+            }
+        } else if(page.equals("3")) {
+            for(int i = 201; i <= 300; i++) {
+                row = new HashMap<String, Object>();
+                
+                row.put("id", i);
+                row.put("invdate", "2012-11-" + i);
+                row.put("name", "test" + i);
+                row.put("note", "note" + i);
+                row.put("amount", "400." + 1);
+                row.put("tax", "30.00");
+                row.put("total", "430.00");
+                
+                rowsList.add(row);    
+            }
+        } else if(page.equals("4")) {
+            for(int i = 301; i <= 400; i++) {
+                row = new HashMap<String, Object>();
+                
+                row.put("id", i);
+                row.put("invdate", "2012-11-" + i);
+                row.put("name", "test" + i);
+                row.put("note", "note" + i);
+                row.put("amount", "400." + 1);
+                row.put("tax", "30.00");
+                row.put("total", "430.00");
+                
+                rowsList.add(row);    
+            }
+        }
+        
+        // response
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("total", 400);
+        result.put("page", page);
+        result.put("records", 400);
+        result.put("rows", rowsList);
+        
+        return result;
+    }
+    
+    
 }
