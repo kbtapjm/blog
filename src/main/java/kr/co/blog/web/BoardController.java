@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import kr.co.blog.common.Barbecue;
 import kr.co.blog.common.CommonUtil;
 import kr.co.blog.common.ExcelUtil;
 import kr.co.blog.common.FileUtil;
@@ -236,10 +237,14 @@ public class BoardController {
      * @throws Exception
      */
     @RequestMapping(value = "/boardRead", method = RequestMethod.POST)
-    public String boardRead(Model model, @RequestParam Map<String, Object> params) throws Exception {
+    public String boardRead(HttpServletRequest request, Model model, @RequestParam Map<String, Object> params) throws Exception {
         if(log.isDebugEnabled()) {
             log.debug("BoardController boardRead method start~!!!");    
         }
+        
+        log.debug(" ================================================  ");
+        log.debug(" getRealPath : " + request.getServletContext().getRealPath("/"));
+        log.debug(" ================================================  ");
         
         String boardId = params.get("boardId").toString();
         
@@ -249,9 +254,15 @@ public class BoardController {
         // 게시글 상세정보
         Board board = boardService.getBoardByBoardId(boardId);
         
+        // 바코드 생성 테스트
+        String cpNo = "0324-2358-5124-6712";
+        String barcodeImg = Barbecue.getBarcodeImg(request, cpNo);
+        Barbecue.barcodeGeneration(barcodeImg, Barbecue.CODE_128C, cpNo, Barbecue.GIFTICON_WIDTH_SIZE, Barbecue.GIFTICON_HEIGHT_SIZE, Color.WHITE);
+        
         model.addAttribute("board", board);
         model.addAttribute("params", params);
         model.addAttribute("attachFileSize", FileUtil.getFileSize(board.getFileSize()));
+        model.addAttribute("barcodeImg", barcodeImg);
         
         return "/board/boardRead";
     }

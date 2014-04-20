@@ -490,6 +490,12 @@
                     </div>
                 </div>
                 <div class="control-group">
+                   <label class="control-label" for="qrcode">barcode</label>
+                   <div class="controls">
+                       <img src="${root}/upload/barcode/ca08cd2ffb73c97d9d3a583628391de6.jpg" title="barcode">
+                    </div>
+                </div>
+                <div class="control-group">
                     <label class="control-label" for="views"></label>
                     <div class="controls">
                         ${board.user.userName}(${board.user.memberId})&nbsp;&nbsp;${fn:substring(board.createDt, 0, 16)}
