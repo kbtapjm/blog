@@ -63,3 +63,36 @@ ALTER TABLE board DROP FOREIGN KEY userid;
 /*=============================================================================*/
 /* ORACLE */
 /*=============================================================================*/
+
+windows
+
+캐릿터 셋 설정
+http://mansoo.tistory.com/entry/MySQL-%EC%BA%90%EB%A6%AD%ED%84%B0-%EC%85%8B-%EB%B3%80%EA%B2%BD
+
+1) my.ini 파일에 설정 추가 (C:\Program Files\MariaDB 10.0\data)
+[client]
+default-character-set = utf8
+
+[mysqld]
+character-set-client-handshake = FALSE
+init_connect="SET collation_connection = utf8_general_ci"
+init_connect="SET NAMES utf8"
+character-set-server = utf8
+
+
+[mysql]
+default-character-set = utf8
+
+[mysqldump]
+default-character-set = utf8
+
+
+2) 저장 후 재시작(관리도구 -> 서비스 -> MySql)
+
+
+3) DB 생성
+CREATE DATABASE myhub;
+
+CREATE USER kbtapjm IDENTIFIED BY '1234';
+
+GRANT ALL PRIVILEGES ON kbtapjm.* TO 'myhub'@'%' WITH GRANT OPTION;

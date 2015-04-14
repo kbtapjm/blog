@@ -16,8 +16,8 @@
                 <ul class="nav">
                     <c:if test="${sessionScope.sessionuser != null}">
                     <li id="boardMenu"><a href="../board/boardList.do"><spring:message code="blog.label.board"/></a></li>
+                    <!--
                     <li id="boardMenu"><a href="../board/boardGridList.do">22222</a></li>
-                    <!-- 
                     <li id="photoGalleryMenu"><a href="../photoGallery/photoGalleryList"><spring:message code="blog.label.photos"/></a></li>
                     <li id="guestbookMenu"><a href="../guestbook/guestbookList"><spring:message code="blog.label.guestbook"/></a></li>
                      -->
@@ -32,7 +32,6 @@
                  -->
                 <ul class="nav pull-right">
                     <c:if test="${sessionScope.sessionuser != null}">
-                        <li class="about-menu" id="chatting"><a>Chatting</a></li>
                         <li class="about-menu" id="userInfo"><a href="../user/userInfo.do">${sessionuser.userName } </a></li>
                         <li class="about-menu"  id="signout"><a href="../user/signout.do"><spring:message code="blog.label.logout"/></a></li>
                     </c:if>

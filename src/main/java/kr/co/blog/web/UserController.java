@@ -101,7 +101,7 @@ public class UserController {
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
     public String createUser(HttpServletRequest request, 
                             Model model, 
-                            @ModelAttribute @Valid User user, 
+                            @ModelAttribute User user, 
                             SessionStatus sessionStatus,
                             RedirectAttributes redirectAttr,
                             BindingResult bindResult) throws Exception {
